@@ -31,7 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TrainModel));
             TrainModOKButton = new Button();
             TrainModCancelButton = new Button();
-            progressBar1 = new ProgressBar();
+            TrainProgress = new ProgressBar();
             modelVersion = new ComboBox();
             label1 = new Label();
             label2 = new Label();
@@ -62,6 +62,7 @@
             TrainModOKButton.TabIndex = 0;
             TrainModOKButton.Text = "Aceptar";
             TrainModOKButton.UseVisualStyleBackColor = true;
+            TrainModOKButton.Click += TrainModOKButton_Click;
             // 
             // TrainModCancelButton
             // 
@@ -72,12 +73,14 @@
             TrainModCancelButton.Text = "Cancelar";
             TrainModCancelButton.UseVisualStyleBackColor = true;
             // 
-            // progressBar1
+            // TrainProgress
             // 
-            progressBar1.Location = new Point(12, 469);
-            progressBar1.Name = "progressBar1";
-            progressBar1.Size = new Size(407, 47);
-            progressBar1.TabIndex = 2;
+            TrainProgress.Enabled = false;
+            TrainProgress.Location = new Point(12, 469);
+            TrainProgress.Name = "TrainProgress";
+            TrainProgress.Size = new Size(407, 47);
+            TrainProgress.TabIndex = 2;
+            TrainProgress.Value = 50;
             // 
             // modelVersion
             // 
@@ -101,9 +104,9 @@
             label2.AutoSize = true;
             label2.Location = new Point(12, 68);
             label2.Name = "label2";
-            label2.Size = new Size(45, 15);
+            label2.Size = new Size(39, 15);
             label2.TabIndex = 5;
-            label2.Text = "Epochs";
+            label2.Text = "Ciclos";
             // 
             // epochBar
             // 
@@ -232,7 +235,7 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(modelVersion);
-            Controls.Add(progressBar1);
+            Controls.Add(TrainProgress);
             Controls.Add(TrainModCancelButton);
             Controls.Add(TrainModOKButton);
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -255,7 +258,7 @@
 
         private Button TrainModOKButton;
         private Button TrainModCancelButton;
-        private ProgressBar progressBar1;
+        private ProgressBar TrainProgress;
         private ComboBox modelVersion;
         private Label label1;
         private Label label2;

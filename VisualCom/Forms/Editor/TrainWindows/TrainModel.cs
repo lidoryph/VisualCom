@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Management;
 using System.Reflection;
+using VisualCom.Forms.Editor.TrainWindows;
 
 namespace VisualCom.Forms.Editor
 {
@@ -93,8 +94,24 @@ namespace VisualCom.Forms.Editor
 
         private void helpButton_Click(object sender, EventArgs e)
         {
-            Form helpWindow = new Form();
+            var helptrain = new HelpTrain();
+            helptrain.Show();
+        }
 
+        private void TrainModOKButton_Click(object sender, EventArgs e)
+        {
+
+            string version = modelVersion.SelectedItem.ToString();
+            int epoch = Convert.ToInt32(epochNumeric.Value);
+            int rate = Convert.ToInt32(rateNumeric.Value);
+            int images = Convert.ToInt32(imagesNumeric.Value);
+            string device = useDevice.SelectedItem.ToString();
+            PythonTrain.Initialize();
+
+            TrainProgress.Enabled = true;
+            PythonTrain.startTrain(version, epoch, rate, images, device);
+
+            TrainProgress.Value = PythonTrain.status;
         }
     }
 }
