@@ -6,10 +6,12 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices.Swift;
 using System.Text;
 using System.Windows.Forms;
 using VisualCom.Forms;
 using VisualCom.Forms.Editor;
+using VisualCom.Properties;
 
 namespace VisualCom
 {
@@ -29,6 +31,7 @@ namespace VisualCom
 
             }
 
+
             LoadImagesToList();
 
         }
@@ -39,7 +42,7 @@ namespace VisualCom
             Application.Exit();
         }
 
-        private void nuevoProyectoToolStripMenuItem_Click(object sender, EventArgs e)
+        private void newProject(object sender, EventArgs e)
         {
             var projecttype = new ProjectType();
             projecttype.ShowDialog();
@@ -62,7 +65,7 @@ namespace VisualCom
             }
         }
 
-        private void abrirProyectoToolStripMenuItem_Click(object sender, EventArgs e)
+        private void openProject(object sender, EventArgs e)
         {
             dlgOpenFile.Title = "Abrir proyecto...";
             dlgOpenFile.Filter = "Archivos de proyecto (*.xml)|*.xml";
@@ -174,7 +177,6 @@ namespace VisualCom
             pictureBox.Image = new Bitmap((string)Path.Join(imagesPath, ImagesList.FocusedItem.Text));
         }
 
-
         private void pictureBox_MouseMove(object sender, MouseEventArgs e)
         {
             int xCoordinate = e.X;
@@ -183,12 +185,12 @@ namespace VisualCom
             mouseCoordinates.Text = "x: " + xCoordinate + ", y: " + yCoordinate;
         }
 
-        private void toolStripButton_ASAIWeb_Click(object sender, EventArgs e)
+        private void openASAIWeb(object sender, EventArgs e)
         {
             Process.Start(new ProcessStartInfo("https://www.asai.es") { UseShellExecute = true });
         }
 
-        private void añadirImagenesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void addImages(object sender, EventArgs e)
         {
             dlgOpenFile.Title = "Abrir imagenes...";
             dlgOpenFile.Filter = "Imagenes (\"*.jpg\", \"*.jpeg\", \"*.png\", \"*.bmp\", \"*.gif\", \"*.webp\")|*.jpg;*.jpeg;*.png;*.bmp;*.gif;*.webp";
@@ -209,10 +211,24 @@ namespace VisualCom
             }
         }
 
-        private void entrenarToolStripMenuItem_Click(object sender, EventArgs e)
+        private void trainModel(object sender, EventArgs e)
         {
             TrainModel trainmodel = new TrainModel();
             trainmodel.Show();
+        }
+
+        private void saveProject(object sender, EventArgs e)
+        {
+            progressEditor.Enabled = true;
+            progressEditor.Value = 0;
+            ProjectActions.SaveProject();
+            progressEditor.Value = 100;
+            progressEditor.Enabled = false;
+        }
+
+        private void exit(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

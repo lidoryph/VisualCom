@@ -117,7 +117,14 @@ namespace VisualCom.Forms.Editor
 
             //PythonTrain.startTrain(version, epoch, rate, images, device);
 
-            TrainProgress.Value = (int) result;
+            TrainProgress.Value = (int)result;
+
+            TrainModOKButton.Enabled = false;
+        }
+
+        private void TrainModCancelButton_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

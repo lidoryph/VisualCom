@@ -72,6 +72,7 @@
             TrainModCancelButton.TabIndex = 1;
             TrainModCancelButton.Text = "Cancelar";
             TrainModCancelButton.UseVisualStyleBackColor = true;
+            TrainModCancelButton.Click += TrainModCancelButton_Click;
             // 
             // TrainProgress
             // 
