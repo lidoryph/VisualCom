@@ -36,6 +36,23 @@ namespace VisualCom
 
         }
 
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            ExitWithoutSave leaving = new ExitWithoutSave();
+            leaving.ShowDialog();
+            if( leaving.left == true)
+            {
+                base.OnFormClosing(e);
+                //Application.Exit();
+            } else
+            {
+                e.Cancel = true;
+                return;
+            }
+
+            
+        }
+
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
             base.OnFormClosed(e);
@@ -215,10 +232,18 @@ namespace VisualCom
         {
             if (ImagesList.SelectedItems.Count == 0)
             {
-                Warning warning = new Warning();
-                warning.noImagesSelected();
-                warning.Show();
+                MessageBox.Show("¡No has seleccionado ninguna imagen!");
+                return;
             }
+
+            string images = Configuration.ProjectVariables.Root.Element("Directories").Element("Images").Value;
+
+            foreach (ListViewItem image in ImagesList.SelectedItems)
+            {
+                File.Delete(Path.Join(images, image.Text.ToString()));
+                ImagesList.Items.Remove(image);
+            }
+
         }
 
         private void trainModel(object sender, EventArgs e)
@@ -234,10 +259,13 @@ namespace VisualCom
             ProjectActions.SaveProject();
             progressEditor.Value = 100;
             progressEditor.Enabled = false;
+            Configuration.Saved = true;
         }
 
         private void exit(object sender, EventArgs e)
         {
+            this.Close();
+            Close();
             Application.Exit();
         }
     }

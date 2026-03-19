@@ -8,6 +8,8 @@ namespace VisualCom
     public static class Configuration
     {
         public static string ProjectFile = "project.xml";
+        public static Boolean Saved = true;
+        public static Boolean PythonStarted = false;
 
 
         public static XDocument ProjectVariables = new XDocument(
