@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Forms;
 using VisualCom.Forms;
+using VisualCom.Forms.Editor;
 
 namespace VisualCom
 {
@@ -111,42 +113,59 @@ namespace VisualCom
         }
         private void LoadImagesToList()
         {
-
+            // Crear un nuevo ImageList
             ImageList imagelist = new ImageList();
             imagelist.ImageSize = GetIconSize();
             imagelist.ColorDepth = ColorDepth.Depth32Bit;
 
+            // Limpiar la lista de imágenes y los elementos del ListView
             ImagesList.Items.Clear();
             imagelist.Images.Clear();
 
+            // Definir extensiones válidas para las imágenes
             string[] valid_extensions = { ".jpg", ".jpeg", ".png", ".bmp", ".gif", ".webp" };
             string imagesDirectory = Configuration.ProjectVariables.Root.Element("Directories").Element("Images").Value;
 
+            // Asignar el ImageList al ListView antes de agregar elementos
+            ImagesList.LargeImageList = imagelist;
+
+            // Recorrer los archivos en el directorio de imágenes
             foreach (var imagePath in Directory.GetFiles(imagesDirectory))
             {
-                if (!valid_extensions.Contains(Path.GetExtension(imagePath).ToLower()))
+                string extension = Path.GetExtension(imagePath).ToLower();
+                if (!valid_extensions.Contains(extension))
                     continue;
 
+                // Verificar si la imagen ya está en la lista
                 if (!ImagesList.Items.ContainsKey(imagePath))
                 {
-                    using (Image original = Image.FromFile(imagePath))
+                    try
                     {
-                        Bitmap thumbnail = ResizeWithAspectRatio(original, imagelist.ImageSize);
-                        imagelist.Images.Add(imagePath, thumbnail);
+                        using (Image original = Image.FromFile(imagePath))
+                        {
+                            Bitmap thumbnail = ResizeWithAspectRatio(original, imagelist.ImageSize);
+                            imagelist.Images.Add(imagePath, thumbnail);
+
+                            // Crear un nuevo ListViewItem
+                            ListViewItem item = new ListViewItem();
+                            item.Text = Path.GetFileName(imagePath);
+                            item.Name = imagePath;
+                            item.ImageKey = imagePath;
+
+                            // Agregar el elemento al ListView
+                            ImagesList.Items.Add(item);
+                        }
                     }
-
-                    ListViewItem item = new ListViewItem();
-                    item.Text = Path.GetFileName(imagePath);
-                    item.Name = imagePath;
-                    item.ImageKey = imagePath;
-
-                    ImagesList.Items.Add(item);
+                    catch (Exception ex)
+                    {
+                        // Manejar excepciones si ocurren mientras se carga una imagen
+                        MessageBox.Show($"Error loading image {imagePath}: {ex.Message}");
+                    }
                 }
             }
 
-            ImagesList.LargeImageList = imagelist;
+            // Establecer la vista del ListView como LargeIcon
             ImagesList.View = View.LargeIcon;
-
         }
 
         private void ImagesList_ItemActivate(object sender, EventArgs e)
@@ -155,11 +174,45 @@ namespace VisualCom
             pictureBox.Image = new Bitmap((string)Path.Join(imagesPath, ImagesList.FocusedItem.Text));
         }
 
-        private void pictureBox_MouseEnter(object sender, EventArgs e)
+
+        private void pictureBox_MouseMove(object sender, MouseEventArgs e)
         {
-            MouseEventArgs me = (MouseEventArgs)e;
-            Point coordinates = me.Location;
-            mouseCoordinates.Text = coordinates.ToString();
+            int xCoordinate = e.X;
+            int yCoordinate = e.Y;
+
+            mouseCoordinates.Text = "x: " + xCoordinate + ", y: " + yCoordinate;
+        }
+
+        private void toolStripButton_ASAIWeb_Click(object sender, EventArgs e)
+        {
+            Process.Start(new ProcessStartInfo("https://www.asai.es") { UseShellExecute = true });
+        }
+
+        private void añadirImagenesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            dlgOpenFile.Title = "Abrir imagenes...";
+            dlgOpenFile.Filter = "Imagenes (\"*.jpg\", \"*.jpeg\", \"*.png\", \"*.bmp\", \"*.gif\", \"*.webp\")|*.jpg;*.jpeg;*.png;*.bmp;*.gif;*.webp";
+            dlgOpenFile.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+            dlgOpenFile.FileName = "";
+            dlgOpenFile.Multiselect = true;
+
+            if (dlgOpenFile.ShowDialog() == DialogResult.OK)
+            {
+                foreach (var file in dlgOpenFile.FileNames)
+                {
+                    File.Copy(file, Path.Join(Configuration.ProjectVariables.Root.Element("Directories").Element("Images").Value,
+                            (string)DateTime.Now.Ticks.GetHashCode().ToString("x").ToUpper() + Path.GetExtension(file)));
+                }
+
+                ImagesList.Items.Clear();
+                LoadImagesToList();
+            }
+        }
+
+        private void entrenarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TrainModel trainmodel = new TrainModel();
+            trainmodel.Show();
         }
     }
 }
