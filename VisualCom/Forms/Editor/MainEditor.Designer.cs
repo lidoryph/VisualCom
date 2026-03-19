@@ -36,9 +36,20 @@
             editarToolStripMenuItem = new ToolStripMenuItem();
             verToolStripMenuItem = new ToolStripMenuItem();
             proyectoToolStripMenuItem = new ToolStripMenuItem();
+            imagenesToolStripMenuItem = new ToolStripMenuItem();
             añadirImagenesToolStripMenuItem = new ToolStripMenuItem();
+            quitarImagenesToolStripMenuItem = new ToolStripMenuItem();
+            clasesToolStripMenuItem = new ToolStripMenuItem();
+            añadirClaseToolStripMenuItem = new ToolStripMenuItem();
+            quitarClaseToolStripMenuItem = new ToolStripMenuItem();
+            editarClaseToolStripMenuItem = new ToolStripMenuItem();
+            versionesToolStripMenuItem = new ToolStripMenuItem();
+            añadirVersiónToolStripMenuItem = new ToolStripMenuItem();
+            quitarVersiónToolStripMenuItem = new ToolStripMenuItem();
+            editarVersiónToolStripMenuItem = new ToolStripMenuItem();
             modeloToolStripMenuItem = new ToolStripMenuItem();
             entrenarToolStripMenuItem = new ToolStripMenuItem();
+            exportarToolStripMenuItem = new ToolStripMenuItem();
             dlgSaveFile = new SaveFileDialog();
             dlgOpenFile = new OpenFileDialog();
             EditorToolStrip = new ToolStrip();
@@ -53,6 +64,10 @@
             toolStripButton_addClass = new ToolStripButton();
             toolStripButton_removeClass = new ToolStripButton();
             toolStripButton_editClass = new ToolStripButton();
+            toolStripSeparator5 = new ToolStripSeparator();
+            toolStripButton_newVersion = new ToolStripButton();
+            toolStripButton_removeVersion = new ToolStripButton();
+            toolStripButton_editVersion = new ToolStripButton();
             toolStripSeparator3 = new ToolStripSeparator();
             toolStripButton_trainModel = new ToolStripButton();
             toolStripButton9 = new ToolStripButton();
@@ -66,10 +81,6 @@
             ClassesList = new ListBox();
             ImagesList = new ListView();
             pictureBox = new PictureBox();
-            toolStripButton_newVersion = new ToolStripButton();
-            toolStripButton_removeVersion = new ToolStripButton();
-            toolStripButton_editVersion = new ToolStripButton();
-            toolStripSeparator5 = new ToolStripSeparator();
             editorMenu.SuspendLayout();
             EditorToolStrip.SuspendLayout();
             EditorStatusStrip.SuspendLayout();
@@ -104,6 +115,7 @@
             // 
             // nuevoProyectoToolStripMenuItem
             // 
+            nuevoProyectoToolStripMenuItem.Image = Properties.Resources.new_document;
             nuevoProyectoToolStripMenuItem.Name = "nuevoProyectoToolStripMenuItem";
             nuevoProyectoToolStripMenuItem.Size = new Size(168, 22);
             nuevoProyectoToolStripMenuItem.Text = "Nuevo Proyecto...";
@@ -111,6 +123,7 @@
             // 
             // abrirProyectoToolStripMenuItem
             // 
+            abrirProyectoToolStripMenuItem.Image = Properties.Resources.open_document;
             abrirProyectoToolStripMenuItem.Name = "abrirProyectoToolStripMenuItem";
             abrirProyectoToolStripMenuItem.Size = new Size(168, 22);
             abrirProyectoToolStripMenuItem.Text = "Abrir Proyecto...";
@@ -118,6 +131,7 @@
             // 
             // guardarProyectoToolStripMenuItem
             // 
+            guardarProyectoToolStripMenuItem.Image = Properties.Resources.save_document;
             guardarProyectoToolStripMenuItem.Name = "guardarProyectoToolStripMenuItem";
             guardarProyectoToolStripMenuItem.Size = new Size(168, 22);
             guardarProyectoToolStripMenuItem.Text = "Guardar Proyecto";
@@ -137,31 +151,114 @@
             // 
             // proyectoToolStripMenuItem
             // 
-            proyectoToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { añadirImagenesToolStripMenuItem });
+            proyectoToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { imagenesToolStripMenuItem, clasesToolStripMenuItem, versionesToolStripMenuItem });
             proyectoToolStripMenuItem.Name = "proyectoToolStripMenuItem";
             proyectoToolStripMenuItem.Size = new Size(66, 20);
             proyectoToolStripMenuItem.Text = "Proyecto";
             // 
+            // imagenesToolStripMenuItem
+            // 
+            imagenesToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { añadirImagenesToolStripMenuItem, quitarImagenesToolStripMenuItem });
+            imagenesToolStripMenuItem.Image = Properties.Resources.image;
+            imagenesToolStripMenuItem.Name = "imagenesToolStripMenuItem";
+            imagenesToolStripMenuItem.Size = new Size(184, 26);
+            imagenesToolStripMenuItem.Text = "Imagenes";
+            // 
             // añadirImagenesToolStripMenuItem
             // 
+            añadirImagenesToolStripMenuItem.Image = Properties.Resources.add_images;
             añadirImagenesToolStripMenuItem.Name = "añadirImagenesToolStripMenuItem";
-            añadirImagenesToolStripMenuItem.Size = new Size(172, 22);
+            añadirImagenesToolStripMenuItem.Size = new Size(184, 26);
             añadirImagenesToolStripMenuItem.Text = "Añadir Imagenes...";
             añadirImagenesToolStripMenuItem.Click += addImages;
             // 
+            // quitarImagenesToolStripMenuItem
+            // 
+            quitarImagenesToolStripMenuItem.Image = Properties.Resources.remove_images;
+            quitarImagenesToolStripMenuItem.Name = "quitarImagenesToolStripMenuItem";
+            quitarImagenesToolStripMenuItem.Size = new Size(184, 26);
+            quitarImagenesToolStripMenuItem.Text = "Quitar Imagenes...";
+            quitarImagenesToolStripMenuItem.Click += removeImages;
+            // 
+            // clasesToolStripMenuItem
+            // 
+            clasesToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { añadirClaseToolStripMenuItem, quitarClaseToolStripMenuItem, editarClaseToolStripMenuItem });
+            clasesToolStripMenuItem.Image = Properties.Resources._class;
+            clasesToolStripMenuItem.Name = "clasesToolStripMenuItem";
+            clasesToolStripMenuItem.Size = new Size(184, 26);
+            clasesToolStripMenuItem.Text = "Clases";
+            // 
+            // añadirClaseToolStripMenuItem
+            // 
+            añadirClaseToolStripMenuItem.Image = Properties.Resources.add_class;
+            añadirClaseToolStripMenuItem.Name = "añadirClaseToolStripMenuItem";
+            añadirClaseToolStripMenuItem.Size = new Size(147, 22);
+            añadirClaseToolStripMenuItem.Text = "Añadir clase...";
+            // 
+            // quitarClaseToolStripMenuItem
+            // 
+            quitarClaseToolStripMenuItem.Image = Properties.Resources.remove_class;
+            quitarClaseToolStripMenuItem.Name = "quitarClaseToolStripMenuItem";
+            quitarClaseToolStripMenuItem.Size = new Size(147, 22);
+            quitarClaseToolStripMenuItem.Text = "Quitar clase...";
+            // 
+            // editarClaseToolStripMenuItem
+            // 
+            editarClaseToolStripMenuItem.Image = Properties.Resources.edit_class;
+            editarClaseToolStripMenuItem.Name = "editarClaseToolStripMenuItem";
+            editarClaseToolStripMenuItem.Size = new Size(147, 22);
+            editarClaseToolStripMenuItem.Text = "Editar clase...";
+            // 
+            // versionesToolStripMenuItem
+            // 
+            versionesToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { añadirVersiónToolStripMenuItem, quitarVersiónToolStripMenuItem, editarVersiónToolStripMenuItem });
+            versionesToolStripMenuItem.Image = Properties.Resources.version;
+            versionesToolStripMenuItem.Name = "versionesToolStripMenuItem";
+            versionesToolStripMenuItem.Size = new Size(184, 26);
+            versionesToolStripMenuItem.Text = "Versiones";
+            // 
+            // añadirVersiónToolStripMenuItem
+            // 
+            añadirVersiónToolStripMenuItem.Image = Properties.Resources.new_version;
+            añadirVersiónToolStripMenuItem.Name = "añadirVersiónToolStripMenuItem";
+            añadirVersiónToolStripMenuItem.Size = new Size(159, 22);
+            añadirVersiónToolStripMenuItem.Text = "Añadir versión...";
+            // 
+            // quitarVersiónToolStripMenuItem
+            // 
+            quitarVersiónToolStripMenuItem.Image = Properties.Resources.remove_version;
+            quitarVersiónToolStripMenuItem.Name = "quitarVersiónToolStripMenuItem";
+            quitarVersiónToolStripMenuItem.Size = new Size(159, 22);
+            quitarVersiónToolStripMenuItem.Text = "Quitar versión...";
+            // 
+            // editarVersiónToolStripMenuItem
+            // 
+            editarVersiónToolStripMenuItem.Image = Properties.Resources.edit_version;
+            editarVersiónToolStripMenuItem.Name = "editarVersiónToolStripMenuItem";
+            editarVersiónToolStripMenuItem.Size = new Size(159, 22);
+            editarVersiónToolStripMenuItem.Text = "Editar versión...";
+            // 
             // modeloToolStripMenuItem
             // 
-            modeloToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { entrenarToolStripMenuItem });
+            modeloToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { entrenarToolStripMenuItem, exportarToolStripMenuItem });
             modeloToolStripMenuItem.Name = "modeloToolStripMenuItem";
             modeloToolStripMenuItem.Size = new Size(60, 20);
             modeloToolStripMenuItem.Text = "Modelo";
             // 
             // entrenarToolStripMenuItem
             // 
+            entrenarToolStripMenuItem.Image = Properties.Resources.train_model;
             entrenarToolStripMenuItem.Name = "entrenarToolStripMenuItem";
             entrenarToolStripMenuItem.Size = new Size(127, 22);
             entrenarToolStripMenuItem.Text = "Entrenar...";
             entrenarToolStripMenuItem.Click += trainModel;
+            // 
+            // exportarToolStripMenuItem
+            // 
+            exportarToolStripMenuItem.Image = Properties.Resources.export_model;
+            exportarToolStripMenuItem.Name = "exportarToolStripMenuItem";
+            exportarToolStripMenuItem.Size = new Size(127, 22);
+            exportarToolStripMenuItem.Text = "Exportar...";
             // 
             // dlgOpenFile
             // 
@@ -238,6 +335,7 @@
             toolStripButton_removeImages.Name = "toolStripButton_removeImages";
             toolStripButton_removeImages.Size = new Size(23, 22);
             toolStripButton_removeImages.Text = "toolStripButton5";
+            toolStripButton_removeImages.Click += removeImages;
             // 
             // toolStripSeparator2
             // 
@@ -270,6 +368,38 @@
             toolStripButton_editClass.Name = "toolStripButton_editClass";
             toolStripButton_editClass.Size = new Size(23, 22);
             toolStripButton_editClass.Text = "toolStripButton8";
+            // 
+            // toolStripSeparator5
+            // 
+            toolStripSeparator5.Name = "toolStripSeparator5";
+            toolStripSeparator5.Size = new Size(6, 25);
+            // 
+            // toolStripButton_newVersion
+            // 
+            toolStripButton_newVersion.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton_newVersion.Image = Properties.Resources.new_version;
+            toolStripButton_newVersion.ImageTransparentColor = Color.Magenta;
+            toolStripButton_newVersion.Name = "toolStripButton_newVersion";
+            toolStripButton_newVersion.Size = new Size(23, 22);
+            toolStripButton_newVersion.Text = "toolStripButton1";
+            // 
+            // toolStripButton_removeVersion
+            // 
+            toolStripButton_removeVersion.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton_removeVersion.Image = Properties.Resources.remove_version;
+            toolStripButton_removeVersion.ImageTransparentColor = Color.Magenta;
+            toolStripButton_removeVersion.Name = "toolStripButton_removeVersion";
+            toolStripButton_removeVersion.Size = new Size(23, 22);
+            toolStripButton_removeVersion.Text = "toolStripButton2";
+            // 
+            // toolStripButton_editVersion
+            // 
+            toolStripButton_editVersion.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton_editVersion.Image = Properties.Resources.edit_version;
+            toolStripButton_editVersion.ImageTransparentColor = Color.Magenta;
+            toolStripButton_editVersion.Name = "toolStripButton_editVersion";
+            toolStripButton_editVersion.Size = new Size(23, 22);
+            toolStripButton_editVersion.Text = "toolStripButton3";
             // 
             // toolStripSeparator3
             // 
@@ -400,38 +530,6 @@
             pictureBox.TabStop = false;
             pictureBox.MouseMove += pictureBox_MouseMove;
             // 
-            // toolStripButton_newVersion
-            // 
-            toolStripButton_newVersion.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton_newVersion.Image = Properties.Resources.new_version;
-            toolStripButton_newVersion.ImageTransparentColor = Color.Magenta;
-            toolStripButton_newVersion.Name = "toolStripButton_newVersion";
-            toolStripButton_newVersion.Size = new Size(23, 22);
-            toolStripButton_newVersion.Text = "toolStripButton1";
-            // 
-            // toolStripButton_removeVersion
-            // 
-            toolStripButton_removeVersion.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton_removeVersion.Image = Properties.Resources.remove_version;
-            toolStripButton_removeVersion.ImageTransparentColor = Color.Magenta;
-            toolStripButton_removeVersion.Name = "toolStripButton_removeVersion";
-            toolStripButton_removeVersion.Size = new Size(23, 22);
-            toolStripButton_removeVersion.Text = "toolStripButton2";
-            // 
-            // toolStripButton_editVersion
-            // 
-            toolStripButton_editVersion.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton_editVersion.Image = Properties.Resources.edit_version;
-            toolStripButton_editVersion.ImageTransparentColor = Color.Magenta;
-            toolStripButton_editVersion.Name = "toolStripButton_editVersion";
-            toolStripButton_editVersion.Size = new Size(23, 22);
-            toolStripButton_editVersion.Text = "toolStripButton3";
-            // 
-            // toolStripSeparator5
-            // 
-            toolStripSeparator5.Name = "toolStripSeparator5";
-            toolStripSeparator5.Size = new Size(6, 25);
-            // 
             // MainEditor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -490,7 +588,6 @@
         private ToolStripButton toolStripButton_newProject;
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripButton toolStripButton_ASAIWeb;
-        private ToolStripMenuItem añadirImagenesToolStripMenuItem;
         private ToolStripMenuItem modeloToolStripMenuItem;
         private ToolStripMenuItem entrenarToolStripMenuItem;
         private ToolStripMenuItem guardarProyectoToolStripMenuItem;
@@ -511,5 +608,17 @@
         private ToolStripButton toolStripButton_newVersion;
         private ToolStripButton toolStripButton_removeVersion;
         private ToolStripButton toolStripButton_editVersion;
+        private ToolStripMenuItem imagenesToolStripMenuItem;
+        private ToolStripMenuItem añadirImagenesToolStripMenuItem;
+        private ToolStripMenuItem quitarImagenesToolStripMenuItem;
+        private ToolStripMenuItem clasesToolStripMenuItem;
+        private ToolStripMenuItem añadirClaseToolStripMenuItem;
+        private ToolStripMenuItem quitarClaseToolStripMenuItem;
+        private ToolStripMenuItem editarClaseToolStripMenuItem;
+        private ToolStripMenuItem versionesToolStripMenuItem;
+        private ToolStripMenuItem añadirVersiónToolStripMenuItem;
+        private ToolStripMenuItem quitarVersiónToolStripMenuItem;
+        private ToolStripMenuItem editarVersiónToolStripMenuItem;
+        private ToolStripMenuItem exportarToolStripMenuItem;
     }
 }

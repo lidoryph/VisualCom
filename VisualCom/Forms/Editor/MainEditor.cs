@@ -211,6 +211,16 @@ namespace VisualCom
             }
         }
 
+        private void removeImages(object sender, EventArgs e)
+        {
+            if (ImagesList.SelectedItems.Count == 0)
+            {
+                Warning warning = new Warning();
+                warning.noImagesSelected();
+                warning.Show();
+            }
+        }
+
         private void trainModel(object sender, EventArgs e)
         {
             TrainModel trainmodel = new TrainModel();
