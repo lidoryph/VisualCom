@@ -80,7 +80,6 @@
             TrainProgress.Name = "TrainProgress";
             TrainProgress.Size = new Size(407, 47);
             TrainProgress.TabIndex = 2;
-            TrainProgress.Value = 50;
             // 
             // modelVersion
             // 

@@ -98,8 +98,11 @@ namespace VisualCom.Forms.Editor
             helptrain.Show();
         }
 
-        private void TrainModOKButton_Click(object sender, EventArgs e)
+        private async void TrainModOKButton_Click(object sender, EventArgs e)
         {
+            TrainModOKButton.Enabled = false;
+            TrainProgress.Enabled = true;
+
 
             string version = modelVersion.SelectedItem.ToString();
             int epoch = Convert.ToInt32(epochNumeric.Value);
@@ -108,10 +111,13 @@ namespace VisualCom.Forms.Editor
             string device = useDevice.SelectedItem.ToString();
             PythonTrain.Initialize();
 
-            TrainProgress.Enabled = true;
-            PythonTrain.startTrain(version, epoch, rate, images, device);
+            dynamic result = await Task.Run(() =>
+                PythonTrain.startTrain(version, epoch, rate, images, device)
+             );
 
-            TrainProgress.Value = PythonTrain.status;
+            //PythonTrain.startTrain(version, epoch, rate, images, device);
+
+            TrainProgress.Value = (int) result;
         }
     }
 }
