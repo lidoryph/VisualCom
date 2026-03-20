@@ -15,6 +15,7 @@ using VisualCom.Forms.Errors;
 using VisualCom.Properties;
 using VisualCom.Forms.Editor.Classes;
 using System.Xml.Linq;
+using System.Numerics;
 
 namespace VisualCom
 {
@@ -30,14 +31,14 @@ namespace VisualCom
         public MainEditor()
         {
             InitializeComponent();
-            
-            if(pv_type == null)
+
+            if (pv_type == null)
             {
                 error.Show();
                 return;
             }
 
-            if(pv_name == null)
+            if (pv_name == null)
             {
                 error.Show();
                 return;
@@ -52,6 +53,8 @@ namespace VisualCom
                 this.Text = "VisualCom - Editando proyecto \"" + pv_name.Value + "\" de tipo Clasificación.";
 
             }
+
+            ClassesList.Resize += (s, e) => ClassesList.Columns[0].Width = ClassesList.ClientSize.Width;
 
             LoadClassesToList();
             LoadImagesToList();
@@ -69,7 +72,7 @@ namespace VisualCom
             ExitWithoutSave leaving = new();
             leaving.ShowDialog();
 
-            if( leaving.left == true)
+            if (leaving.left == true)
                 base.OnFormClosing(e);
             else
             {
@@ -77,7 +80,7 @@ namespace VisualCom
                 return;
             }
 
-            
+
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)
@@ -91,7 +94,7 @@ namespace VisualCom
             var projecttype = new ProjectType();
             projecttype.ShowDialog();
 
-            if(pv_type == null)
+            if (pv_type == null)
             {
                 error.Show();
                 return;
@@ -180,7 +183,7 @@ namespace VisualCom
             // Definir extensiones válidas para las imágenes
             string[] valid_extensions = [".jpg", ".jpeg", ".png", ".bmp", ".gif", ".webp"];
 
-            if(pv_images == null)
+            if (pv_images == null)
             {
                 error.Show();
                 return;
@@ -238,7 +241,7 @@ namespace VisualCom
                 return;
             }
 
-            if(ImagesList.FocusedItem == null)
+            if (ImagesList.FocusedItem == null)
             {
                 return;
             }
@@ -268,7 +271,7 @@ namespace VisualCom
             dlgOpenFile.FileName = "";
             dlgOpenFile.Multiselect = true;
 
-            if(pv_images == null)
+            if (pv_images == null)
             {
                 error.Show();
                 return;
@@ -276,10 +279,16 @@ namespace VisualCom
 
             if (dlgOpenFile.ShowDialog() == DialogResult.OK)
             {
+                int total = dlgOpenFile.FileNames.Length;
+                progressEditor.Enabled = true;
+                int current = 0;
+
                 foreach (var file in dlgOpenFile.FileNames)
                 {
                     File.Copy(file, Path.Join(pv_images.Value,
                             (string)DateTime.Now.Ticks.GetHashCode().ToString("x").ToUpper() + Path.GetExtension(file)));
+                    current += 1;
+                    progressEditor.Value = (current / total) * 100;
                 }
 
                 ImagesList.Items.Clear();
@@ -332,15 +341,15 @@ namespace VisualCom
             ListViewItem item;
             string classname;
 
-            if(pv_classes == null)
+            if (pv_classes == null)
             {
                 error.Show();
                 return;
             }
 
-            foreach(var classes in pv_classes.Elements("Class"))
+            foreach (var classes in pv_classes.Elements("Class"))
             {
-                if(classes == null)
+                if (classes == null)
                 {
                     return;
                 }
@@ -392,7 +401,7 @@ namespace VisualCom
         private void EraseClassDialog(object sender, EventArgs e)
         {
 
-            if(ClassesList.SelectedItems.Count == 0)
+            if (ClassesList.SelectedItems.Count == 0)
             {
                 MessageBox.Show("¡No has seleccionado ninguna clase!");
                 return;
@@ -424,16 +433,16 @@ namespace VisualCom
 
         public void ModifyExternalClass(string id, string name, string color)
         {
-            if(pv_classes == null)
+            if (pv_classes == null)
             {
                 error.ShowDialog();
                 return;
             }
-            
+
 
             pv_classes.Elements("Class").FirstOrDefault(c => string.Equals(c.Attribute("id")?.Value, id, StringComparison.Ordinal))?.Value = name;
             pv_classes.Elements("Class").FirstOrDefault(c => string.Equals(c.Attribute("id")?.Value, id, StringComparison.Ordinal))?.Attribute("color")?.Value = color ?? "#FFFFFF";
-            foreach(ListViewItem item in ClassesList.Items)
+            foreach (ListViewItem item in ClassesList.Items)
             {
                 if (color == null)
                     return;
@@ -458,7 +467,7 @@ namespace VisualCom
             string name = "";
             string color = "";
 
-            foreach(ListViewItem item in ClassesList.SelectedItems)
+            foreach (ListViewItem item in ClassesList.SelectedItems)
             {
                 id = item.Name;
                 name = item.Text;
@@ -469,11 +478,43 @@ namespace VisualCom
             dialog.ShowDialog();
         }
 
+        private void SelectClass(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            if (ClassesList.SelectedItems.Count == 0)
+            {
+                toolStripButton_editClass.Enabled = false;
+                toolStripButton_removeClass.Enabled = false;
+            }
+            else if (ClassesList.SelectedItems.Count > 0)
+            {
+                toolStripButton_editClass.Enabled = true;
+                toolStripButton_removeClass.Enabled = true;
+            }
+        }
+
+        private void SelectImages(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            if (ImagesList.SelectedItems.Count == 0)
+            {
+                toolStripButton_removeImages.Enabled = false;
+            }
+            else if (ImagesList.SelectedItems.Count > 0)
+            {
+                toolStripButton_removeImages.Enabled = true;
+            }
+        }
+
+        private void ResizeClassesList(object sender, EventArgs e)
+        {
+            ClassesList.Resize += (s, e) => ClassesList.Columns[0].Width = ClassesList.ClientSize.Width;
+        }
+
         private void Exit(object sender, EventArgs e)
         {
             this.Close();
             Close();
             Application.Exit();
         }
+
     }
 }

@@ -79,6 +79,7 @@
             MainContainer = new SplitContainer();
             ListsContainer = new SplitContainer();
             ClassesList = new ListView();
+            columnHeader1 = new ColumnHeader();
             ImagesList = new ListView();
             pictureBox = new PictureBox();
             editorMenu.SuspendLayout();
@@ -331,6 +332,7 @@
             // toolStripButton_removeImages
             // 
             toolStripButton_removeImages.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton_removeImages.Enabled = false;
             toolStripButton_removeImages.Image = Properties.Resources.remove_images;
             toolStripButton_removeImages.ImageTransparentColor = Color.Magenta;
             toolStripButton_removeImages.Name = "toolStripButton_removeImages";
@@ -356,6 +358,7 @@
             // toolStripButton_removeClass
             // 
             toolStripButton_removeClass.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton_removeClass.Enabled = false;
             toolStripButton_removeClass.Image = Properties.Resources.remove_class;
             toolStripButton_removeClass.ImageTransparentColor = Color.Magenta;
             toolStripButton_removeClass.Name = "toolStripButton_removeClass";
@@ -366,6 +369,7 @@
             // toolStripButton_editClass
             // 
             toolStripButton_editClass.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton_editClass.Enabled = false;
             toolStripButton_editClass.Image = Properties.Resources.edit_class;
             toolStripButton_editClass.ImageTransparentColor = Color.Magenta;
             toolStripButton_editClass.Name = "toolStripButton_editClass";
@@ -505,13 +509,23 @@
             // 
             // ClassesList
             // 
+            ClassesList.Columns.AddRange(new ColumnHeader[] { columnHeader1 });
             ClassesList.Dock = DockStyle.Fill;
+            ClassesList.Font = new Font("Segoe UI", 12F);
+            ClassesList.FullRowSelect = true;
             ClassesList.Location = new Point(0, 0);
             ClassesList.Name = "ClassesList";
             ClassesList.Size = new Size(256, 214);
             ClassesList.TabIndex = 0;
             ClassesList.UseCompatibleStateImageBehavior = false;
-            ClassesList.View = View.List;
+            ClassesList.View = View.Details;
+            ClassesList.ItemSelectionChanged += SelectClass;
+            ClassesList.Resize += ResizeClassesList;
+            // 
+            // columnHeader1
+            // 
+            columnHeader1.Text = "Nombre";
+            columnHeader1.Width = 250;
             // 
             // ImagesList
             // 
@@ -522,6 +536,7 @@
             ImagesList.TabIndex = 0;
             ImagesList.UseCompatibleStateImageBehavior = false;
             ImagesList.ItemActivate += ImagesList_ItemActivate;
+            ImagesList.ItemSelectionChanged += SelectImages;
             // 
             // pictureBox
             // 
@@ -625,5 +640,6 @@
         private ToolStripMenuItem exportarToolStripMenuItem;
         private PictureBox pictureBox;
         private ListView ClassesList;
+        private ColumnHeader columnHeader1;
     }
 }
