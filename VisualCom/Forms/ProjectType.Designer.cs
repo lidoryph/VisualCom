@@ -36,37 +36,39 @@
             // 
             // OIbutton
             // 
-            OIbutton.ForeColor = SystemColors.HighlightText;
-            OIbutton.Location = new Point(29, 58);
+            OIbutton.ForeColor = SystemColors.ControlText;
+            OIbutton.Image = Properties.Resources.magnifier;
+            OIbutton.ImageAlign = ContentAlignment.MiddleLeft;
+            OIbutton.Location = new Point(32, 80);
             OIbutton.Margin = new Padding(3, 2, 3, 2);
             OIbutton.Name = "OIbutton";
-            OIbutton.Size = new Size(163, 35);
+            OIbutton.Padding = new Padding(10, 0, 0, 0);
+            OIbutton.Size = new Size(192, 48);
             OIbutton.TabIndex = 0;
             OIbutton.Text = "Identificación de Objetos";
             OIbutton.UseVisualStyleBackColor = true;
             OIbutton.Click += OIbutton_Click;
-            OIbutton.MouseEnter += OIbutton_MouseEnter;
-            OIbutton.MouseLeave += OIbutton_MouseLeave;
             // 
             // Cbutton
             // 
-            Cbutton.ForeColor = SystemColors.HighlightText;
-            Cbutton.Location = new Point(242, 58);
+            Cbutton.ForeColor = SystemColors.ControlText;
+            Cbutton.Image = Properties.Resources.tag;
+            Cbutton.ImageAlign = ContentAlignment.MiddleLeft;
+            Cbutton.Location = new Point(274, 80);
             Cbutton.Margin = new Padding(3, 2, 3, 2);
             Cbutton.Name = "Cbutton";
-            Cbutton.Size = new Size(163, 35);
+            Cbutton.Padding = new Padding(10, 0, 0, 0);
+            Cbutton.Size = new Size(192, 48);
             Cbutton.TabIndex = 1;
             Cbutton.Text = "Clasificación";
             Cbutton.UseVisualStyleBackColor = true;
             Cbutton.Click += Cbutton_Click;
-            Cbutton.MouseEnter += Cbutton_MouseEnter;
-            Cbutton.MouseLeave += Cbutton_MouseLeave;
             // 
             // Label
             // 
             Label.AutoSize = true;
-            Label.ForeColor = SystemColors.HighlightText;
-            Label.Location = new Point(111, 21);
+            Label.ForeColor = SystemColors.ControlText;
+            Label.Location = new Point(145, 24);
             Label.Name = "Label";
             Label.Size = new Size(199, 15);
             Label.TabIndex = 2;
@@ -76,17 +78,18 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(63, 62, 62);
-            ClientSize = new Size(434, 115);
+            BackColor = SystemColors.Control;
+            ClientSize = new Size(496, 153);
             Controls.Add(Label);
             Controls.Add(Cbutton);
             Controls.Add(OIbutton);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(3, 2, 3, 2);
             MaximizeBox = false;
-            MaximumSize = new Size(450, 154);
+            MaximumSize = new Size(512, 192);
             MinimizeBox = false;
-            MinimumSize = new Size(450, 154);
+            MinimumSize = new Size(512, 192);
             Name = "ProjectType";
             ShowInTaskbar = false;
             SizeGripStyle = SizeGripStyle.Hide;

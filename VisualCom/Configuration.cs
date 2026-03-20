@@ -27,6 +27,9 @@ namespace VisualCom
                     new XElement("Models", ""),
                     new XElement("Versions", "")
                 ),
+                new XElement("Classes",
+                    new XElement("Objetos", "#55FF22")
+                ),
                 new XComment("NEVER CHANGE DATA HERE, ALWAYS CHANGE IT FROM THE PROGRAM")
             )
         );

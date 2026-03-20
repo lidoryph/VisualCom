@@ -78,7 +78,7 @@
             progressEditor = new ToolStripProgressBar();
             MainContainer = new SplitContainer();
             ListsContainer = new SplitContainer();
-            ClassesList = new ListBox();
+            ClassesList = new ListView();
             ImagesList = new ListView();
             pictureBox = new PictureBox();
             editorMenu.SuspendLayout();
@@ -119,7 +119,7 @@
             nuevoProyectoToolStripMenuItem.Name = "nuevoProyectoToolStripMenuItem";
             nuevoProyectoToolStripMenuItem.Size = new Size(168, 22);
             nuevoProyectoToolStripMenuItem.Text = "Nuevo Proyecto...";
-            nuevoProyectoToolStripMenuItem.Click += newProject;
+            nuevoProyectoToolStripMenuItem.Click += NewProject;
             // 
             // abrirProyectoToolStripMenuItem
             // 
@@ -127,7 +127,7 @@
             abrirProyectoToolStripMenuItem.Name = "abrirProyectoToolStripMenuItem";
             abrirProyectoToolStripMenuItem.Size = new Size(168, 22);
             abrirProyectoToolStripMenuItem.Text = "Abrir Proyecto...";
-            abrirProyectoToolStripMenuItem.Click += openProject;
+            abrirProyectoToolStripMenuItem.Click += OpenProject;
             // 
             // guardarProyectoToolStripMenuItem
             // 
@@ -135,7 +135,7 @@
             guardarProyectoToolStripMenuItem.Name = "guardarProyectoToolStripMenuItem";
             guardarProyectoToolStripMenuItem.Size = new Size(168, 22);
             guardarProyectoToolStripMenuItem.Text = "Guardar Proyecto";
-            guardarProyectoToolStripMenuItem.Click += saveProject;
+            guardarProyectoToolStripMenuItem.Click += SaveProject;
             // 
             // editarToolStripMenuItem
             // 
@@ -161,31 +161,31 @@
             imagenesToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { añadirImagenesToolStripMenuItem, quitarImagenesToolStripMenuItem });
             imagenesToolStripMenuItem.Image = Properties.Resources.image;
             imagenesToolStripMenuItem.Name = "imagenesToolStripMenuItem";
-            imagenesToolStripMenuItem.Size = new Size(184, 26);
+            imagenesToolStripMenuItem.Size = new Size(125, 22);
             imagenesToolStripMenuItem.Text = "Imagenes";
             // 
             // añadirImagenesToolStripMenuItem
             // 
             añadirImagenesToolStripMenuItem.Image = Properties.Resources.add_images;
             añadirImagenesToolStripMenuItem.Name = "añadirImagenesToolStripMenuItem";
-            añadirImagenesToolStripMenuItem.Size = new Size(184, 26);
+            añadirImagenesToolStripMenuItem.Size = new Size(172, 22);
             añadirImagenesToolStripMenuItem.Text = "Añadir Imagenes...";
-            añadirImagenesToolStripMenuItem.Click += addImages;
+            añadirImagenesToolStripMenuItem.Click += AddImages;
             // 
             // quitarImagenesToolStripMenuItem
             // 
             quitarImagenesToolStripMenuItem.Image = Properties.Resources.remove_images;
             quitarImagenesToolStripMenuItem.Name = "quitarImagenesToolStripMenuItem";
-            quitarImagenesToolStripMenuItem.Size = new Size(184, 26);
+            quitarImagenesToolStripMenuItem.Size = new Size(172, 22);
             quitarImagenesToolStripMenuItem.Text = "Quitar Imagenes...";
-            quitarImagenesToolStripMenuItem.Click += removeImages;
+            quitarImagenesToolStripMenuItem.Click += RemoveImages;
             // 
             // clasesToolStripMenuItem
             // 
             clasesToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { añadirClaseToolStripMenuItem, quitarClaseToolStripMenuItem, editarClaseToolStripMenuItem });
             clasesToolStripMenuItem.Image = Properties.Resources._class;
             clasesToolStripMenuItem.Name = "clasesToolStripMenuItem";
-            clasesToolStripMenuItem.Size = new Size(184, 26);
+            clasesToolStripMenuItem.Size = new Size(125, 22);
             clasesToolStripMenuItem.Text = "Clases";
             // 
             // añadirClaseToolStripMenuItem
@@ -194,6 +194,7 @@
             añadirClaseToolStripMenuItem.Name = "añadirClaseToolStripMenuItem";
             añadirClaseToolStripMenuItem.Size = new Size(147, 22);
             añadirClaseToolStripMenuItem.Text = "Añadir clase...";
+            añadirClaseToolStripMenuItem.Click += AddClass;
             // 
             // quitarClaseToolStripMenuItem
             // 
@@ -214,7 +215,7 @@
             versionesToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { añadirVersiónToolStripMenuItem, quitarVersiónToolStripMenuItem, editarVersiónToolStripMenuItem });
             versionesToolStripMenuItem.Image = Properties.Resources.version;
             versionesToolStripMenuItem.Name = "versionesToolStripMenuItem";
-            versionesToolStripMenuItem.Size = new Size(184, 26);
+            versionesToolStripMenuItem.Size = new Size(125, 22);
             versionesToolStripMenuItem.Text = "Versiones";
             // 
             // añadirVersiónToolStripMenuItem
@@ -251,7 +252,7 @@
             entrenarToolStripMenuItem.Name = "entrenarToolStripMenuItem";
             entrenarToolStripMenuItem.Size = new Size(127, 22);
             entrenarToolStripMenuItem.Text = "Entrenar...";
-            entrenarToolStripMenuItem.Click += trainModel;
+            entrenarToolStripMenuItem.Click += TrainModel;
             // 
             // exportarToolStripMenuItem
             // 
@@ -281,7 +282,7 @@
             toolStripButton_newProject.Name = "toolStripButton_newProject";
             toolStripButton_newProject.Size = new Size(23, 22);
             toolStripButton_newProject.Text = "toolStripButton1";
-            toolStripButton_newProject.Click += newProject;
+            toolStripButton_newProject.Click += NewProject;
             // 
             // toolStripButton_saveProject
             // 
@@ -291,7 +292,7 @@
             toolStripButton_saveProject.Name = "toolStripButton_saveProject";
             toolStripButton_saveProject.Size = new Size(23, 22);
             toolStripButton_saveProject.Text = "toolStripButton_saveProject";
-            toolStripButton_saveProject.Click += saveProject;
+            toolStripButton_saveProject.Click += SaveProject;
             // 
             // toolStripButton_loadProject
             // 
@@ -301,7 +302,7 @@
             toolStripButton_loadProject.Name = "toolStripButton_loadProject";
             toolStripButton_loadProject.Size = new Size(23, 22);
             toolStripButton_loadProject.Text = "toolStripButton_loadProject";
-            toolStripButton_loadProject.Click += openProject;
+            toolStripButton_loadProject.Click += OpenProject;
             // 
             // toolStripButton_Exit
             // 
@@ -325,7 +326,7 @@
             toolStripButton_addImages.Name = "toolStripButton_addImages";
             toolStripButton_addImages.Size = new Size(23, 22);
             toolStripButton_addImages.Text = "toolStripButton4";
-            toolStripButton_addImages.Click += addImages;
+            toolStripButton_addImages.Click += AddImages;
             // 
             // toolStripButton_removeImages
             // 
@@ -335,7 +336,7 @@
             toolStripButton_removeImages.Name = "toolStripButton_removeImages";
             toolStripButton_removeImages.Size = new Size(23, 22);
             toolStripButton_removeImages.Text = "toolStripButton5";
-            toolStripButton_removeImages.Click += removeImages;
+            toolStripButton_removeImages.Click += RemoveImages;
             // 
             // toolStripSeparator2
             // 
@@ -350,6 +351,7 @@
             toolStripButton_addClass.Name = "toolStripButton_addClass";
             toolStripButton_addClass.Size = new Size(23, 22);
             toolStripButton_addClass.Text = "toolStripButton6";
+            toolStripButton_addClass.Click += AddClass;
             // 
             // toolStripButton_removeClass
             // 
@@ -359,6 +361,7 @@
             toolStripButton_removeClass.Name = "toolStripButton_removeClass";
             toolStripButton_removeClass.Size = new Size(23, 22);
             toolStripButton_removeClass.Text = "toolStripButton7";
+            toolStripButton_removeClass.Click += EraseClassDialog;
             // 
             // toolStripButton_editClass
             // 
@@ -368,6 +371,7 @@
             toolStripButton_editClass.Name = "toolStripButton_editClass";
             toolStripButton_editClass.Size = new Size(23, 22);
             toolStripButton_editClass.Text = "toolStripButton8";
+            toolStripButton_editClass.Click += ModifyClass;
             // 
             // toolStripSeparator5
             // 
@@ -414,7 +418,7 @@
             toolStripButton_trainModel.Name = "toolStripButton_trainModel";
             toolStripButton_trainModel.Size = new Size(23, 22);
             toolStripButton_trainModel.Text = "toolStripButton1";
-            toolStripButton_trainModel.Click += trainModel;
+            toolStripButton_trainModel.Click += TrainModel;
             // 
             // toolStripButton9
             // 
@@ -438,7 +442,7 @@
             toolStripButton_ASAIWeb.Name = "toolStripButton_ASAIWeb";
             toolStripButton_ASAIWeb.Size = new Size(23, 22);
             toolStripButton_ASAIWeb.Text = "Abrir web ASAI";
-            toolStripButton_ASAIWeb.Click += openASAIWeb;
+            toolStripButton_ASAIWeb.Click += OpenASAIWeb;
             // 
             // EditorStatusStrip
             // 
@@ -502,11 +506,12 @@
             // ClassesList
             // 
             ClassesList.Dock = DockStyle.Fill;
-            ClassesList.FormattingEnabled = true;
             ClassesList.Location = new Point(0, 0);
             ClassesList.Name = "ClassesList";
             ClassesList.Size = new Size(256, 214);
             ClassesList.TabIndex = 0;
+            ClassesList.UseCompatibleStateImageBehavior = false;
+            ClassesList.View = View.List;
             // 
             // ImagesList
             // 
@@ -528,7 +533,7 @@
             pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox.TabIndex = 0;
             pictureBox.TabStop = false;
-            pictureBox.MouseMove += pictureBox_MouseMove;
+            pictureBox.MouseMove += PictureBox_MouseMove;
             // 
             // MainEditor
             // 
@@ -579,9 +584,7 @@
         private ToolStrip EditorToolStrip;
         private StatusStrip EditorStatusStrip;
         private SplitContainer MainContainer;
-        private PictureBox pictureBox;
         private SplitContainer ListsContainer;
-        private ListBox ClassesList;
         private ListView ImagesList;
         private ToolStripStatusLabel mouseCoordinates;
         private ToolStripProgressBar progressEditor;
@@ -620,5 +623,7 @@
         private ToolStripMenuItem quitarVersiónToolStripMenuItem;
         private ToolStripMenuItem editarVersiónToolStripMenuItem;
         private ToolStripMenuItem exportarToolStripMenuItem;
+        private PictureBox pictureBox;
+        private ListView ClassesList;
     }
 }

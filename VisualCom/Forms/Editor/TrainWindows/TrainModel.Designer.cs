@@ -238,6 +238,7 @@
             Controls.Add(TrainProgress);
             Controls.Add(TrainModCancelButton);
             Controls.Add(TrainModOKButton);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             MinimizeBox = false;
@@ -263,7 +264,6 @@
         private Label label1;
         private Label label2;
         private TrackBar epochBar;
-        private DomainUpDown epochsDomainValue;
         private Button helpButton;
         private Label label3;
         private NumericUpDown rateNumeric;

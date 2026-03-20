@@ -50,6 +50,7 @@
             discard.ImageAlign = ContentAlignment.MiddleLeft;
             discard.Location = new Point(153, 129);
             discard.Name = "discard";
+            discard.Padding = new Padding(10, 0, 0, 0);
             discard.Size = new Size(206, 23);
             discard.TabIndex = 1;
             discard.Text = "Descartar Cambios";
@@ -62,6 +63,7 @@
             save.ImageAlign = ContentAlignment.MiddleLeft;
             save.Location = new Point(153, 80);
             save.Name = "save";
+            save.Padding = new Padding(10, 0, 0, 0);
             save.Size = new Size(206, 43);
             save.TabIndex = 2;
             save.Text = "Guardar Cambios";
@@ -70,10 +72,11 @@
             // 
             // cancel
             // 
-            cancel.Image = Properties.Resources.undo;
+            cancel.Image = Properties.Resources.go_back;
             cancel.ImageAlign = ContentAlignment.MiddleLeft;
             cancel.Location = new Point(153, 158);
             cancel.Name = "cancel";
+            cancel.Padding = new Padding(10, 0, 0, 0);
             cancel.Size = new Size(206, 23);
             cancel.TabIndex = 3;
             cancel.Text = "Cancelar y Volver";

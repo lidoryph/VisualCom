@@ -11,40 +11,67 @@ using System.Text;
 using System.Windows.Forms;
 using VisualCom.Forms;
 using VisualCom.Forms.Editor;
+using VisualCom.Forms.Errors;
 using VisualCom.Properties;
+using VisualCom.Forms.Editor.Classes;
+using System.Xml.Linq;
 
 namespace VisualCom
 {
     public partial class MainEditor : Form
     {
+
+        private readonly ReadingDocument error = new();
+        private readonly XElement? pv_type = Configuration.ProjectVariables.Root?.Element("Type");
+        private readonly XElement? pv_name = Configuration.ProjectVariables.Root?.Element("Name");
+        private readonly XElement? pv_images = Configuration.ProjectVariables.Root?.Element("Directories")?.Element("Images");
+        private readonly XElement? pv_classes = Configuration.ProjectVariables.Root?.Element("Classes");
+
         public MainEditor()
         {
             InitializeComponent();
-
-            if (Configuration.ProjectVariables.Root.Element("Type").Value == "OI")
+            
+            if(pv_type == null)
             {
-                this.Text = "VisualCom - Editando proyecto \"" + Configuration.ProjectVariables.Root.Element("Name").Value + "\" de tipo Identificación de Objetos.";
-            }
-            else if (Configuration.ProjectVariables.Root.Element("Type").Value == "C")
-            {
-                this.Text = "VisualCom - Editando proyecto \"" + Configuration.ProjectVariables.Root.Element("Name").Value + "\" de tipo Clasificación.";
-
+                error.Show();
+                return;
             }
 
+            if(pv_name == null)
+            {
+                error.Show();
+                return;
+            }
 
+            if (pv_type.Value == "OI")
+            {
+                this.Text = "VisualCom - Editando proyecto \"" + pv_name.Value + "\" de tipo Identificación de Objetos.";
+            }
+            else if (pv_type.Value == "C")
+            {
+                this.Text = "VisualCom - Editando proyecto \"" + pv_name.Value + "\" de tipo Clasificación.";
+
+            }
+
+            LoadClassesToList();
             LoadImagesToList();
 
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            ExitWithoutSave leaving = new ExitWithoutSave();
-            leaving.ShowDialog();
-            if( leaving.left == true)
+            if (Configuration.Saved == true)
             {
                 base.OnFormClosing(e);
-                //Application.Exit();
-            } else
+                return;
+            }
+
+            ExitWithoutSave leaving = new();
+            leaving.ShowDialog();
+
+            if( leaving.left == true)
+                base.OnFormClosing(e);
+            else
             {
                 e.Cancel = true;
                 return;
@@ -59,12 +86,18 @@ namespace VisualCom
             Application.Exit();
         }
 
-        private void newProject(object sender, EventArgs e)
+        private void NewProject(object sender, EventArgs e)
         {
             var projecttype = new ProjectType();
             projecttype.ShowDialog();
 
-            if (Configuration.ProjectVariables.Root.Element("Type").Value != "")
+            if(pv_type == null)
+            {
+                error.Show();
+                return;
+            }
+
+            if (pv_type.Value != "")
             {
                 dlgSaveFile.Title = "Crea un proyecto...";
                 dlgSaveFile.Filter = "Archivos de proyecto (*.xml)|*.xml";
@@ -82,7 +115,7 @@ namespace VisualCom
             }
         }
 
-        private void openProject(object sender, EventArgs e)
+        private void OpenProject(object sender, EventArgs e)
         {
             dlgOpenFile.Title = "Abrir proyecto...";
             dlgOpenFile.Filter = "Archivos de proyecto (*.xml)|*.xml";
@@ -107,7 +140,7 @@ namespace VisualCom
             return new Size(size, size);
         }
 
-        private Bitmap ResizeWithAspectRatio(Image original, Size maxSize)
+        private static Bitmap ResizeWithAspectRatio(Image original, Size maxSize)
         {
             float ratioX = (float)maxSize.Width / original.Width;
             float ratioY = (float)maxSize.Height / original.Height;
@@ -117,7 +150,7 @@ namespace VisualCom
             int newHeight = (int)(original.Height * ratio);
 
             // Creamos un bitmap del tamaño máximo con fondo transparente
-            Bitmap result = new Bitmap(maxSize.Width, maxSize.Height);
+            Bitmap result = new(maxSize.Width, maxSize.Height);
             using (Graphics g = Graphics.FromImage(result))
             {
                 g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
@@ -134,17 +167,26 @@ namespace VisualCom
         private void LoadImagesToList()
         {
             // Crear un nuevo ImageList
-            ImageList imagelist = new ImageList();
-            imagelist.ImageSize = GetIconSize();
-            imagelist.ColorDepth = ColorDepth.Depth32Bit;
+            ImageList imagelist = new()
+            {
+                ImageSize = GetIconSize(),
+                ColorDepth = ColorDepth.Depth32Bit
+            };
 
             // Limpiar la lista de imágenes y los elementos del ListView
             ImagesList.Items.Clear();
             imagelist.Images.Clear();
 
             // Definir extensiones válidas para las imágenes
-            string[] valid_extensions = { ".jpg", ".jpeg", ".png", ".bmp", ".gif", ".webp" };
-            string imagesDirectory = Configuration.ProjectVariables.Root.Element("Directories").Element("Images").Value;
+            string[] valid_extensions = [".jpg", ".jpeg", ".png", ".bmp", ".gif", ".webp"];
+
+            if(pv_images == null)
+            {
+                error.Show();
+                return;
+            }
+
+            string imagesDirectory = pv_images.Value;
 
             // Asignar el ImageList al ListView antes de agregar elementos
             ImagesList.LargeImageList = imagelist;
@@ -161,20 +203,20 @@ namespace VisualCom
                 {
                     try
                     {
-                        using (Image original = Image.FromFile(imagePath))
+                        using Image original = Image.FromFile(imagePath);
+                        Bitmap thumbnail = ResizeWithAspectRatio(original, imagelist.ImageSize);
+                        imagelist.Images.Add(imagePath, thumbnail);
+
+                        // Crear un nuevo ListViewItem
+                        ListViewItem item = new()
                         {
-                            Bitmap thumbnail = ResizeWithAspectRatio(original, imagelist.ImageSize);
-                            imagelist.Images.Add(imagePath, thumbnail);
+                            Text = Path.GetFileName(imagePath),
+                            Name = imagePath,
+                            ImageKey = imagePath
+                        };
 
-                            // Crear un nuevo ListViewItem
-                            ListViewItem item = new ListViewItem();
-                            item.Text = Path.GetFileName(imagePath);
-                            item.Name = imagePath;
-                            item.ImageKey = imagePath;
-
-                            // Agregar el elemento al ListView
-                            ImagesList.Items.Add(item);
-                        }
+                        // Agregar el elemento al ListView
+                        ImagesList.Items.Add(item);
                     }
                     catch (Exception ex)
                     {
@@ -190,11 +232,22 @@ namespace VisualCom
 
         private void ImagesList_ItemActivate(object sender, EventArgs e)
         {
-            string imagesPath = Configuration.ProjectVariables.Root.Element("Directories").Element("Images").Value;
+            if (pv_images == null)
+            {
+                error.Show();
+                return;
+            }
+
+            if(ImagesList.FocusedItem == null)
+            {
+                return;
+            }
+
+            string imagesPath = pv_images.Value;
             pictureBox.Image = new Bitmap((string)Path.Join(imagesPath, ImagesList.FocusedItem.Text));
         }
 
-        private void pictureBox_MouseMove(object sender, MouseEventArgs e)
+        private void PictureBox_MouseMove(object sender, MouseEventArgs e)
         {
             int xCoordinate = e.X;
             int yCoordinate = e.Y;
@@ -202,12 +255,12 @@ namespace VisualCom
             mouseCoordinates.Text = "x: " + xCoordinate + ", y: " + yCoordinate;
         }
 
-        private void openASAIWeb(object sender, EventArgs e)
+        private void OpenASAIWeb(object sender, EventArgs e)
         {
             Process.Start(new ProcessStartInfo("https://www.asai.es") { UseShellExecute = true });
         }
 
-        private void addImages(object sender, EventArgs e)
+        private void AddImages(object sender, EventArgs e)
         {
             dlgOpenFile.Title = "Abrir imagenes...";
             dlgOpenFile.Filter = "Imagenes (\"*.jpg\", \"*.jpeg\", \"*.png\", \"*.bmp\", \"*.gif\", \"*.webp\")|*.jpg;*.jpeg;*.png;*.bmp;*.gif;*.webp";
@@ -215,11 +268,17 @@ namespace VisualCom
             dlgOpenFile.FileName = "";
             dlgOpenFile.Multiselect = true;
 
+            if(pv_images == null)
+            {
+                error.Show();
+                return;
+            }
+
             if (dlgOpenFile.ShowDialog() == DialogResult.OK)
             {
                 foreach (var file in dlgOpenFile.FileNames)
                 {
-                    File.Copy(file, Path.Join(Configuration.ProjectVariables.Root.Element("Directories").Element("Images").Value,
+                    File.Copy(file, Path.Join(pv_images.Value,
                             (string)DateTime.Now.Ticks.GetHashCode().ToString("x").ToUpper() + Path.GetExtension(file)));
                 }
 
@@ -228,7 +287,7 @@ namespace VisualCom
             }
         }
 
-        private void removeImages(object sender, EventArgs e)
+        private void RemoveImages(object sender, EventArgs e)
         {
             if (ImagesList.SelectedItems.Count == 0)
             {
@@ -236,7 +295,13 @@ namespace VisualCom
                 return;
             }
 
-            string images = Configuration.ProjectVariables.Root.Element("Directories").Element("Images").Value;
+            if (pv_images == null)
+            {
+                error.Show();
+                return;
+            }
+
+            string images = pv_images.Value;
 
             foreach (ListViewItem image in ImagesList.SelectedItems)
             {
@@ -246,13 +311,13 @@ namespace VisualCom
 
         }
 
-        private void trainModel(object sender, EventArgs e)
+        private void TrainModel(object sender, EventArgs e)
         {
-            TrainModel trainmodel = new TrainModel();
-            trainmodel.Show();
+            TrainModel trainmodel = new();
+            trainmodel.ShowDialog();
         }
 
-        private void saveProject(object sender, EventArgs e)
+        private void SaveProject(object sender, EventArgs e)
         {
             progressEditor.Enabled = true;
             progressEditor.Value = 0;
@@ -262,7 +327,149 @@ namespace VisualCom
             Configuration.Saved = true;
         }
 
-        private void exit(object sender, EventArgs e)
+        private void LoadClassesToList()
+        {
+            ListViewItem item;
+            string classname;
+
+            if(pv_classes == null)
+            {
+                error.Show();
+                return;
+            }
+
+            foreach(var classes in pv_classes.Elements("Class"))
+            {
+                if(classes == null)
+                {
+                    return;
+                }
+
+                classname = classes.Value.ToString();
+                item = new ListViewItem
+                {
+                    Name = classes.Attribute("id")?.Value,
+                    Text = classname,
+                    BackColor = ColorTranslator.FromHtml(classes.Attribute("color")?.Value ?? "#FFFFFF")
+                };
+
+                if (item.BackColor.GetBrightness() > 0.85)
+                    item.ForeColor = Color.Black;
+                else
+                    item.ForeColor = Color.White;
+
+                ClassesList.Items.Add(item);
+            }
+        }
+
+        public void AddExternalClass((string, string) classtoadd)
+        {
+            ListViewItem item = new()
+            {
+                Text = classtoadd.Item1.ToString(),
+                BackColor = ColorTranslator.FromHtml(classtoadd.Item2.ToString()),
+                Name = String.Join(classtoadd.Item1.ToString(), classtoadd.Item2.ToString()).GetHashCode().ToString()
+            };
+
+            if (item.BackColor.GetBrightness() > 0.85)
+                item.ForeColor = Color.Black;
+            else
+                item.ForeColor = Color.White;
+
+
+            ClassesList.Items.Add(item);
+            ListsContainer.Panel1.Refresh();
+            ClassesList.Refresh();
+            ClassesList.Show();
+        }
+
+        private void AddClass(object sender, EventArgs e)
+        {
+            AddClasses classwindow = new(this);
+            classwindow.ShowDialog();
+        }
+
+        private void EraseClassDialog(object sender, EventArgs e)
+        {
+
+            if(ClassesList.SelectedItems.Count == 0)
+            {
+                MessageBox.Show("¡No has seleccionado ninguna clase!");
+                return;
+            }
+
+            RemoveClasses dialog = new(this, ClassesList.SelectedItems.Count);
+            dialog.ShowDialog();
+        }
+        public void EraseClass()
+        {
+
+            string id;
+
+            foreach (ListViewItem selected in ClassesList.SelectedItems)
+            {
+                if (pv_classes == null)
+                {
+                    error.ShowDialog();
+                    return;
+                }
+
+                id = selected.Name;
+
+                pv_classes.Elements("Class").FirstOrDefault(c => string.Equals(c.Attribute("id")?.Value, id, StringComparison.Ordinal))?.Remove();
+                ClassesList.Items.Remove(selected);
+            }
+        }
+
+
+        public void ModifyExternalClass(string id, string name, string color)
+        {
+            if(pv_classes == null)
+            {
+                error.ShowDialog();
+                return;
+            }
+            
+
+            pv_classes.Elements("Class").FirstOrDefault(c => string.Equals(c.Attribute("id")?.Value, id, StringComparison.Ordinal))?.Value = name;
+            pv_classes.Elements("Class").FirstOrDefault(c => string.Equals(c.Attribute("id")?.Value, id, StringComparison.Ordinal))?.Attribute("color")?.Value = color ?? "#FFFFFF";
+            foreach(ListViewItem item in ClassesList.Items)
+            {
+                if (color == null)
+                    return;
+
+                if (String.Join(item.Text, ColorTranslator.ToHtml(item.BackColor).ToString()).GetHashCode().ToString() == id)
+                {
+                    item.Text = name;
+                    item.BackColor = ColorTranslator.FromHtml(color);
+                }
+            }
+        }
+
+        private void ModifyClass(object sender, EventArgs e)
+        {
+
+            if (ClassesList.SelectedItems.Count == 0)
+                return;
+            if (ClassesList.SelectedItems.Count > 1)
+                return;
+
+            string id = "";
+            string name = "";
+            string color = "";
+
+            foreach(ListViewItem item in ClassesList.SelectedItems)
+            {
+                id = item.Name;
+                name = item.Text;
+                color = ColorTranslator.ToHtml(item.BackColor);
+            }
+
+            ModifyClass dialog = new(this, id, name, color);
+            dialog.ShowDialog();
+        }
+
+        private void Exit(object sender, EventArgs e)
         {
             this.Close();
             Close();

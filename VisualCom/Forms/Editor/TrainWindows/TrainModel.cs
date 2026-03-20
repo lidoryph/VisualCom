@@ -95,7 +95,7 @@ namespace VisualCom.Forms.Editor
         private void helpButton_Click(object sender, EventArgs e)
         {
             var helptrain = new HelpTrain();
-            helptrain.Show();
+            helptrain.ShowDialog();
         }
 
         private async void TrainModOKButton_Click(object sender, EventArgs e)
