@@ -29,6 +29,7 @@ namespace VisualCom
                     CreateNoWindow = true,
                 }
             };
+            
 
             proc.Start();
             string pythonEXE = proc.StandardOutput.ReadToEnd().Trim();
@@ -42,9 +43,13 @@ namespace VisualCom
             PythonEngine.PythonHome = pythonDIR;
             Environment.SetEnvironmentVariable("PYTHONPATH", sitePackages + ";" + TrainModPATH);
 
-            PythonEngine.Initialize();
+            if (Configuration.PythonStarted == false)
+            {
+                PythonEngine.Initialize();
 
-            PythonEngine.BeginAllowThreads();
+                PythonEngine.BeginAllowThreads();
+            }
+
 
             using (Py.GIL())
             {

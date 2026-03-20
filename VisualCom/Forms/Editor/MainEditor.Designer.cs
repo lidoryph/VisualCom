@@ -313,6 +313,7 @@
             toolStripButton_Exit.Name = "toolStripButton_Exit";
             toolStripButton_Exit.Size = new Size(23, 22);
             toolStripButton_Exit.Text = "toolStripButton_Exit";
+            toolStripButton_Exit.Click += Exit;
             // 
             // toolStripSeparator1
             // 
