@@ -32,8 +32,8 @@
             groupBox1 = new GroupBox();
             btnLoadProject = new Button();
             btnNewProject = new Button();
-            dlgOpenFile = new OpenFileDialog();
-            dlgSaveFile = new SaveFileDialog();
+            SaveFileDlg = new SaveFileDialog();
+            OpenFileDlg = new OpenFileDialog();
             groupBox1.SuspendLayout();
             SuspendLayout();
             // 
@@ -41,56 +41,35 @@
             // 
             groupBox1.Controls.Add(btnLoadProject);
             groupBox1.Controls.Add(btnNewProject);
-            groupBox1.ForeColor = SystemColors.HighlightText;
-            groupBox1.Location = new Point(124, 85);
-            groupBox1.Margin = new Padding(3, 2, 3, 2);
+            groupBox1.ForeColor = SystemColors.ControlText;
+            resources.ApplyResources(groupBox1, "groupBox1");
             groupBox1.Name = "groupBox1";
-            groupBox1.Padding = new Padding(3, 2, 3, 2);
-            groupBox1.Size = new Size(148, 102);
-            groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
-            groupBox1.Text = "Acciones";
             // 
             // btnLoadProject
             // 
-            btnLoadProject.ForeColor = SystemColors.HighlightText;
-            btnLoadProject.Location = new Point(6, 59);
-            btnLoadProject.Margin = new Padding(3, 2, 3, 2);
+            btnLoadProject.ForeColor = SystemColors.ControlText;
+            resources.ApplyResources(btnLoadProject, "btnLoadProject");
             btnLoadProject.Name = "btnLoadProject";
-            btnLoadProject.Size = new Size(137, 35);
-            btnLoadProject.TabIndex = 1;
-            btnLoadProject.Text = "Cargar Proyecto...";
             btnLoadProject.UseVisualStyleBackColor = true;
-            btnLoadProject.Click += btnLoadProject_Click;
-            btnLoadProject.MouseEnter += btnLoadProject_MouseEnter;
-            btnLoadProject.MouseLeave += btnLoadProject_MouseLeave;
+            btnLoadProject.Click += LoadProject;
             // 
             // btnNewProject
             // 
-            btnNewProject.ForeColor = SystemColors.HighlightText;
-            btnNewProject.Location = new Point(6, 20);
-            btnNewProject.Margin = new Padding(3, 2, 3, 2);
+            btnNewProject.ForeColor = SystemColors.ControlText;
+            resources.ApplyResources(btnNewProject, "btnNewProject");
             btnNewProject.Name = "btnNewProject";
-            btnNewProject.Size = new Size(137, 35);
-            btnNewProject.TabIndex = 0;
-            btnNewProject.Text = "Proyecto Nuevo...";
             btnNewProject.UseVisualStyleBackColor = true;
-            btnNewProject.Click += btnNewProject_Click;
-            btnNewProject.MouseEnter += btnNewProject_MouseEnter;
-            btnNewProject.MouseLeave += btnNewProject_MouseLeave;
+            btnNewProject.Click += NewProject;
             // 
             // WelcomeWindow
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            resources.ApplyResources(this, "$this");
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(63, 62, 62);
-            ClientSize = new Size(656, 349);
+            BackColor = SystemColors.Control;
             Controls.Add(groupBox1);
-            Icon = (Icon)resources.GetObject("$this.Icon");
-            Margin = new Padding(3, 2, 3, 2);
             MaximizeBox = false;
             Name = "WelcomeWindow";
-            Text = "VisualCom - Bienvenido";
             groupBox1.ResumeLayout(false);
             ResumeLayout(false);
         }
@@ -100,7 +79,7 @@
         private GroupBox groupBox1;
         private Button btnLoadProject;
         private Button btnNewProject;
-        private OpenFileDialog dlgOpenFile;
-        private SaveFileDialog dlgSaveFile;
+        private SaveFileDialog SaveFileDlg;
+        private OpenFileDialog OpenFileDlg;
     }
 }

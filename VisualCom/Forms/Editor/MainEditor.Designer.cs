@@ -175,6 +175,7 @@
             // 
             // quitarImagenesToolStripMenuItem
             // 
+            quitarImagenesToolStripMenuItem.Enabled = false;
             quitarImagenesToolStripMenuItem.Image = Properties.Resources.remove_images;
             quitarImagenesToolStripMenuItem.Name = "quitarImagenesToolStripMenuItem";
             quitarImagenesToolStripMenuItem.Size = new Size(172, 22);
@@ -199,17 +200,21 @@
             // 
             // quitarClaseToolStripMenuItem
             // 
+            quitarClaseToolStripMenuItem.Enabled = false;
             quitarClaseToolStripMenuItem.Image = Properties.Resources.remove_class;
             quitarClaseToolStripMenuItem.Name = "quitarClaseToolStripMenuItem";
             quitarClaseToolStripMenuItem.Size = new Size(147, 22);
             quitarClaseToolStripMenuItem.Text = "Quitar clase...";
+            quitarClaseToolStripMenuItem.Click += EraseClassDialog;
             // 
             // editarClaseToolStripMenuItem
             // 
+            editarClaseToolStripMenuItem.Enabled = false;
             editarClaseToolStripMenuItem.Image = Properties.Resources.edit_class;
             editarClaseToolStripMenuItem.Name = "editarClaseToolStripMenuItem";
             editarClaseToolStripMenuItem.Size = new Size(147, 22);
             editarClaseToolStripMenuItem.Text = "Editar clase...";
+            editarClaseToolStripMenuItem.Click += ModifyClass;
             // 
             // versionesToolStripMenuItem
             // 
@@ -225,6 +230,7 @@
             añadirVersiónToolStripMenuItem.Name = "añadirVersiónToolStripMenuItem";
             añadirVersiónToolStripMenuItem.Size = new Size(159, 22);
             añadirVersiónToolStripMenuItem.Text = "Añadir versión...";
+            añadirVersiónToolStripMenuItem.Click += DialogNewVersion;
             // 
             // quitarVersiónToolStripMenuItem
             // 
@@ -232,6 +238,7 @@
             quitarVersiónToolStripMenuItem.Name = "quitarVersiónToolStripMenuItem";
             quitarVersiónToolStripMenuItem.Size = new Size(159, 22);
             quitarVersiónToolStripMenuItem.Text = "Quitar versión...";
+            quitarVersiónToolStripMenuItem.Click += DialogRemoveVersion;
             // 
             // editarVersiónToolStripMenuItem
             // 
@@ -391,6 +398,7 @@
             toolStripButton_newVersion.Name = "toolStripButton_newVersion";
             toolStripButton_newVersion.Size = new Size(23, 22);
             toolStripButton_newVersion.Text = "toolStripButton1";
+            toolStripButton_newVersion.Click += DialogNewVersion;
             // 
             // toolStripButton_removeVersion
             // 
@@ -400,6 +408,7 @@
             toolStripButton_removeVersion.Name = "toolStripButton_removeVersion";
             toolStripButton_removeVersion.Size = new Size(23, 22);
             toolStripButton_removeVersion.Text = "toolStripButton2";
+            toolStripButton_removeVersion.Click += DialogRemoveVersion;
             // 
             // toolStripButton_editVersion
             // 
@@ -549,7 +558,10 @@
             pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox.TabIndex = 0;
             pictureBox.TabStop = false;
+            pictureBox.Paint += PictureBox_Paint;
+            pictureBox.MouseDown += PictureBox_MouseDown;
             pictureBox.MouseMove += PictureBox_MouseMove;
+            pictureBox.MouseUp += PictureBox_MouseUp;
             // 
             // MainEditor
             // 

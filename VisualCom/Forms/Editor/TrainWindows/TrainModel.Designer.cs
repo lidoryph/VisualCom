@@ -29,50 +29,56 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TrainModel));
-            TrainModOKButton = new Button();
-            TrainModCancelButton = new Button();
+            TrainModelButton = new Button();
+            CancelButton = new Button();
             TrainProgress = new ProgressBar();
-            modelVersion = new ComboBox();
+            VersionSelector = new ComboBox();
             label1 = new Label();
             label2 = new Label();
-            epochBar = new TrackBar();
-            helpButton = new Button();
+            EpochBar = new TrackBar();
+            HelpButton = new Button();
             label3 = new Label();
-            rateNumeric = new NumericUpDown();
-            rateBar = new TrackBar();
+            RateNumeric = new NumericUpDown();
+            RateBar = new TrackBar();
             label4 = new Label();
-            imagesBar = new TrackBar();
-            imagesNumeric = new NumericUpDown();
-            epochNumeric = new NumericUpDown();
+            ImagesBar = new TrackBar();
+            ImagesNumeric = new NumericUpDown();
+            EpochNumeric = new NumericUpDown();
             label5 = new Label();
-            useDevice = new ComboBox();
-            ((System.ComponentModel.ISupportInitialize)epochBar).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)rateNumeric).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)rateBar).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)imagesBar).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)imagesNumeric).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)epochNumeric).BeginInit();
+            DeviceSelector = new ComboBox();
+            ((System.ComponentModel.ISupportInitialize)EpochBar).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)RateNumeric).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)RateBar).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)ImagesBar).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)ImagesNumeric).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)EpochNumeric).BeginInit();
             SuspendLayout();
             // 
-            // TrainModOKButton
+            // TrainModelButton
             // 
-            TrainModOKButton.Location = new Point(120, 361);
-            TrainModOKButton.Name = "TrainModOKButton";
-            TrainModOKButton.Size = new Size(192, 48);
-            TrainModOKButton.TabIndex = 0;
-            TrainModOKButton.Text = "Aceptar";
-            TrainModOKButton.UseVisualStyleBackColor = true;
-            TrainModOKButton.Click += TrainModOKButton_Click;
+            TrainModelButton.Image = Properties.Resources.train_model;
+            TrainModelButton.ImageAlign = ContentAlignment.MiddleLeft;
+            TrainModelButton.Location = new Point(120, 361);
+            TrainModelButton.Name = "TrainModelButton";
+            TrainModelButton.Padding = new Padding(10, 0, 0, 0);
+            TrainModelButton.Size = new Size(192, 48);
+            TrainModelButton.TabIndex = 0;
+            TrainModelButton.Text = "Aceptar";
+            TrainModelButton.UseVisualStyleBackColor = true;
+            TrainModelButton.Click += InitTrainModel;
             // 
-            // TrainModCancelButton
+            // CancelButton
             // 
-            TrainModCancelButton.Location = new Point(120, 415);
-            TrainModCancelButton.Name = "TrainModCancelButton";
-            TrainModCancelButton.Size = new Size(192, 48);
-            TrainModCancelButton.TabIndex = 1;
-            TrainModCancelButton.Text = "Cancelar";
-            TrainModCancelButton.UseVisualStyleBackColor = true;
-            TrainModCancelButton.Click += TrainModCancelButton_Click;
+            CancelButton.Image = Properties.Resources.go_back;
+            CancelButton.ImageAlign = ContentAlignment.MiddleLeft;
+            CancelButton.Location = new Point(120, 415);
+            CancelButton.Name = "CancelButton";
+            CancelButton.Padding = new Padding(10, 0, 0, 0);
+            CancelButton.Size = new Size(192, 48);
+            CancelButton.TabIndex = 1;
+            CancelButton.Text = "Cancelar";
+            CancelButton.UseVisualStyleBackColor = true;
+            CancelButton.Click += TrainModCancelButton_Click;
             // 
             // TrainProgress
             // 
@@ -82,13 +88,13 @@
             TrainProgress.Size = new Size(407, 47);
             TrainProgress.TabIndex = 2;
             // 
-            // modelVersion
+            // VersionSelector
             // 
-            modelVersion.FormattingEnabled = true;
-            modelVersion.Location = new Point(12, 27);
-            modelVersion.Name = "modelVersion";
-            modelVersion.Size = new Size(407, 23);
-            modelVersion.TabIndex = 3;
+            VersionSelector.FormattingEnabled = true;
+            VersionSelector.Location = new Point(12, 27);
+            VersionSelector.Name = "VersionSelector";
+            VersionSelector.Size = new Size(407, 23);
+            VersionSelector.TabIndex = 3;
             // 
             // label1
             // 
@@ -108,25 +114,25 @@
             label2.TabIndex = 5;
             label2.Text = "Ciclos";
             // 
-            // epochBar
+            // EpochBar
             // 
-            epochBar.Location = new Point(12, 86);
-            epochBar.Maximum = 100;
-            epochBar.Name = "epochBar";
-            epochBar.Size = new Size(362, 45);
-            epochBar.TabIndex = 6;
-            epochBar.TickFrequency = 10;
-            epochBar.Value = 10;
-            epochBar.ValueChanged += epochBar_ValueChanged;
+            EpochBar.Location = new Point(12, 86);
+            EpochBar.Maximum = 100;
+            EpochBar.Name = "EpochBar";
+            EpochBar.Size = new Size(362, 45);
+            EpochBar.TabIndex = 6;
+            EpochBar.TickFrequency = 10;
+            EpochBar.Value = 10;
+            EpochBar.ValueChanged += EpochBar_ValueChanged;
             // 
-            // helpButton
+            // HelpButton
             // 
-            helpButton.Location = new Point(371, 415);
-            helpButton.Name = "helpButton";
-            helpButton.Size = new Size(48, 48);
-            helpButton.TabIndex = 8;
-            helpButton.UseVisualStyleBackColor = true;
-            helpButton.Click += helpButton_Click;
+            HelpButton.Location = new Point(371, 415);
+            HelpButton.Name = "HelpButton";
+            HelpButton.Size = new Size(48, 48);
+            HelpButton.TabIndex = 8;
+            HelpButton.UseVisualStyleBackColor = true;
+            HelpButton.Click += ShowHelpDlg;
             // 
             // label3
             // 
@@ -137,25 +143,25 @@
             label3.TabIndex = 9;
             label3.Text = "Corrección de Aprendizaje";
             // 
-            // rateNumeric
+            // RateNumeric
             // 
-            rateNumeric.Location = new Point(380, 152);
-            rateNumeric.Name = "rateNumeric";
-            rateNumeric.Size = new Size(39, 23);
-            rateNumeric.TabIndex = 10;
-            rateNumeric.Value = new decimal(new int[] { 50, 0, 0, 0 });
-            rateNumeric.ValueChanged += rateNumeric_ValueChanged;
+            RateNumeric.Location = new Point(380, 152);
+            RateNumeric.Name = "RateNumeric";
+            RateNumeric.Size = new Size(39, 23);
+            RateNumeric.TabIndex = 10;
+            RateNumeric.Value = new decimal(new int[] { 50, 0, 0, 0 });
+            RateNumeric.ValueChanged += RateNumeric_ValueChanged;
             // 
-            // rateBar
+            // RateBar
             // 
-            rateBar.Location = new Point(12, 152);
-            rateBar.Maximum = 100;
-            rateBar.Name = "rateBar";
-            rateBar.Size = new Size(362, 45);
-            rateBar.TabIndex = 11;
-            rateBar.TickFrequency = 10;
-            rateBar.Value = 50;
-            rateBar.ValueChanged += rateBar_ValueChanged;
+            RateBar.Location = new Point(12, 152);
+            RateBar.Maximum = 100;
+            RateBar.Name = "RateBar";
+            RateBar.Size = new Size(362, 45);
+            RateBar.TabIndex = 11;
+            RateBar.TickFrequency = 10;
+            RateBar.Value = 50;
+            RateBar.ValueChanged += RateBar_ValueChanged;
             // 
             // label4
             // 
@@ -166,36 +172,36 @@
             label4.TabIndex = 12;
             label4.Text = "Imagenes a mostrar";
             // 
-            // imagesBar
+            // ImagesBar
             // 
-            imagesBar.Location = new Point(12, 218);
-            imagesBar.Maximum = 100;
-            imagesBar.Name = "imagesBar";
-            imagesBar.Size = new Size(362, 45);
-            imagesBar.TabIndex = 13;
-            imagesBar.TickFrequency = 10;
-            imagesBar.Value = 16;
-            imagesBar.ValueChanged += imagesBar_ValueChanged;
+            ImagesBar.Location = new Point(12, 218);
+            ImagesBar.Maximum = 100;
+            ImagesBar.Name = "ImagesBar";
+            ImagesBar.Size = new Size(362, 45);
+            ImagesBar.TabIndex = 13;
+            ImagesBar.TickFrequency = 10;
+            ImagesBar.Value = 16;
+            ImagesBar.ValueChanged += ImagesBar_ValueChanged;
             // 
-            // imagesNumeric
+            // ImagesNumeric
             // 
-            imagesNumeric.Location = new Point(380, 218);
-            imagesNumeric.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            imagesNumeric.Name = "imagesNumeric";
-            imagesNumeric.Size = new Size(39, 23);
-            imagesNumeric.TabIndex = 14;
-            imagesNumeric.Value = new decimal(new int[] { 16, 0, 0, 0 });
-            imagesNumeric.ValueChanged += imagesNumeric_ValueChanged;
+            ImagesNumeric.Location = new Point(380, 218);
+            ImagesNumeric.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            ImagesNumeric.Name = "ImagesNumeric";
+            ImagesNumeric.Size = new Size(39, 23);
+            ImagesNumeric.TabIndex = 14;
+            ImagesNumeric.Value = new decimal(new int[] { 16, 0, 0, 0 });
+            ImagesNumeric.ValueChanged += ImagesNumeric_ValueChanged;
             // 
-            // epochNumeric
+            // EpochNumeric
             // 
-            epochNumeric.Location = new Point(380, 86);
-            epochNumeric.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            epochNumeric.Name = "epochNumeric";
-            epochNumeric.Size = new Size(39, 23);
-            epochNumeric.TabIndex = 15;
-            epochNumeric.Value = new decimal(new int[] { 10, 0, 0, 0 });
-            epochNumeric.ValueChanged += epochNumeric_ValueChanged;
+            EpochNumeric.Location = new Point(380, 86);
+            EpochNumeric.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            EpochNumeric.Name = "EpochNumeric";
+            EpochNumeric.Size = new Size(39, 23);
+            EpochNumeric.TabIndex = 15;
+            EpochNumeric.Value = new decimal(new int[] { 10, 0, 0, 0 });
+            EpochNumeric.ValueChanged += EpochNumeric_ValueChanged;
             // 
             // label5
             // 
@@ -206,38 +212,37 @@
             label5.TabIndex = 16;
             label5.Text = "Dispositivo a usar";
             // 
-            // useDevice
+            // DeviceSelector
             // 
-            useDevice.FormattingEnabled = true;
-            useDevice.Location = new Point(12, 284);
-            useDevice.Name = "useDevice";
-            useDevice.Size = new Size(407, 23);
-            useDevice.TabIndex = 17;
+            DeviceSelector.FormattingEnabled = true;
+            DeviceSelector.Location = new Point(12, 284);
+            DeviceSelector.Name = "DeviceSelector";
+            DeviceSelector.Size = new Size(407, 23);
+            DeviceSelector.TabIndex = 17;
             // 
             // TrainModel
             // 
-            AcceptButton = TrainModOKButton;
+            AcceptButton = TrainModelButton;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            CancelButton = TrainModCancelButton;
             ClientSize = new Size(431, 528);
-            Controls.Add(useDevice);
+            Controls.Add(DeviceSelector);
             Controls.Add(label5);
-            Controls.Add(epochNumeric);
-            Controls.Add(imagesNumeric);
-            Controls.Add(imagesBar);
+            Controls.Add(EpochNumeric);
+            Controls.Add(ImagesNumeric);
+            Controls.Add(ImagesBar);
             Controls.Add(label4);
-            Controls.Add(rateBar);
-            Controls.Add(rateNumeric);
+            Controls.Add(RateBar);
+            Controls.Add(RateNumeric);
             Controls.Add(label3);
-            Controls.Add(helpButton);
-            Controls.Add(epochBar);
+            Controls.Add(HelpButton);
+            Controls.Add(EpochBar);
             Controls.Add(label2);
             Controls.Add(label1);
-            Controls.Add(modelVersion);
+            Controls.Add(VersionSelector);
             Controls.Add(TrainProgress);
-            Controls.Add(TrainModCancelButton);
-            Controls.Add(TrainModOKButton);
+            Controls.Add(CancelButton);
+            Controls.Add(TrainModelButton);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
@@ -245,34 +250,34 @@
             Name = "TrainModel";
             ShowInTaskbar = false;
             Text = "Entrenar un modelo...";
-            ((System.ComponentModel.ISupportInitialize)epochBar).EndInit();
-            ((System.ComponentModel.ISupportInitialize)rateNumeric).EndInit();
-            ((System.ComponentModel.ISupportInitialize)rateBar).EndInit();
-            ((System.ComponentModel.ISupportInitialize)imagesBar).EndInit();
-            ((System.ComponentModel.ISupportInitialize)imagesNumeric).EndInit();
-            ((System.ComponentModel.ISupportInitialize)epochNumeric).EndInit();
+            ((System.ComponentModel.ISupportInitialize)EpochBar).EndInit();
+            ((System.ComponentModel.ISupportInitialize)RateNumeric).EndInit();
+            ((System.ComponentModel.ISupportInitialize)RateBar).EndInit();
+            ((System.ComponentModel.ISupportInitialize)ImagesBar).EndInit();
+            ((System.ComponentModel.ISupportInitialize)ImagesNumeric).EndInit();
+            ((System.ComponentModel.ISupportInitialize)EpochNumeric).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
-        private Button TrainModOKButton;
-        private Button TrainModCancelButton;
+        private Button TrainModelButton;
+        private Button CancelButton;
         private ProgressBar TrainProgress;
-        private ComboBox modelVersion;
+        private ComboBox VersionSelector;
         private Label label1;
         private Label label2;
-        private TrackBar epochBar;
-        private Button helpButton;
+        private TrackBar EpochBar;
+        private Button HelpButton;
         private Label label3;
-        private NumericUpDown rateNumeric;
-        private TrackBar rateBar;
+        private NumericUpDown RateNumeric;
+        private TrackBar RateBar;
         private Label label4;
-        private TrackBar imagesBar;
-        private NumericUpDown imagesNumeric;
-        private NumericUpDown epochNumeric;
+        private TrackBar ImagesBar;
+        private NumericUpDown ImagesNumeric;
+        private NumericUpDown EpochNumeric;
         private Label label5;
-        private ComboBox useDevice;
+        private ComboBox DeviceSelector;
     }
 }

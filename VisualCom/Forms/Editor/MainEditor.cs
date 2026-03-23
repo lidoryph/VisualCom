@@ -16,6 +16,7 @@ using VisualCom.Properties;
 using VisualCom.Forms.Editor.Classes;
 using System.Xml.Linq;
 using System.Numerics;
+using VisualCom.Forms.Editor.Versions;
 
 namespace VisualCom
 {
@@ -25,8 +26,22 @@ namespace VisualCom
         private readonly ReadingDocument error = new();
         private readonly XElement? pv_type = Configuration.ProjectVariables.Root?.Element("Type");
         private readonly XElement? pv_name = Configuration.ProjectVariables.Root?.Element("Name");
+        private readonly XElement? pv_version = Configuration.ProjectVariables.Root?.Element("Version");
+
         private readonly XElement? pv_images = Configuration.ProjectVariables.Root?.Element("Directories")?.Element("Images");
+        private readonly XElement? pv_versions = Configuration.ProjectVariables.Root?.Element("Directories")?.Element("Versions");
+        private readonly XElement? pv_notes = Configuration.ProjectVariables.Root?.Element("Directories")?.Element("Annotations");
+
         private readonly XElement? pv_classes = Configuration.ProjectVariables.Root?.Element("Classes");
+
+        private Boolean _isDragging = false;
+        private Point _dragStartBox = Point.Empty;
+        private Point _dragCurrentBox = Point.Empty;
+
+        private PointF _selectionBottomLeft = PointF.Empty;
+        private PointF _selectionTopRight = PointF.Empty;
+
+        private Boolean ChangedImage = false;
 
         public MainEditor()
         {
@@ -46,11 +61,11 @@ namespace VisualCom
 
             if (pv_type.Value == "OI")
             {
-                this.Text = "VisualCom - Editando proyecto \"" + pv_name.Value + "\" de tipo Identificación de Objetos.";
+                this.Text = "VisualCom - Editando proyecto \"" + pv_name.Value + "\" de tipo Identificación de Objetos. Versión: " + pv_version.Value;
             }
             else if (pv_type.Value == "C")
             {
-                this.Text = "VisualCom - Editando proyecto \"" + pv_name.Value + "\" de tipo Clasificación.";
+                this.Text = "VisualCom - Editando proyecto \"" + pv_name.Value + "\" de tipo Clasificación. Versión: " + pv_version.Value;
 
             }
 
@@ -242,20 +257,20 @@ namespace VisualCom
             }
 
             if (ImagesList.FocusedItem == null)
-            {
                 return;
-            }
 
+            ChangedImage = true;
             string imagesPath = pv_images.Value;
             pictureBox.Image = new Bitmap((string)Path.Join(imagesPath, ImagesList.FocusedItem.Text));
         }
 
         private void PictureBox_MouseMove(object sender, MouseEventArgs e)
         {
-            int xCoordinate = e.X;
-            int yCoordinate = e.Y;
+            PointF? imgCoords = GetImageCoordinates(e.Location);
 
-            mouseCoordinates.Text = "x: " + xCoordinate + ", y: " + yCoordinate;
+            if (imgCoords.HasValue)
+                mouseCoordinates.Text = $"x: {(int)imgCoords.Value.X}, y: {(int)imgCoords.Value.Y}";
+            else return;
         }
 
         private void OpenASAIWeb(object sender, EventArgs e)
@@ -484,11 +499,15 @@ namespace VisualCom
             {
                 toolStripButton_editClass.Enabled = false;
                 toolStripButton_removeClass.Enabled = false;
+                quitarClaseToolStripMenuItem.Enabled = false;
+                editarClaseToolStripMenuItem.Enabled = false;
             }
             else if (ClassesList.SelectedItems.Count > 0)
             {
                 toolStripButton_editClass.Enabled = true;
                 toolStripButton_removeClass.Enabled = true;
+                quitarClaseToolStripMenuItem.Enabled = true;
+                editarClaseToolStripMenuItem.Enabled = true;
             }
         }
 
@@ -497,16 +516,193 @@ namespace VisualCom
             if (ImagesList.SelectedItems.Count == 0)
             {
                 toolStripButton_removeImages.Enabled = false;
+                quitarImagenesToolStripMenuItem.Enabled = false;
             }
             else if (ImagesList.SelectedItems.Count > 0)
             {
                 toolStripButton_removeImages.Enabled = true;
+                quitarImagenesToolStripMenuItem.Enabled = true;
             }
         }
 
         private void ResizeClassesList(object sender, EventArgs e)
         {
             ClassesList.Resize += (s, e) => ClassesList.Columns[0].Width = ClassesList.ClientSize.Width;
+        }
+
+
+        private void DialogNewVersion(object sender, EventArgs e)
+        {
+            NewVersion dialog = new(this);
+            dialog.ShowDialog();
+        }
+
+        private void DialogRemoveVersion(object sender, EventArgs e)
+        {
+            RemoveVersion dialog = new(this);
+            dialog.ShowDialog();
+        }
+
+        public void NewVersion((string, string, string, string) VersionArguments)
+        {
+            if(pv_versions == null || pv_images == null || pv_notes == null || pv_version == null)
+            {
+                error.ShowDialog();
+                return;
+            }
+
+            string FirstOctave = VersionArguments.Item1;
+            string SecondOctave = VersionArguments.Item2;
+            string ThirdOctave = VersionArguments.Item3;
+            string VersionSuffix = VersionArguments.Item4;
+
+            string VersionName = FirstOctave + "." + SecondOctave + "." + ThirdOctave + "-" + VersionSuffix;
+            string VersionPath = Path.Join(pv_versions.Value, VersionName);
+            string VersionImages = Path.Join(VersionPath, "images");
+            string VersionAnnotations = Path.Join(VersionPath, "annotations");
+           
+            System.IO.Directory.CreateDirectory(VersionPath);
+            System.IO.Directory.CreateDirectory(VersionImages);
+            System.IO.Directory.CreateDirectory(VersionAnnotations);
+
+            foreach(var image in System.IO.Directory.GetFiles(pv_images.Value))
+                System.IO.File.Copy(image, Path.Join(VersionImages, Path.GetFileName(image)));
+            foreach (var note in System.IO.Directory.GetFiles(pv_notes.Value))
+                System.IO.File.Copy(note, Path.Join(VersionAnnotations, Path.GetFileName(note)));
+
+            pv_version.Value = VersionName;
+            Configuration.Saved = false;
+        }
+
+        public void RemoveVersion(string version)
+        {
+            if (pv_versions == null)
+                return;
+
+            string VersionPath = Path.Join(pv_versions.Value, version);
+            System.IO.Directory.Delete(VersionPath, true);
+        }
+
+        private RectangleF GetRenderedImageRect()
+        {
+            if (pictureBox.Image == null) return RectangleF.Empty;
+
+            float imgAspect = (float)pictureBox.Image.Width / pictureBox.Image.Height;
+            float boxAspect = (float)pictureBox.Width / pictureBox.Height;
+
+            float drawWidth, drawHeight;
+            if (imgAspect > boxAspect)
+            {
+                drawWidth = pictureBox.Width;
+                drawHeight = pictureBox.Width / imgAspect;
+            }
+            else
+            {
+                drawHeight = pictureBox.Height;
+                drawWidth = pictureBox.Height * imgAspect;
+            }
+
+            float offsetX = (pictureBox.Width - drawWidth) / 2f;
+            float offsetY = (pictureBox.Height - drawHeight) / 2f;
+
+            return new RectangleF(offsetX, offsetY, drawWidth, drawHeight);
+        }
+
+        private PointF? GetImageCoordinates(Point mousePos)
+        {
+            if (pictureBox.Image == null) return null;
+
+            RectangleF imgRect = GetRenderedImageRect();
+            if (!imgRect.Contains(mousePos)) return null;
+
+            float imgX = (mousePos.X - imgRect.X) / imgRect.Width * pictureBox.Image.Width;
+            float imgY = (mousePos.Y - imgRect.Y) / imgRect.Height * pictureBox.Image.Height;
+
+            return new PointF(imgX, imgY);
+        }
+
+        private void PictureBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Left || pictureBox.Image == null) return;
+
+            _isDragging = true;
+            _dragStartBox = e.Location;
+            _dragCurrentBox = e.Location;
+
+            // Limpia la selección anterior mientras se empieza una nueva
+            _selectionBottomLeft = PointF.Empty;
+            _selectionTopRight = PointF.Empty;
+        }
+
+        private void PictureBox_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (!_isDragging || e.Button != MouseButtons.Left) return;
+
+            _isDragging = false;
+            _dragCurrentBox = e.Location;
+
+            // Convertir ambos extremos a coordenadas de imagen
+            PointF? start = GetImageCoordinates(_dragStartBox);
+            PointF? end = GetImageCoordinates(_dragCurrentBox);
+
+            if (start.HasValue && end.HasValue)
+            {
+                // Esquina inferior izquierda (X mín, Y máx) y superior derecha (X máx, Y mín)
+                _selectionBottomLeft = new PointF(
+                    Math.Min(start.Value.X, end.Value.X),
+                    Math.Max(start.Value.Y, end.Value.Y)   // Y mayor = más abajo en imagen
+                );
+                _selectionTopRight = new PointF(
+                    Math.Max(start.Value.X, end.Value.X),
+                    Math.Min(start.Value.Y, end.Value.Y)   // Y menor = más arriba en imagen
+                );
+            }
+
+            pictureBox.Invalidate();
+        }
+
+        private void PictureBox_Paint(object sender, PaintEventArgs e)
+        {
+            // Dibujar rectángulo mientras se arrastra
+            Point p1 = _dragStartBox;
+            Point p2 = _isDragging ? _dragCurrentBox : Point.Empty;
+
+            // Si hay una selección guardada y no se está arrastrando, convertirla a coords del box
+            if (!_isDragging && _selectionBottomLeft != PointF.Empty)
+            {
+                RectangleF imgRect = GetRenderedImageRect();
+                if (imgRect != RectangleF.Empty && pictureBox.Image != null)
+                {
+                    float scaleX = imgRect.Width / pictureBox.Image.Width;
+                    float scaleY = imgRect.Height / pictureBox.Image.Height;
+
+                    // TopRight en imagen → esquina superior derecha visual
+                    p1 = new Point(
+                        (int)(imgRect.X + _selectionTopRight.X * scaleX),
+                        (int)(imgRect.Y + _selectionTopRight.Y * scaleY)
+                    );
+                    // BottomLeft en imagen → esquina inferior izquierda visual
+                    p2 = new Point(
+                        (int)(imgRect.X + _selectionBottomLeft.X * scaleX),
+                        (int)(imgRect.Y + _selectionBottomLeft.Y * scaleY)
+                    );
+                }
+            }
+
+            if (p2 == Point.Empty) return;
+
+            int x = Math.Min(p1.X, p2.X);
+            int y = Math.Min(p1.Y, p2.Y);
+            int w = Math.Abs(p1.X - p2.X);
+            int h = Math.Abs(p1.Y - p2.Y);
+
+            if (w < 2 || h < 2) return;
+
+            using SolidBrush fill = new(Color.FromArgb(40, 30, 144, 255));
+            using Pen border = new(Color.FromArgb(220, 30, 144, 255), 2);
+
+            e.Graphics.FillRectangle(fill, x, y, w, h);
+            e.Graphics.DrawRectangle(border, x, y, w, h);
         }
 
         private void Exit(object sender, EventArgs e)

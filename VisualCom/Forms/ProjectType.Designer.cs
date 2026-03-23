@@ -38,63 +38,40 @@
             // 
             OIbutton.ForeColor = SystemColors.ControlText;
             OIbutton.Image = Properties.Resources.magnifier;
-            OIbutton.ImageAlign = ContentAlignment.MiddleLeft;
-            OIbutton.Location = new Point(32, 80);
-            OIbutton.Margin = new Padding(3, 2, 3, 2);
+            resources.ApplyResources(OIbutton, "OIbutton");
             OIbutton.Name = "OIbutton";
-            OIbutton.Padding = new Padding(10, 0, 0, 0);
-            OIbutton.Size = new Size(192, 48);
-            OIbutton.TabIndex = 0;
-            OIbutton.Text = "Identificación de Objetos";
             OIbutton.UseVisualStyleBackColor = true;
-            OIbutton.Click += OIbutton_Click;
+            OIbutton.Click += ObjectIdentification;
             // 
             // Cbutton
             // 
             Cbutton.ForeColor = SystemColors.ControlText;
             Cbutton.Image = Properties.Resources.tag;
-            Cbutton.ImageAlign = ContentAlignment.MiddleLeft;
-            Cbutton.Location = new Point(274, 80);
-            Cbutton.Margin = new Padding(3, 2, 3, 2);
+            resources.ApplyResources(Cbutton, "Cbutton");
             Cbutton.Name = "Cbutton";
-            Cbutton.Padding = new Padding(10, 0, 0, 0);
-            Cbutton.Size = new Size(192, 48);
-            Cbutton.TabIndex = 1;
-            Cbutton.Text = "Clasificación";
             Cbutton.UseVisualStyleBackColor = true;
-            Cbutton.Click += Cbutton_Click;
+            Cbutton.Click += Classification;
             // 
             // Label
             // 
-            Label.AutoSize = true;
+            resources.ApplyResources(Label, "Label");
             Label.ForeColor = SystemColors.ControlText;
-            Label.Location = new Point(145, 24);
             Label.Name = "Label";
-            Label.Size = new Size(199, 15);
-            Label.TabIndex = 2;
-            Label.Text = "¿Que tipo de proyecto quieres crear?";
             // 
             // ProjectType
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            resources.ApplyResources(this, "$this");
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
-            ClientSize = new Size(496, 153);
             Controls.Add(Label);
             Controls.Add(Cbutton);
             Controls.Add(OIbutton);
             FormBorderStyle = FormBorderStyle.FixedSingle;
-            Icon = (Icon)resources.GetObject("$this.Icon");
-            Margin = new Padding(3, 2, 3, 2);
             MaximizeBox = false;
-            MaximumSize = new Size(512, 192);
             MinimizeBox = false;
-            MinimumSize = new Size(512, 192);
             Name = "ProjectType";
             ShowInTaskbar = false;
             SizeGripStyle = SizeGripStyle.Hide;
-            Text = "Seleccione el tipo de proyecto:";
-            FormClosing += ProjectType_FormClosing;
             ResumeLayout(false);
             PerformLayout();
         }

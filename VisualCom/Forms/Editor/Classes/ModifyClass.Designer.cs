@@ -29,38 +29,38 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ModifyClass));
-            openClassColor = new Button();
-            boxClassName = new TextBox();
+            OpenClassSelector = new Button();
+            ClassRenamer = new TextBox();
             label1 = new Label();
-            returnButton = new Button();
-            modifyClassButton = new Button();
+            CancelButton = new Button();
+            ModifyClassButton = new Button();
             colorDialog = new ColorDialog();
             SuspendLayout();
             // 
-            // openClassColor
+            // OpenClassSelector
             // 
-            openClassColor.BackColor = Color.White;
-            openClassColor.ForeColor = Color.Black;
-            openClassColor.Image = Properties.Resources.color;
-            openClassColor.ImageAlign = ContentAlignment.MiddleLeft;
-            openClassColor.Location = new Point(56, 88);
-            openClassColor.Name = "openClassColor";
-            openClassColor.Padding = new Padding(10, 0, 0, 0);
-            openClassColor.Size = new Size(384, 24);
-            openClassColor.TabIndex = 9;
-            openClassColor.Text = "Seleccione un Color";
-            openClassColor.UseVisualStyleBackColor = false;
-            openClassColor.Click += SelectColor;
+            OpenClassSelector.BackColor = Color.White;
+            OpenClassSelector.ForeColor = Color.Black;
+            OpenClassSelector.Image = Properties.Resources.color;
+            OpenClassSelector.ImageAlign = ContentAlignment.MiddleLeft;
+            OpenClassSelector.Location = new Point(56, 88);
+            OpenClassSelector.Name = "OpenClassSelector";
+            OpenClassSelector.Padding = new Padding(10, 0, 0, 0);
+            OpenClassSelector.Size = new Size(384, 24);
+            OpenClassSelector.TabIndex = 9;
+            OpenClassSelector.Text = "Seleccione un Color";
+            OpenClassSelector.UseVisualStyleBackColor = false;
+            OpenClassSelector.Click += SelectColor;
             // 
-            // boxClassName
+            // ClassRenamer
             // 
-            boxClassName.Location = new Point(56, 59);
-            boxClassName.MaxLength = 32;
-            boxClassName.Name = "boxClassName";
-            boxClassName.Size = new Size(384, 23);
-            boxClassName.TabIndex = 8;
-            boxClassName.TextAlign = HorizontalAlignment.Center;
-            boxClassName.TextChanged += SetClassName;
+            ClassRenamer.Location = new Point(56, 59);
+            ClassRenamer.MaxLength = 32;
+            ClassRenamer.Name = "ClassRenamer";
+            ClassRenamer.Size = new Size(384, 23);
+            ClassRenamer.TabIndex = 8;
+            ClassRenamer.TextAlign = HorizontalAlignment.Center;
+            ClassRenamer.TextChanged += SetClassName;
             // 
             // label1
             // 
@@ -71,42 +71,42 @@
             label1.TabIndex = 7;
             label1.Text = "Escribe el nuevo nombre de la clase";
             // 
-            // returnButton
+            // CancelButton
             // 
-            returnButton.Image = Properties.Resources.go_back;
-            returnButton.ImageAlign = ContentAlignment.MiddleLeft;
-            returnButton.Location = new Point(280, 139);
-            returnButton.Name = "returnButton";
-            returnButton.Padding = new Padding(10, 0, 0, 0);
-            returnButton.Size = new Size(160, 48);
-            returnButton.TabIndex = 6;
-            returnButton.Text = "Cancelar";
-            returnButton.UseVisualStyleBackColor = true;
-            returnButton.Click += CloseDialog;
+            CancelButton.Image = Properties.Resources.go_back;
+            CancelButton.ImageAlign = ContentAlignment.MiddleLeft;
+            CancelButton.Location = new Point(280, 139);
+            CancelButton.Name = "CancelButton";
+            CancelButton.Padding = new Padding(10, 0, 0, 0);
+            CancelButton.Size = new Size(160, 48);
+            CancelButton.TabIndex = 6;
+            CancelButton.Text = "Cancelar";
+            CancelButton.UseVisualStyleBackColor = true;
+            CancelButton.Click += CloseDialog;
             // 
-            // modifyClassButton
+            // ModifyClassButton
             // 
-            modifyClassButton.Image = Properties.Resources.add_class;
-            modifyClassButton.ImageAlign = ContentAlignment.MiddleLeft;
-            modifyClassButton.Location = new Point(56, 139);
-            modifyClassButton.Name = "modifyClassButton";
-            modifyClassButton.Padding = new Padding(10, 0, 0, 0);
-            modifyClassButton.Size = new Size(160, 48);
-            modifyClassButton.TabIndex = 5;
-            modifyClassButton.Text = "Modificar Clase";
-            modifyClassButton.UseVisualStyleBackColor = true;
-            modifyClassButton.Click += Modify;
+            ModifyClassButton.Image = Properties.Resources.add_class;
+            ModifyClassButton.ImageAlign = ContentAlignment.MiddleLeft;
+            ModifyClassButton.Location = new Point(56, 139);
+            ModifyClassButton.Name = "ModifyClassButton";
+            ModifyClassButton.Padding = new Padding(10, 0, 0, 0);
+            ModifyClassButton.Size = new Size(160, 48);
+            ModifyClassButton.TabIndex = 5;
+            ModifyClassButton.Text = "Modificar Clase";
+            ModifyClassButton.UseVisualStyleBackColor = true;
+            ModifyClassButton.Click += Modify;
             // 
             // ModifyClass
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(496, 217);
-            Controls.Add(openClassColor);
-            Controls.Add(boxClassName);
+            Controls.Add(OpenClassSelector);
+            Controls.Add(ClassRenamer);
             Controls.Add(label1);
-            Controls.Add(returnButton);
-            Controls.Add(modifyClassButton);
+            Controls.Add(CancelButton);
+            Controls.Add(ModifyClassButton);
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             MinimizeBox = false;
@@ -118,11 +118,11 @@
 
         #endregion
 
-        private Button openClassColor;
-        private TextBox boxClassName;
+        private Button OpenClassSelector;
+        private TextBox ClassRenamer;
         private Label label1;
-        private Button returnButton;
-        private Button modifyClassButton;
+        private Button CancelButton;
+        private Button ModifyClassButton;
         private ColorDialog colorDialog;
     }
 }

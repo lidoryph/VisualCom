@@ -30,9 +30,9 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExitWithoutSave));
             label1 = new Label();
-            discard = new Button();
-            save = new Button();
-            cancel = new Button();
+            DiscardButton = new Button();
+            SaveButton = new Button();
+            CancelButton = new Button();
             SuspendLayout();
             // 
             // label1
@@ -44,44 +44,44 @@
             label1.TabIndex = 0;
             label1.Text = "No has guardado, ¿Que deseas hacer?";
             // 
-            // discard
+            // DiscardButton
             // 
-            discard.Image = Properties.Resources.exit;
-            discard.ImageAlign = ContentAlignment.MiddleLeft;
-            discard.Location = new Point(153, 129);
-            discard.Name = "discard";
-            discard.Padding = new Padding(10, 0, 0, 0);
-            discard.Size = new Size(206, 23);
-            discard.TabIndex = 1;
-            discard.Text = "Descartar Cambios";
-            discard.UseVisualStyleBackColor = true;
-            discard.Click += discardChanges;
+            DiscardButton.Image = Properties.Resources.exit;
+            DiscardButton.ImageAlign = ContentAlignment.MiddleLeft;
+            DiscardButton.Location = new Point(153, 129);
+            DiscardButton.Name = "DiscardButton";
+            DiscardButton.Padding = new Padding(10, 0, 0, 0);
+            DiscardButton.Size = new Size(206, 23);
+            DiscardButton.TabIndex = 1;
+            DiscardButton.Text = "Descartar Cambios";
+            DiscardButton.UseVisualStyleBackColor = true;
+            DiscardButton.Click += DiscardChanges;
             // 
-            // save
+            // SaveButton
             // 
-            save.Image = Properties.Resources.save_document;
-            save.ImageAlign = ContentAlignment.MiddleLeft;
-            save.Location = new Point(153, 80);
-            save.Name = "save";
-            save.Padding = new Padding(10, 0, 0, 0);
-            save.Size = new Size(206, 43);
-            save.TabIndex = 2;
-            save.Text = "Guardar Cambios";
-            save.UseVisualStyleBackColor = true;
-            save.Click += writeChanges;
+            SaveButton.Image = Properties.Resources.save_document;
+            SaveButton.ImageAlign = ContentAlignment.MiddleLeft;
+            SaveButton.Location = new Point(153, 80);
+            SaveButton.Name = "SaveButton";
+            SaveButton.Padding = new Padding(10, 0, 0, 0);
+            SaveButton.Size = new Size(206, 43);
+            SaveButton.TabIndex = 2;
+            SaveButton.Text = "Guardar Cambios";
+            SaveButton.UseVisualStyleBackColor = true;
+            SaveButton.Click += WriteChanges;
             // 
-            // cancel
+            // CancelButton
             // 
-            cancel.Image = Properties.Resources.go_back;
-            cancel.ImageAlign = ContentAlignment.MiddleLeft;
-            cancel.Location = new Point(153, 158);
-            cancel.Name = "cancel";
-            cancel.Padding = new Padding(10, 0, 0, 0);
-            cancel.Size = new Size(206, 23);
-            cancel.TabIndex = 3;
-            cancel.Text = "Cancelar y Volver";
-            cancel.UseVisualStyleBackColor = true;
-            cancel.Click += returnback;
+            CancelButton.Image = Properties.Resources.go_back;
+            CancelButton.ImageAlign = ContentAlignment.MiddleLeft;
+            CancelButton.Location = new Point(153, 158);
+            CancelButton.Name = "CancelButton";
+            CancelButton.Padding = new Padding(10, 0, 0, 0);
+            CancelButton.Size = new Size(206, 23);
+            CancelButton.TabIndex = 3;
+            CancelButton.Text = "Cancelar y Volver";
+            CancelButton.UseVisualStyleBackColor = true;
+            CancelButton.Click += Returnback;
             // 
             // ExitWithoutSave
             // 
@@ -89,9 +89,9 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(496, 217);
             ControlBox = false;
-            Controls.Add(cancel);
-            Controls.Add(save);
-            Controls.Add(discard);
+            Controls.Add(CancelButton);
+            Controls.Add(SaveButton);
+            Controls.Add(DiscardButton);
             Controls.Add(label1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -107,8 +107,8 @@
         #endregion
 
         private Label label1;
-        private Button discard;
-        private Button save;
-        private Button cancel;
+        private Button DiscardButton;
+        private Button SaveButton;
+        private Button CancelButton;
     }
 }

@@ -8,123 +8,129 @@ using System.Windows.Forms;
 using System.Management;
 using System.Reflection;
 using VisualCom.Forms.Editor.TrainWindows;
+using System.Xml.Linq;
 
 namespace VisualCom.Forms.Editor
 {
     public partial class TrainModel : Form
     {
+
+        private readonly XElement? pv_d_versions = Configuration.ProjectVariables.Root?.Element("Directories")?.Element("Versions");
+        private Boolean c_ps = Configuration.PythonStarted;
+
         public TrainModel()
         {
             InitializeComponent();
-            helpButton.Image = SystemIcons.Question.ToBitmap();
-            getVersions();
-            getGraphicsCards();
+            HelpButton.Image = SystemIcons.Question.ToBitmap();
+            GetVersions();
+            GetGraphicsCards();
         }
 
-        private void epochBar_ValueChanged(object sender, EventArgs e)
+        private void GetVersions()
         {
-            if (epochBar.Value == 0)
-            {
-                epochNumeric.Value = 1;
-            }
-            else
-            {
-                epochNumeric.Value = epochBar.Value;
-            }
+            if (pv_d_versions == null)
+                return;
 
+            foreach (var path in Directory.GetDirectories(pv_d_versions.Value))
+                VersionSelector.Items.Add(Path.GetFileName(path));
         }
-
-        private void epochNumeric_ValueChanged(object sender, EventArgs e)
+        private void GetGraphicsCards()
         {
-            epochBar.Value = Convert.ToInt32(epochNumeric.Value);
-        }
+            ManagementObjectSearcher searcher = new("SELECT * FROM Win32_DisplayConfiguration");
 
-        private void rateBar_ValueChanged(object sender, EventArgs e)
-        {
-            rateNumeric.Value = rateBar.Value;
-        }
-
-        private void rateNumeric_ValueChanged(object sender, EventArgs e)
-        {
-            rateBar.Value = Convert.ToInt32(rateNumeric.Value);
-        }
-
-        private void imagesBar_ValueChanged(object sender, EventArgs e)
-        {
-            if (imagesBar.Value == 0)
-            {
-                imagesNumeric.Value = 1;
-            }
-            else
-            {
-                imagesNumeric.Value = imagesBar.Value;
-            }
-
-        }
-
-        private void imagesNumeric_ValueChanged(object sender, EventArgs e)
-        {
-            imagesBar.Value = Convert.ToInt32(imagesNumeric.Value);
-        }
-
-        private void getGraphicsCards()
-        {
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_DisplayConfiguration");
-            string graphicsCards = string.Empty;
-
-            foreach (ManagementObject mo in searcher.Get())
+            foreach (ManagementObject mo in searcher.Get().Cast<ManagementObject>())
             {
                 foreach (PropertyData property in mo.Properties)
                 {
                     if (property.Name == "Description")
                     {
-                        useDevice.Items.Add(property.Value);
+                        DeviceSelector.Items.Add(property.Value);
                     }
                 }
             }
         }
 
-        private void getVersions()
+        private async void InitTrainModel(object sender, EventArgs e)
         {
-            foreach (var path in Directory.GetDirectories(Configuration.ProjectVariables.Root.Element("Directories").Element("Versions").Value))
-            {
-                modelVersion.Items.Add(Path.GetFileName(path));
-            }
-        }
-
-        private void helpButton_Click(object sender, EventArgs e)
-        {
-            var helptrain = new HelpTrain();
-            helptrain.ShowDialog();
-        }
-
-        private async void TrainModOKButton_Click(object sender, EventArgs e)
-        {
-            TrainModOKButton.Enabled = false;
+            TrainModelButton.Enabled = false;
             TrainProgress.Enabled = true;
 
+            string? Version = VersionSelector.SelectedItem?.ToString();
+            string? Device = DeviceSelector.SelectedItem?.ToString();
 
-            string version = modelVersion.SelectedItem.ToString();
-            int epoch = Convert.ToInt32(epochNumeric.Value);
-            int rate = Convert.ToInt32(rateNumeric.Value);
-            int images = Convert.ToInt32(imagesNumeric.Value);
-            string device = useDevice.SelectedItem.ToString();
-            PythonTrain.Initialize();
+            if (Version == null || Device == null)
+            {
+                MessageBox.Show("Ha habido un error recogiendo información.");
+                return;
+            }
 
-            dynamic result = await Task.Run(() =>
-                PythonTrain.startTrain(version, epoch, rate, images, device)
-             );
+            var PythonArguments = (version: Version, epoch: Convert.ToInt32(EpochNumeric.Value),
+                rate: Convert.ToInt32(RateNumeric.Value), images: Convert.ToInt32(ImagesNumeric.Value), device: Device);
 
-            //PythonTrain.startTrain(version, epoch, rate, images, device);
+
+            if (c_ps == false)
+            {
+                c_ps = true;
+                PythonTrain.Initialize();
+            }
+
+            dynamic? result = await Task.Run(() =>
+                PythonTrain.StartTrain(PythonArguments)
+            );
+
+            if (result == null) return;
 
             TrainProgress.Value = (int)result;
+            TrainModelButton.Enabled = true;
+            TrainProgress.Enabled = false;
 
-            TrainModOKButton.Enabled = false;
+        }
+        private void ShowHelpDlg(object sender, EventArgs e)
+        {
+            HelpTrain dialog = new();
+            dialog.ShowDialog();
         }
 
-        private void TrainModCancelButton_Click(object sender, EventArgs e)
+        private async void TrainModCancelButton_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void EpochBar_ValueChanged(object sender, EventArgs e)
+        {
+            if (EpochBar.Value == 0)
+                EpochNumeric.Value = 1;
+            else
+                EpochNumeric.Value = EpochBar.Value;
+        }
+
+        private void EpochNumeric_ValueChanged(object sender, EventArgs e)
+        {
+            EpochBar.Value = Convert.ToInt32(EpochNumeric.Value);
+        }
+
+        private void RateBar_ValueChanged(object sender, EventArgs e)
+        {
+            RateNumeric.Value = RateBar.Value;
+        }
+
+        private void RateNumeric_ValueChanged(object sender, EventArgs e)
+        {
+            RateBar.Value = Convert.ToInt32(RateNumeric.Value);
+        }
+
+        private void ImagesBar_ValueChanged(object sender, EventArgs e)
+        {
+            if (ImagesBar.Value == 0)
+                ImagesNumeric.Value = 1;
+            else
+                ImagesNumeric.Value = ImagesBar.Value;
+
+        }
+
+        private void ImagesNumeric_ValueChanged(object sender, EventArgs e)
+        {
+            ImagesBar.Value = Convert.ToInt32(ImagesNumeric.Value);
         }
     }
 }

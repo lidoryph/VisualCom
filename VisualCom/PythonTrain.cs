@@ -9,13 +9,11 @@ namespace VisualCom
 {
     public static class PythonTrain
     {
-
-        public static int status = 0;
         public static void Initialize()
         {
 
-            string projectDIR = AppDomain.CurrentDomain.BaseDirectory;
-            string TrainModPATH = Path.GetFullPath( Path.Combine(projectDIR, @".\..\..\..\TrainMod\") );
+            string ProjectDir = AppDomain.CurrentDomain.BaseDirectory;
+            string TrainModPath = Path.GetFullPath( Path.Combine(ProjectDir, @".\..\..\..\TrainMod\") );
 
             var proc = new Process
             {
@@ -32,16 +30,20 @@ namespace VisualCom
             
 
             proc.Start();
-            string pythonEXE = proc.StandardOutput.ReadToEnd().Trim();
-            string pythonDIR = Path.GetDirectoryName(pythonEXE);
+            string PythonExe = proc.StandardOutput.ReadToEnd().Trim();
+            string? PythonDir = Path.GetDirectoryName(PythonExe);
 
-            Runtime.PythonDLL = Path.Combine(pythonDIR, "python312.dll");
 
-            string venvPath = Path.Combine(TrainModPATH, @".venv");
-            string sitePackages = Path.Combine(venvPath, @"Lib\site-packages");
+            if (PythonDir == null)
+                return;
 
-            PythonEngine.PythonHome = pythonDIR;
-            Environment.SetEnvironmentVariable("PYTHONPATH", sitePackages + ";" + TrainModPATH);
+            Runtime.PythonDLL = Path.Combine(PythonDir, "python312.dll");
+
+            string VenvPath = Path.Combine(TrainModPath, @".venv");
+            string SitePackages = Path.Combine(VenvPath, @"Lib\site-packages");
+
+            PythonEngine.PythonHome = PythonDir;
+            Environment.SetEnvironmentVariable("PYTHONPATH", SitePackages + ";" + TrainModPath);
 
             if (Configuration.PythonStarted == false)
             {
@@ -54,8 +56,8 @@ namespace VisualCom
             using (Py.GIL())
             {
                 dynamic sys = Py.Import("sys");
-                sys.path.insert(0, TrainModPATH);
-                sys.path.insert(0, sitePackages);
+                sys.path.insert(0, TrainModPath);
+                sys.path.insert(0, SitePackages);
 
                 Console.WriteLine("sys.path: " + sys.path.ToString());
             }
@@ -63,14 +65,19 @@ namespace VisualCom
 
         }
 
-        public static double startTrain(string version, int epoch, int rate, int images, string device)
+        public static double StartTrain((string, int, int, int, string) PythonArguments)
         {
             using (Py.GIL())
             {
+                string? Version = PythonArguments.Item1;
+                int Epoch = PythonArguments.Item2;
+                int Rate = PythonArguments.Item3;
+                int Images = PythonArguments.Item4;
+                string Device = PythonArguments.Item5;
+
+
                 dynamic mod = Py.Import("miscriptpqnofunciona");
-
-                dynamic returns = mod.calcular(version, epoch, rate, images, device);
-
+                dynamic returns = mod.calcular(Version, Epoch, Rate, Images, Device);
 
                 double status = returns["status"].As<double>();
 

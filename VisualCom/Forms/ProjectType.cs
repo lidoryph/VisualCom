@@ -20,17 +20,16 @@ namespace VisualCom.Forms
             InitializeComponent();
         }
 
-        private void OIbutton_Click(object sender, EventArgs e)
+        private void ObjectIdentification(object sender, EventArgs e)
         {
             if (pv_type == null)
                 return;
 
             pv_type.Value = "OI";
             Close();
-
         }
 
-        private void Cbutton_Click(object sender, EventArgs e)
+        private void Classification(object sender, EventArgs e)
         {
             if (pv_type == null)
                 return;
@@ -38,11 +37,5 @@ namespace VisualCom.Forms
             pv_type.Value = "C";
             Close();
         }
-
-        private void ProjectType_FormClosing(object sender, FormClosingEventArgs e)
-        {
-
-        }
-
     }
 }

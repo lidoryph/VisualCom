@@ -18,13 +18,13 @@ namespace VisualCom.Forms.Errors
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Accept(object sender, EventArgs e)
         {
             errorAccepted = true;
             Application.Exit();
         }
 
-        private void ReadingDocument_FormClosed(object sender, FormClosedEventArgs e)
+        private void OnFormClosed(object sender, FormClosedEventArgs e)
         {
             errorAccepted = true;
             Application.Exit();

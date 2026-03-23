@@ -14,8 +14,6 @@ namespace VisualCom.Forms.Editor.Classes
     public partial class AddClasses : Form
     {
 
-
-
         string className = "";
         Color classColor;
         Boolean changedcolor = false;
@@ -24,36 +22,30 @@ namespace VisualCom.Forms.Editor.Classes
         public AddClasses(MainEditor window)
         {
             InitializeComponent();
-            boxClassName.PlaceholderText = "Escriba aqui...";
+            ClassNamer.PlaceholderText = "Escriba aqui...";
             _editor = window;
-
-            if (Configuration.ProjectVariables.Root == null)
-                Application.Exit();
-            else if (Configuration.ProjectVariables.Root.Element("Classes") == null)
-                Application.Exit();
-
-        }
-
-
-        private void SelectColor(object sender, EventArgs e)
-        {
-            colorDialog.ShowDialog();
-            openClassColor.BackColor = colorDialog.Color;
-
-            if (colorDialog.Color.GetBrightness() > 0.85)
-                openClassColor.ForeColor = Color.Black;
-            else
-                openClassColor.ForeColor = Color.White;
-
-            classColor = colorDialog.Color;
-            changedcolor = true;
         }
 
         private void SetClassName(object sender, EventArgs e)
         {
-            className = boxClassName.Text;
+            className = ClassNamer.Text;
         }
 
+        private void SelectColor(object sender, EventArgs e)
+        {
+            ColorDialog.ShowDialog();
+            OpenColorSelector.BackColor = ColorDialog.Color;
+
+            if (ColorDialog.Color.GetBrightness() > 0.85)
+                OpenColorSelector.ForeColor = Color.Black;
+            else
+                OpenColorSelector.ForeColor = Color.White;
+
+            classColor = ColorDialog.Color;
+            changedcolor = true;
+        }
+
+        
         private void AddClassToFile(object sender, EventArgs e)
         {
             className = className.Trim();
@@ -74,9 +66,9 @@ namespace VisualCom.Forms.Editor.Classes
 
                 Configuration.Saved = false;
 
-                boxClassName.Text = "";
-                openClassColor.BackColor = Color.White;
-                openClassColor.ForeColor = Color.Black;
+                ClassNamer.Text = "";
+                OpenColorSelector.BackColor = Color.White;
+                OpenColorSelector.ForeColor = Color.Black;
                 changedcolor = false;
             }
             else

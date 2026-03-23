@@ -12,8 +12,7 @@ namespace VisualCom
         private static readonly string? c_pf = Configuration.ProjectFile; 
         private static readonly XElement? pv_name = Configuration.ProjectVariables.Root?.Element("Name");
         private static readonly XElement? pv_created = Configuration.ProjectVariables.Root?.Element("Created");
-        //private static readonly XElement? pv_modified = Configuration.ProjectVariables.Root?.Element("Modified");
-        private static readonly XElement? pv_modified = null;
+        private static readonly XElement? pv_modified = Configuration.ProjectVariables.Root?.Element("Modified");
 
         private static readonly XElement? pv_dirs = Configuration.ProjectVariables.Root?.Element("Directories");
         private static readonly XElement? pv_main = Configuration.ProjectVariables.Root?.Element("Directories")?.Element("Main");
@@ -35,27 +34,27 @@ namespace VisualCom
                
             
 
-            string projectName = Path.GetFileNameWithoutExtension(c_pf);
-            pv_name.Value = projectName;
+            string ProjectName = Path.GetFileNameWithoutExtension(c_pf);
+            pv_name.Value = ProjectName;
 
-            string? projectDir = Path.GetDirectoryName(c_pf);
+            string? ProjectDir = Path.GetDirectoryName(c_pf);
 
-            if (projectDir == null)
+            if (ProjectDir == null)
                 return;
 
-            if (Directory.EnumerateFileSystemEntries(projectDir).Any())
+            if (Directory.EnumerateFileSystemEntries(ProjectDir).Any())
             {
-                System.IO.Directory.CreateDirectory(Path.Join(projectDir, projectName));
-                projectDir = Path.Join(projectDir, projectName);
-                Configuration.ProjectFile = (string)Path.Join(projectDir, (projectName + ".xml"));
+                System.IO.Directory.CreateDirectory(Path.Join(ProjectDir, ProjectName));
+                ProjectDir = Path.Join(ProjectDir, ProjectName);
+                Configuration.ProjectFile = (string)Path.Join(ProjectDir, (ProjectName + ".xml"));
             }
 
-            pv_main.Value = projectDir;
+            pv_main.Value = ProjectDir;
 
-            pv_images.Value = Path.Join(projectDir, "images");
-            pv_annotations.Value = Path.Join(projectDir, "annotations");
-            pv_models.Value = Path.Join(projectDir, "models");
-            pv_versions.Value = Path.Join(projectDir, "versions");
+            pv_images.Value = Path.Join(ProjectDir, "images");
+            pv_annotations.Value = Path.Join(ProjectDir, "annotations");
+            pv_models.Value = Path.Join(ProjectDir, "models");
+            pv_versions.Value = Path.Join(ProjectDir, "versions");
 
             pv_created.Value = DateTime.Now.ToString();
             pv_modified.Value = DateTime.Now.ToString();

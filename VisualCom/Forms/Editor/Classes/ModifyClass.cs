@@ -31,28 +31,28 @@ namespace VisualCom.Forms.Editor.Classes
             _color = color;
             className = classname;
             classColor = ColorTranslator.FromHtml(color);
-            boxClassName.Text = classname;
-            openClassColor.BackColor = ColorTranslator.FromHtml(color);
+            ClassRenamer.Text = classname;
+            OpenClassSelector.BackColor = ColorTranslator.FromHtml(color);
+        }
+        private void SetClassName(object sender, EventArgs e)
+        {
+            className = ClassRenamer.Text;
         }
 
         private void SelectColor(object sender, EventArgs e)
         {
             colorDialog.ShowDialog();
-            openClassColor.BackColor = colorDialog.Color;
+            OpenClassSelector.BackColor = colorDialog.Color;
 
             if (colorDialog.Color.GetBrightness() > 0.85)
-                openClassColor.ForeColor = Color.Black;
+                OpenClassSelector.ForeColor = Color.Black;
             else
-                openClassColor.ForeColor = Color.White;
+                OpenClassSelector.ForeColor = Color.White;
 
             classColor = colorDialog.Color;
             changedcolor = true;
         }
 
-        private void SetClassName(object sender, EventArgs e)
-        {
-            className = boxClassName.Text;
-        }
         private void Modify(object sender, EventArgs e)
         {
             className = className.Trim();

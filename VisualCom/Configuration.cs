@@ -12,12 +12,12 @@ namespace VisualCom
         public static Boolean PythonStarted = false;
 
 
-        public static XDocument ProjectVariables = new XDocument(
+        public static XDocument ProjectVariables = new(
             new XElement("Project",
                 new XComment("NEVER CHANGE DATA HERE, ALWAYS CHANGE IT FROM THE PROGRAM"),
                 new XElement("Name", ""),
                 new XElement("Type", ""),
-                new XElement("Version", 1.0),
+                new XElement("Version", "0.0.1"),
                 new XElement("Created", ""),
                 new XElement("Modified", ""),
                 new XElement("Directories",

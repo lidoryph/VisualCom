@@ -31,58 +31,39 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReadingDocument));
             label1 = new Label();
             label2 = new Label();
-            button1 = new Button();
+            OkButton = new Button();
             SuspendLayout();
             // 
             // label1
             // 
-            label1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            label1.AutoSize = true;
-            label1.Location = new Point(78, 24);
-            label1.Margin = new Padding(4, 0, 4, 0);
+            resources.ApplyResources(label1, "label1");
             label1.Name = "label1";
-            label1.Size = new Size(355, 21);
-            label1.TabIndex = 0;
-            label1.Text = "¡Ha ocurrido un error fatal leyendo el documento!";
             // 
             // label2
             // 
-            label2.AutoSize = true;
-            label2.Location = new Point(154, 63);
+            resources.ApplyResources(label2, "label2");
             label2.Name = "label2";
-            label2.Size = new Size(204, 42);
-            label2.TabIndex = 1;
-            label2.Text = "Se va a cerrar el programa.\r\nAbrelo e intentelo de nuevo.";
-            label2.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // button1
+            // OkButton
             // 
-            button1.Location = new Point(192, 139);
-            button1.Name = "button1";
-            button1.Size = new Size(128, 48);
-            button1.TabIndex = 2;
-            button1.Text = "Aceptar";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            resources.ApplyResources(OkButton, "OkButton");
+            OkButton.Name = "OkButton";
+            OkButton.UseVisualStyleBackColor = true;
+            OkButton.Click += Accept;
             // 
             // ReadingDocument
             // 
-            AutoScaleDimensions = new SizeF(9F, 21F);
+            resources.ApplyResources(this, "$this");
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(496, 217);
-            Controls.Add(button1);
+            Controls.Add(OkButton);
             Controls.Add(label2);
             Controls.Add(label1);
-            Font = new Font("Segoe UI", 12F);
             FormBorderStyle = FormBorderStyle.FixedDialog;
-            Icon = (Icon)resources.GetObject("$this.Icon");
-            Margin = new Padding(4);
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "ReadingDocument";
             ShowInTaskbar = false;
-            Text = "Error leyendo documento.";
-            FormClosed += ReadingDocument_FormClosed;
+            FormClosed += OnFormClosed;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -91,6 +72,6 @@
 
         private Label label1;
         private Label label2;
-        private Button button1;
+        private Button OkButton;
     }
 }

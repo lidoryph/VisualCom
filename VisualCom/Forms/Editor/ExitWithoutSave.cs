@@ -17,20 +17,20 @@ namespace VisualCom.Forms.Editor
             InitializeComponent();
         }
 
-        private void writeChanges(object sender, EventArgs e)
+        private void WriteChanges(object sender, EventArgs e)
         {
             ProjectActions.SaveProject();
             left = true;
             Close();
         }
 
-        private void discardChanges(object sender, EventArgs e)
+        private void DiscardChanges(object sender, EventArgs e)
         {
             left = true;
             Close();
         }
 
-        private void returnback(object sender, EventArgs e)
+        private void Returnback(object sender, EventArgs e)
         {
             left = false;
             Close();

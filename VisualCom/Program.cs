@@ -11,7 +11,7 @@ namespace VisualCom
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            WelcomeWindow main = new WelcomeWindow();
+            WelcomeWindow main = new();
             main.Show();
             Application.Run();
 
