@@ -2,10 +2,26 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Linq;
+using System.Text.Json;
+
 
 namespace VisualCom
 {
-    public static class Configuration
+
+    public class BoundingBox
+    {
+        public string Class { get; set; } = String.Empty;
+        public float[] BL { get; set; } = new float[2];
+        public float[] TR { get; set; } = new float[2];
+    }
+
+    public class ImageAnnotation
+    {
+        public string Name { get; set; } = String.Empty;
+        public List<BoundingBox> Boxes { get; set; } = new();
+    }
+
+        public static class Configuration
     {
         public static string ProjectFile = "project.xml";
         public static Boolean Saved = true;
@@ -33,5 +49,19 @@ namespace VisualCom
                 new XComment("NEVER CHANGE DATA HERE, ALWAYS CHANGE IT FROM THE PROGRAM")
             )
         );
+
+        public static List<Tuple<PointF, PointF>> CurrentImageCoordinates = [];
+        public static string CurrentImageString = "";
+        public static string CurrentImageFile = "";
+        public static string JsonPath = "";
+        public static ImageAnnotation CurrentImageJson = new()
+        {
+            Name = "imageName",
+            Boxes = CurrentImageCoordinates.Select(b => new BoundingBox
+            {
+                BL = new float[] { b.Item1.X, b.Item1.Y },
+                TR = new float[] { b.Item2.X, b.Item2.Y },
+            }).ToList()
+        };
     }
 }

@@ -268,6 +268,7 @@
             exportarToolStripMenuItem.Name = "exportarToolStripMenuItem";
             exportarToolStripMenuItem.Size = new Size(127, 22);
             exportarToolStripMenuItem.Text = "Exportar...";
+            exportarToolStripMenuItem.Click += Export;
             // 
             // dlgOpenFile
             // 
@@ -289,7 +290,7 @@
             toolStripButton_newProject.ImageTransparentColor = Color.Magenta;
             toolStripButton_newProject.Name = "toolStripButton_newProject";
             toolStripButton_newProject.Size = new Size(23, 22);
-            toolStripButton_newProject.Text = "toolStripButton1";
+            toolStripButton_newProject.Text = "Nuevo Proyecto";
             toolStripButton_newProject.Click += NewProject;
             // 
             // toolStripButton_saveProject
@@ -299,7 +300,7 @@
             toolStripButton_saveProject.ImageTransparentColor = Color.Magenta;
             toolStripButton_saveProject.Name = "toolStripButton_saveProject";
             toolStripButton_saveProject.Size = new Size(23, 22);
-            toolStripButton_saveProject.Text = "toolStripButton_saveProject";
+            toolStripButton_saveProject.Text = "Guardar Proyecto";
             toolStripButton_saveProject.Click += SaveProject;
             // 
             // toolStripButton_loadProject
@@ -309,7 +310,7 @@
             toolStripButton_loadProject.ImageTransparentColor = Color.Magenta;
             toolStripButton_loadProject.Name = "toolStripButton_loadProject";
             toolStripButton_loadProject.Size = new Size(23, 22);
-            toolStripButton_loadProject.Text = "toolStripButton_loadProject";
+            toolStripButton_loadProject.Text = "Abrir Proyecto";
             toolStripButton_loadProject.Click += OpenProject;
             // 
             // toolStripButton_Exit
@@ -319,7 +320,7 @@
             toolStripButton_Exit.ImageTransparentColor = Color.Magenta;
             toolStripButton_Exit.Name = "toolStripButton_Exit";
             toolStripButton_Exit.Size = new Size(23, 22);
-            toolStripButton_Exit.Text = "toolStripButton_Exit";
+            toolStripButton_Exit.Text = "Salir";
             toolStripButton_Exit.Click += Exit;
             // 
             // toolStripSeparator1
@@ -334,7 +335,7 @@
             toolStripButton_addImages.ImageTransparentColor = Color.Magenta;
             toolStripButton_addImages.Name = "toolStripButton_addImages";
             toolStripButton_addImages.Size = new Size(23, 22);
-            toolStripButton_addImages.Text = "toolStripButton4";
+            toolStripButton_addImages.Text = "Añadir Imagenes...";
             toolStripButton_addImages.Click += AddImages;
             // 
             // toolStripButton_removeImages
@@ -345,7 +346,7 @@
             toolStripButton_removeImages.ImageTransparentColor = Color.Magenta;
             toolStripButton_removeImages.Name = "toolStripButton_removeImages";
             toolStripButton_removeImages.Size = new Size(23, 22);
-            toolStripButton_removeImages.Text = "toolStripButton5";
+            toolStripButton_removeImages.Text = "Quitar Clase";
             toolStripButton_removeImages.Click += RemoveImages;
             // 
             // toolStripSeparator2
@@ -360,7 +361,7 @@
             toolStripButton_addClass.ImageTransparentColor = Color.Magenta;
             toolStripButton_addClass.Name = "toolStripButton_addClass";
             toolStripButton_addClass.Size = new Size(23, 22);
-            toolStripButton_addClass.Text = "toolStripButton6";
+            toolStripButton_addClass.Text = "Añadir Clase";
             toolStripButton_addClass.Click += AddClass;
             // 
             // toolStripButton_removeClass
@@ -371,7 +372,7 @@
             toolStripButton_removeClass.ImageTransparentColor = Color.Magenta;
             toolStripButton_removeClass.Name = "toolStripButton_removeClass";
             toolStripButton_removeClass.Size = new Size(23, 22);
-            toolStripButton_removeClass.Text = "toolStripButton7";
+            toolStripButton_removeClass.Text = "Quitar Clase";
             toolStripButton_removeClass.Click += EraseClassDialog;
             // 
             // toolStripButton_editClass
@@ -382,7 +383,7 @@
             toolStripButton_editClass.ImageTransparentColor = Color.Magenta;
             toolStripButton_editClass.Name = "toolStripButton_editClass";
             toolStripButton_editClass.Size = new Size(23, 22);
-            toolStripButton_editClass.Text = "toolStripButton8";
+            toolStripButton_editClass.Text = "Editar Clase";
             toolStripButton_editClass.Click += ModifyClass;
             // 
             // toolStripSeparator5
@@ -397,7 +398,7 @@
             toolStripButton_newVersion.ImageTransparentColor = Color.Magenta;
             toolStripButton_newVersion.Name = "toolStripButton_newVersion";
             toolStripButton_newVersion.Size = new Size(23, 22);
-            toolStripButton_newVersion.Text = "toolStripButton1";
+            toolStripButton_newVersion.Text = "Crear Versión";
             toolStripButton_newVersion.Click += DialogNewVersion;
             // 
             // toolStripButton_removeVersion
@@ -407,7 +408,7 @@
             toolStripButton_removeVersion.ImageTransparentColor = Color.Magenta;
             toolStripButton_removeVersion.Name = "toolStripButton_removeVersion";
             toolStripButton_removeVersion.Size = new Size(23, 22);
-            toolStripButton_removeVersion.Text = "toolStripButton2";
+            toolStripButton_removeVersion.Text = "Borrar Versión";
             toolStripButton_removeVersion.Click += DialogRemoveVersion;
             // 
             // toolStripButton_editVersion
@@ -431,7 +432,7 @@
             toolStripButton_trainModel.ImageTransparentColor = Color.Magenta;
             toolStripButton_trainModel.Name = "toolStripButton_trainModel";
             toolStripButton_trainModel.Size = new Size(23, 22);
-            toolStripButton_trainModel.Text = "toolStripButton1";
+            toolStripButton_trainModel.Text = "Entrenar Modelo";
             toolStripButton_trainModel.Click += TrainModel;
             // 
             // toolStripButton9
@@ -441,7 +442,8 @@
             toolStripButton9.ImageTransparentColor = Color.Magenta;
             toolStripButton9.Name = "toolStripButton9";
             toolStripButton9.Size = new Size(23, 22);
-            toolStripButton9.Text = "toolStripButton9";
+            toolStripButton9.Text = "Exportar...";
+            toolStripButton9.Click += Export;
             // 
             // toolStripSeparator4
             // 
@@ -455,7 +457,7 @@
             toolStripButton_ASAIWeb.ImageTransparentColor = Color.Magenta;
             toolStripButton_ASAIWeb.Name = "toolStripButton_ASAIWeb";
             toolStripButton_ASAIWeb.Size = new Size(23, 22);
-            toolStripButton_ASAIWeb.Text = "Abrir web ASAI";
+            toolStripButton_ASAIWeb.Text = "Abrir web de ASAI";
             toolStripButton_ASAIWeb.Click += OpenASAIWeb;
             // 
             // EditorStatusStrip
@@ -559,6 +561,7 @@
             pictureBox.TabIndex = 0;
             pictureBox.TabStop = false;
             pictureBox.Paint += PictureBox_Paint;
+            pictureBox.MouseClick += PictureBox_MouseClick;
             pictureBox.MouseDown += PictureBox_MouseDown;
             pictureBox.MouseMove += PictureBox_MouseMove;
             pictureBox.MouseUp += PictureBox_MouseUp;
@@ -575,7 +578,7 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = editorMenu;
             Margin = new Padding(3, 2, 3, 2);
-            MinimumSize = new Size(1280, 720);
+            MinimumSize = new Size(776, 720);
             Name = "MainEditor";
             Text = "VisualCom - Editor";
             WindowState = FormWindowState.Maximized;

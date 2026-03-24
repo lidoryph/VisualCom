@@ -19,7 +19,7 @@ namespace VisualCom.Forms.Editor
 
         private void WriteChanges(object sender, EventArgs e)
         {
-            ProjectActions.SaveProject();
+            ProjectActions.SaveProject(notes:false);
             left = true;
             Close();
         }

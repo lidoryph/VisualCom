@@ -1,22 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
-using System.Net.Http.Headers;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices.Swift;
-using System.Text;
-using System.Windows.Forms;
+﻿using System.Diagnostics;
+using System.Xml.Linq;
 using VisualCom.Forms;
 using VisualCom.Forms.Editor;
-using VisualCom.Forms.Errors;
-using VisualCom.Properties;
 using VisualCom.Forms.Editor.Classes;
-using System.Xml.Linq;
-using System.Numerics;
+using VisualCom.Forms.Editor.TrainWindows;
 using VisualCom.Forms.Editor.Versions;
+using VisualCom.Forms.Errors;
 
 namespace VisualCom
 {
@@ -42,18 +31,13 @@ namespace VisualCom
         private PointF _selectionTopRight = PointF.Empty;
 
         private Boolean ChangedImage = false;
+        private Boolean Noted = true;
 
         public MainEditor()
         {
             InitializeComponent();
 
-            if (pv_type == null)
-            {
-                error.Show();
-                return;
-            }
-
-            if (pv_name == null)
+            if (pv_type == null || pv_name == null || pv_version == null)
             {
                 error.Show();
                 return;
@@ -250,7 +234,7 @@ namespace VisualCom
 
         private void ImagesList_ItemActivate(object sender, EventArgs e)
         {
-            if (pv_images == null)
+            if (pv_images == null || pv_notes == null)
             {
                 error.Show();
                 return;
@@ -259,9 +243,44 @@ namespace VisualCom
             if (ImagesList.FocusedItem == null)
                 return;
 
+            if (Configuration.JsonPath != "" && Noted == false)
+            {
+                var info = new FileInfo(Configuration.JsonPath);
+                if (info.Exists && info.Length == 0)
+                    File.Delete(Configuration.JsonPath);
+            }
+
+
+
+            if (Configuration.Saved == false)
+            {
+                SaveImageAnnotation dialog = new();
+                dialog.ShowDialog();
+                if (dialog.Cancel == true)
+                    return;
+            }
+
+            string imagename = "";
+
+            foreach (ListViewItem item in ImagesList.SelectedItems)
+                imagename = item.Text;
+
+            Configuration.CurrentImageJson.Boxes.Clear();
+            string AnnotationPath = Path.Join(pv_notes.Value, Path.GetFileNameWithoutExtension(imagename) + ".json");
+
+            if (File.Exists(AnnotationPath))
+                ProjectActions.LoadAnnotations(AnnotationPath);
+            else
+            {
+                Configuration.CurrentImageJson.Name = imagename;
+                File.Create(AnnotationPath).Dispose();
+                Configuration.JsonPath = AnnotationPath;
+            }
+
             ChangedImage = true;
             string imagesPath = pv_images.Value;
             pictureBox.Image = new Bitmap((string)Path.Join(imagesPath, ImagesList.FocusedItem.Text));
+            Noted = false;
         }
 
         private void PictureBox_MouseMove(object sender, MouseEventArgs e)
@@ -271,6 +290,12 @@ namespace VisualCom
             if (imgCoords.HasValue)
                 mouseCoordinates.Text = $"x: {(int)imgCoords.Value.X}, y: {(int)imgCoords.Value.Y}";
             else return;
+
+            if (_isDragging)
+            {
+                _dragCurrentBox = e.Location;
+                pictureBox.Invalidate();
+            }
         }
 
         private void OpenASAIWeb(object sender, EventArgs e)
@@ -345,7 +370,10 @@ namespace VisualCom
         {
             progressEditor.Enabled = true;
             progressEditor.Value = 0;
-            ProjectActions.SaveProject();
+            if (ChangedImage)
+                ProjectActions.SaveProject(notes: true);
+            else
+                ProjectActions.SaveProject(notes: false);
             progressEditor.Value = 100;
             progressEditor.Enabled = false;
             Configuration.Saved = true;
@@ -545,7 +573,7 @@ namespace VisualCom
 
         public void NewVersion((string, string, string, string) VersionArguments)
         {
-            if(pv_versions == null || pv_images == null || pv_notes == null || pv_version == null)
+            if (pv_versions == null || pv_images == null || pv_notes == null || pv_version == null || pv_classes == null)
             {
                 error.ShowDialog();
                 return;
@@ -560,18 +588,34 @@ namespace VisualCom
             string VersionPath = Path.Join(pv_versions.Value, VersionName);
             string VersionImages = Path.Join(VersionPath, "images");
             string VersionAnnotations = Path.Join(VersionPath, "annotations");
-           
+
+            XDocument VersionDoc = new(
+                new XElement("Version",
+                    new XElement("Name", VersionName),
+                    new XElement("Directories",
+                        new XElement("Images", VersionImages),
+                        new XElement("Annotations", VersionAnnotations)
+                    ),
+                    new XElement("Classes")
+                )
+            );
+
+            foreach(XElement Class in pv_classes.Elements("Class"))
+                VersionDoc.Root?.Element("Classes")?.Add(Class);
+
             System.IO.Directory.CreateDirectory(VersionPath);
             System.IO.Directory.CreateDirectory(VersionImages);
             System.IO.Directory.CreateDirectory(VersionAnnotations);
 
-            foreach(var image in System.IO.Directory.GetFiles(pv_images.Value))
+            foreach (var image in System.IO.Directory.GetFiles(pv_images.Value))
                 System.IO.File.Copy(image, Path.Join(VersionImages, Path.GetFileName(image)));
             foreach (var note in System.IO.Directory.GetFiles(pv_notes.Value))
                 System.IO.File.Copy(note, Path.Join(VersionAnnotations, Path.GetFileName(note)));
 
+            VersionDoc.Save(Path.Join(VersionPath, VersionName + ".xml"));
+
             pv_version.Value = VersionName;
-            Configuration.Saved = false;
+            ProjectActions.SaveProject(notes:false);
         }
 
         public void RemoveVersion(string version)
@@ -623,15 +667,26 @@ namespace VisualCom
 
         private void PictureBox_MouseDown(object sender, MouseEventArgs e)
         {
+            if (ChangedImage == false)
+                return;
+
+            if (ClassesList.SelectedItems.Count == 0)
+            {
+                MessageBox.Show("¡Tienes que seleccionar una clase para hacer anotaciones!");
+                return;
+            }
+            else if (ClassesList.SelectedItems.Count > 1)
+            {
+                MessageBox.Show("¡Solo puedes seleccionar una clase para hacer anotaciones!");
+                return;
+            }
+
             if (e.Button != MouseButtons.Left || pictureBox.Image == null) return;
 
             _isDragging = true;
             _dragStartBox = e.Location;
             _dragCurrentBox = e.Location;
-
-            // Limpia la selección anterior mientras se empieza una nueva
-            _selectionBottomLeft = PointF.Empty;
-            _selectionTopRight = PointF.Empty;
+            pictureBox.Invalidate();
         }
 
         private void PictureBox_MouseUp(object sender, MouseEventArgs e)
@@ -656,53 +711,128 @@ namespace VisualCom
                     Math.Max(start.Value.X, end.Value.X),
                     Math.Min(start.Value.Y, end.Value.Y)   // Y menor = más arriba en imagen
                 );
-            }
 
+                string classname = "";
+
+                foreach (ListViewItem item in ClassesList.SelectedItems)
+                    classname = item.Text;
+
+                Configuration.CurrentImageCoordinates.Add(new Tuple<PointF, PointF>(_selectionBottomLeft, _selectionTopRight));
+                Configuration.CurrentImageJson.Boxes.Add(new BoundingBox
+                {
+                    Class = classname,
+                    BL = new float[] { _selectionBottomLeft.X, _selectionBottomLeft.Y },
+                    TR = new float[] { _selectionTopRight.X, _selectionTopRight.Y }
+                });
+            }
+            Configuration.Saved = false;
             pictureBox.Invalidate();
+            Noted = true;
         }
 
         private void PictureBox_Paint(object sender, PaintEventArgs e)
         {
-            // Dibujar rectángulo mientras se arrastra
-            Point p1 = _dragStartBox;
-            Point p2 = _isDragging ? _dragCurrentBox : Point.Empty;
+            RectangleF imgRect = GetRenderedImageRect();
+            if (imgRect == RectangleF.Empty || pictureBox.Image == null) return;
 
-            // Si hay una selección guardada y no se está arrastrando, convertirla a coords del box
-            if (!_isDragging && _selectionBottomLeft != PointF.Empty)
+            float scaleX = imgRect.Width / pictureBox.Image.Width;
+            float scaleY = imgRect.Height / pictureBox.Image.Height;
+
+            // Dibujar todas las anotaciones guardadas
+            foreach (BoundingBox box in Configuration.CurrentImageJson.Boxes)
             {
-                RectangleF imgRect = GetRenderedImageRect();
-                if (imgRect != RectangleF.Empty && pictureBox.Image != null)
-                {
-                    float scaleX = imgRect.Width / pictureBox.Image.Width;
-                    float scaleY = imgRect.Height / pictureBox.Image.Height;
+                // BL[0] = minX, TR[1] = minY → esquina superior izquierda del rectángulo
+                int x = (int)(imgRect.X + box.BL[0] * scaleX);
+                int y = (int)(imgRect.Y + box.TR[1] * scaleY);
+                int w = (int)((box.TR[0] - box.BL[0]) * scaleX);
+                int h = (int)((box.BL[1] - box.TR[1]) * scaleY);
 
-                    // TopRight en imagen → esquina superior derecha visual
-                    p1 = new Point(
-                        (int)(imgRect.X + _selectionTopRight.X * scaleX),
-                        (int)(imgRect.Y + _selectionTopRight.Y * scaleY)
-                    );
-                    // BottomLeft en imagen → esquina inferior izquierda visual
-                    p2 = new Point(
-                        (int)(imgRect.X + _selectionBottomLeft.X * scaleX),
-                        (int)(imgRect.Y + _selectionBottomLeft.Y * scaleY)
-                    );
+                if (w < 2 || h < 2) continue;
+
+                Color boxColor = Color.Red;
+                foreach (ListViewItem item in ClassesList.Items)
+                {
+                    if (item.Text == box.Class)
+                    {
+                        boxColor = item.BackColor;
+                        break;
+                    }
+                }
+
+                using SolidBrush fill = new(Color.FromArgb(0, 0, 0, 0));
+                using Pen border = new(boxColor, 2);
+                e.Graphics.FillRectangle(fill, x, y, w, h);
+                e.Graphics.DrawRectangle(border, x, y, w, h);
+            }
+
+            // Dibujar el rectángulo que se está arrastrando ahora mismo
+            if (_isDragging && _dragStartBox != Point.Empty && _dragCurrentBox != Point.Empty)
+            {
+                int x = Math.Min(_dragStartBox.X, _dragCurrentBox.X);
+                int y = Math.Min(_dragStartBox.Y, _dragCurrentBox.Y);
+                int w = Math.Abs(_dragStartBox.X - _dragCurrentBox.X);
+                int h = Math.Abs(_dragStartBox.Y - _dragCurrentBox.Y);
+
+                if (w >= 2 && h >= 2)
+                {
+                    Color dragColor = Color.Red;
+                    foreach (ListViewItem item in ClassesList.SelectedItems)
+                        dragColor = item.BackColor;
+
+                    using SolidBrush fill = new(Color.FromArgb(40, dragColor.R, dragColor.G, dragColor.B));
+                    using Pen border = new(dragColor, 2);
+                    e.Graphics.FillRectangle(fill, x, y, w, h);
+                    e.Graphics.DrawRectangle(border, x, y, w, h);
+                }
+            }
+        }
+
+        private void PictureBox_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right) return;
+            if (pictureBox.Image == null) return;
+
+            PointF? click = GetImageCoordinates(e.Location);
+            if (!click.HasValue) return;
+
+            float cx = click.Value.X;
+            float cy = click.Value.Y;
+
+            // Buscar la primera caja que contenga el punto del click
+            BoundingBox? toRemove = null;
+            foreach (BoundingBox box in Configuration.CurrentImageJson.Boxes)
+            {
+                float minX = box.BL[0];
+                float maxX = box.TR[0];
+                float minY = box.TR[1];
+                float maxY = box.BL[1];
+
+                if (cx >= minX && cx <= maxX && cy >= minY && cy <= maxY)
+                {
+                    toRemove = box;
+                    break;
                 }
             }
 
-            if (p2 == Point.Empty) return;
+            if (toRemove == null) return;
 
-            int x = Math.Min(p1.X, p2.X);
-            int y = Math.Min(p1.Y, p2.Y);
-            int w = Math.Abs(p1.X - p2.X);
-            int h = Math.Abs(p1.Y - p2.Y);
+            // Borrar de ambas listas
+            Configuration.CurrentImageJson.Boxes.Remove(toRemove);
+            Configuration.CurrentImageCoordinates.RemoveAll(t =>
+                t.Item1.X == toRemove.BL[0] && t.Item1.Y == toRemove.BL[1] &&
+                t.Item2.X == toRemove.TR[0] && t.Item2.Y == toRemove.TR[1]
+            );
 
-            if (w < 2 || h < 2) return;
+            // Guardar el JSON actualizado
+            ProjectActions.SaveProject(notes:true);
 
-            using SolidBrush fill = new(Color.FromArgb(40, 30, 144, 255));
-            using Pen border = new(Color.FromArgb(220, 30, 144, 255), 2);
+            pictureBox.Invalidate();
+        }
 
-            e.Graphics.FillRectangle(fill, x, y, w, h);
-            e.Graphics.DrawRectangle(border, x, y, w, h);
+        private void Export(object sender, EventArgs e)
+        {
+            ExportToYolo dialog = new();
+            dialog.ShowDialog();
         }
 
         private void Exit(object sender, EventArgs e)
