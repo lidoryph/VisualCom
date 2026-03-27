@@ -1,19 +1,23 @@
-﻿using System;
+﻿using Python.Runtime;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Text;
-using Python.Runtime;
 using VisualCom.Forms.Editor;
 
 namespace VisualCom
 {
     public static class PythonTrain
     {
+        private static bool _initialized = false;
+
         public static void Initialize()
         {
+            if (_initialized == true) return;
 
             string ProjectDir = AppDomain.CurrentDomain.BaseDirectory;
-            string TrainModPath = Path.GetFullPath( Path.Combine(ProjectDir, @".\..\..\..\TrainMod\") );
+            string TrainModPath = Path.GetFullPath(Path.Combine(ProjectDir, @".\TrainMod\"));
 
             var proc = new Process
             {
@@ -27,7 +31,7 @@ namespace VisualCom
                     CreateNoWindow = true,
                 }
             };
-            
+
 
             proc.Start();
             string PythonExe = proc.StandardOutput.ReadToEnd().Trim();
@@ -43,7 +47,8 @@ namespace VisualCom
             string SitePackages = Path.Combine(VenvPath, @"Lib\site-packages");
 
             PythonEngine.PythonHome = PythonDir;
-            Environment.SetEnvironmentVariable("PYTHONPATH", SitePackages + ";" + TrainModPath);
+            string PYTHONPATH = SitePackages + ";" + TrainModPath;
+            Environment.SetEnvironmentVariable("PYTHONPATH", PYTHONPATH);
 
             if (Configuration.PythonStarted == false)
             {
@@ -62,7 +67,27 @@ namespace VisualCom
                 Console.WriteLine("sys.path: " + sys.path.ToString());
             }
 
+            _initialized = true;
+        }
 
+        public static int GetListModel(string ModelName)
+        {
+            using (Py.GIL())
+            {
+                dynamic mod = Py.Import("pullmodel");
+                dynamic returns = mod.download_model(ModelName);
+                return returns;
+            }
+        }
+
+        public static int PullModel(string ModelName)
+        {
+            using (Py.GIL())
+            {
+                dynamic mod = Py.Import("pullmodel");
+                dynamic returns = mod.pull_model(ModelName);
+                return returns;
+            }
         }
 
         public static double StartTrain((string, int, int, int, string) PythonArguments)
@@ -76,8 +101,8 @@ namespace VisualCom
                 string Device = PythonArguments.Item5;
 
 
-                dynamic mod = Py.Import("miscriptpqnofunciona");
-                dynamic returns = mod.calcular(Version, Epoch, Rate, Images, Device);
+                dynamic mod = Py.Import("main");
+                dynamic returns = mod.train(Version, Epoch, Rate, Images, Device);
 
                 double status = returns["status"].As<double>();
 

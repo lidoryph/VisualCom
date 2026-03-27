@@ -36,7 +36,11 @@
             CustomName = new CheckBox();
             ExportButton = new Button();
             CancelButton = new Button();
-            OpenLocation = new Button();
+            label3 = new Label();
+            ImagesBar = new TrackBar();
+            ImagesNum = new NumericUpDown();
+            ((System.ComponentModel.ISupportInitialize)ImagesBar).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)ImagesNum).BeginInit();
             SuspendLayout();
             // 
             // label1
@@ -93,7 +97,7 @@
             // 
             ExportButton.Image = Properties.Resources.export_model;
             ExportButton.ImageAlign = ContentAlignment.MiddleLeft;
-            ExportButton.Location = new Point(24, 177);
+            ExportButton.Location = new Point(24, 231);
             ExportButton.Name = "ExportButton";
             ExportButton.Padding = new Padding(10, 0, 0, 0);
             ExportButton.Size = new Size(192, 48);
@@ -115,25 +119,43 @@
             CancelButton.UseVisualStyleBackColor = true;
             CancelButton.Click += Cancel;
             // 
-            // OpenLocation
+            // label3
             // 
-            OpenLocation.Enabled = false;
-            OpenLocation.Image = Properties.Resources.open_location;
-            OpenLocation.ImageAlign = ContentAlignment.MiddleLeft;
-            OpenLocation.Location = new Point(24, 231);
-            OpenLocation.Name = "OpenLocation";
-            OpenLocation.Padding = new Padding(10, 0, 0, 0);
-            OpenLocation.Size = new Size(192, 48);
-            OpenLocation.TabIndex = 7;
-            OpenLocation.Text = "Abrir Ubicación";
-            OpenLocation.UseVisualStyleBackColor = true;
+            label3.AutoSize = true;
+            label3.Location = new Point(37, 145);
+            label3.Name = "label3";
+            label3.Size = new Size(160, 15);
+            label3.TabIndex = 8;
+            label3.Text = "% de Imagenes para entrenar";
+            // 
+            // ImagesBar
+            // 
+            ImagesBar.Location = new Point(11, 163);
+            ImagesBar.Maximum = 100;
+            ImagesBar.Name = "ImagesBar";
+            ImagesBar.Size = new Size(168, 45);
+            ImagesBar.TabIndex = 9;
+            ImagesBar.TickFrequency = 10;
+            ImagesBar.Value = 80;
+            ImagesBar.ValueChanged += ChangedBar;
+            // 
+            // ImagesNum
+            // 
+            ImagesNum.Location = new Point(185, 163);
+            ImagesNum.Name = "ImagesNum";
+            ImagesNum.Size = new Size(43, 23);
+            ImagesNum.TabIndex = 10;
+            ImagesNum.Value = new decimal(new int[] { 80, 0, 0, 0 });
+            ImagesNum.ValueChanged += ChangedNumeric;
             // 
             // ExportToYolo
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(240, 345);
-            Controls.Add(OpenLocation);
+            Controls.Add(ImagesNum);
+            Controls.Add(ImagesBar);
+            Controls.Add(label3);
             Controls.Add(CancelButton);
             Controls.Add(ExportButton);
             Controls.Add(CustomName);
@@ -148,6 +170,8 @@
             Name = "ExportToYolo";
             ShowInTaskbar = false;
             Text = "Exportar a YOLO...";
+            ((System.ComponentModel.ISupportInitialize)ImagesBar).EndInit();
+            ((System.ComponentModel.ISupportInitialize)ImagesNum).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -161,6 +185,8 @@
         private CheckBox CustomName;
         private Button ExportButton;
         private Button CancelButton;
-        private Button OpenLocation;
+        private Label label3;
+        private TrackBar ImagesBar;
+        private NumericUpDown ImagesNum;
     }
 }

@@ -33,6 +33,7 @@
             nuevoProyectoToolStripMenuItem = new ToolStripMenuItem();
             abrirProyectoToolStripMenuItem = new ToolStripMenuItem();
             guardarProyectoToolStripMenuItem = new ToolStripMenuItem();
+            extraerModeloToolStripMenuItem = new ToolStripMenuItem();
             editarToolStripMenuItem = new ToolStripMenuItem();
             verToolStripMenuItem = new ToolStripMenuItem();
             proyectoToolStripMenuItem = new ToolStripMenuItem();
@@ -109,7 +110,7 @@
             // 
             // menuitemArchivo
             // 
-            menuitemArchivo.DropDownItems.AddRange(new ToolStripItem[] { nuevoProyectoToolStripMenuItem, abrirProyectoToolStripMenuItem, guardarProyectoToolStripMenuItem });
+            menuitemArchivo.DropDownItems.AddRange(new ToolStripItem[] { nuevoProyectoToolStripMenuItem, abrirProyectoToolStripMenuItem, guardarProyectoToolStripMenuItem, extraerModeloToolStripMenuItem });
             menuitemArchivo.Name = "menuitemArchivo";
             menuitemArchivo.Size = new Size(60, 20);
             menuitemArchivo.Text = "Archivo";
@@ -137,6 +138,14 @@
             guardarProyectoToolStripMenuItem.Size = new Size(168, 22);
             guardarProyectoToolStripMenuItem.Text = "Guardar Proyecto";
             guardarProyectoToolStripMenuItem.Click += SaveProject;
+            // 
+            // extraerModeloToolStripMenuItem
+            // 
+            extraerModeloToolStripMenuItem.Image = Properties.Resources.pull_model;
+            extraerModeloToolStripMenuItem.Name = "extraerModeloToolStripMenuItem";
+            extraerModeloToolStripMenuItem.Size = new Size(168, 22);
+            extraerModeloToolStripMenuItem.Text = "Extraer Modelo...";
+            extraerModeloToolStripMenuItem.Click += PullModel;
             // 
             // editarToolStripMenuItem
             // 
@@ -479,6 +488,7 @@
             // progressEditor
             // 
             progressEditor.Enabled = false;
+            progressEditor.MarqueeAnimationSpeed = 50;
             progressEditor.Name = "progressEditor";
             progressEditor.Size = new Size(100, 16);
             // 
@@ -580,8 +590,8 @@
             Margin = new Padding(3, 2, 3, 2);
             MinimumSize = new Size(776, 720);
             Name = "MainEditor";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "VisualCom - Editor";
-            WindowState = FormWindowState.Maximized;
             editorMenu.ResumeLayout(false);
             editorMenu.PerformLayout();
             EditorToolStrip.ResumeLayout(false);
@@ -657,5 +667,6 @@
         private PictureBox pictureBox;
         private ListView ClassesList;
         private ColumnHeader columnHeader1;
+        private ToolStripMenuItem extraerModeloToolStripMenuItem;
     }
 }

@@ -3,6 +3,7 @@ using System.Xml.Linq;
 using VisualCom.Forms;
 using VisualCom.Forms.Editor;
 using VisualCom.Forms.Editor.Classes;
+using VisualCom.Forms.Editor.PullModels;
 using VisualCom.Forms.Editor.TrainWindows;
 using VisualCom.Forms.Editor.Versions;
 using VisualCom.Forms.Errors;
@@ -832,6 +833,12 @@ namespace VisualCom
         private void Export(object sender, EventArgs e)
         {
             ExportToYolo dialog = new();
+            dialog.ShowDialog();
+        }
+
+        private void PullModel(object sender, EventArgs e)
+        {
+            PullModel dialog = new();
             dialog.ShowDialog();
         }
 

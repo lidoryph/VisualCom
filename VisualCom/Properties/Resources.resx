@@ -202,4 +202,13 @@
   <data name="open_location" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\blue-folder-import.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="pull_model" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\database-share.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="import_model" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\database-import.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="globe-network" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\globe-network.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

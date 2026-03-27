@@ -163,6 +163,16 @@ namespace VisualCom.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap globe_network {
+            get {
+                object obj = ResourceManager.GetObject("globe-network", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap go_back {
             get {
                 object obj = ResourceManager.GetObject("go_back", resourceCulture);
@@ -186,6 +196,16 @@ namespace VisualCom.Properties {
         internal static System.Drawing.Bitmap image {
             get {
                 object obj = ResourceManager.GetObject("image", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap import_model {
+            get {
+                object obj = ResourceManager.GetObject("import_model", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -266,6 +286,16 @@ namespace VisualCom.Properties {
         internal static System.Drawing.Bitmap open_location {
             get {
                 object obj = ResourceManager.GetObject("open_location", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap pull_model {
+            get {
+                object obj = ResourceManager.GetObject("pull_model", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

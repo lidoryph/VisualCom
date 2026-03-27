@@ -8,9 +8,23 @@ using VisualCom.Forms.Errors;
 using Windows.ApplicationModel.VoiceCommands;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using static System.Windows.Forms.Design.AxImporter;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
+using System.Security.Policy;
 
 namespace VisualCom
 {
+
+    public class ModelYaml
+    {
+        public string path { get; set; } = string.Empty;
+        public string train { get; set; } = string.Empty;
+        public string val { get; set; } = string.Empty;
+        public int nc { get; set; } = new int();
+        //public IEnumerable<string> Classes { get; set; } = new List<string>();
+        public Dictionary<int, string> names { get; set; } = new Dictionary<int, string>();
+    }
+
     internal static class ProjectActions
     {
         private static readonly ReadingDocument error = new();
@@ -122,7 +136,7 @@ namespace VisualCom
             Configuration.Saved = true;
         }
 
-        public static void ExportToYOLO(string VersionPath, string outputDirectory)
+        public static void ExportToYOLO(string VersionPath, string outputDirectory, int imagesBar)
         {
             if (pv_annotations == null || pv_images == null)
             {
@@ -133,22 +147,44 @@ namespace VisualCom
             string DocumentPath = Path.Combine(VersionPath, Path.GetFileName(VersionPath) + ".xml");
             XDocument VerDoc = XDocument.Load(DocumentPath);
 
-            string ImagesPath = VerDoc.Root?.Element("Directories")?.Element("Images")?.Value;
-            string AnnotationsPath = VerDoc.Root?.Element("Directories")?.Element("Annotations")?.Value;
-            XElement? v_classes = VerDoc.Root?.Element("Classes");
+            string? ImagesPath = VerDoc.Root?.Element("Directories")?.Element("Images")?.Value;
+            string? AnnotationsPath = VerDoc.Root?.Element("Directories")?.Element("Annotations")?.Value;
+            XElement? VersionClasses = VerDoc.Root?.Element("Classes");
 
+            if (ImagesPath == null || AnnotationsPath == null || VersionClasses == null)
+                return;
 
-            // Construir el índice de clases desde el XML { "Perro": 0, "Gato": 1, ... }
             var classIndex = new Dictionary<string, int>();
             int idx = 0;
-            foreach (var cls in v_classes.Elements("Class"))
+            foreach (var cls in VersionClasses.Elements("Class"))
             {
                 classIndex[cls.Value] = idx;
                 idx++;
             }
 
-            Directory.CreateDirectory(outputDirectory);
+            string path = Path.GetFullPath(outputDirectory);
+            Directory.CreateDirectory(path);
+            var myClass = classIndex.OrderBy(c => c.Value).ToDictionary(c => c.Value, c => c.Key);
 
+            var ModelFile = new ModelYaml
+            {
+                path = path,
+                train = Path.Join(path, "dataset", "images", "train"),
+                val = Path.Join(path, "dataset", "images", "val"),
+                nc = idx,
+                names = myClass
+            };
+
+            var newdirs = new List<string> { Path.Join(path, "dataset"), Path.Join(path, "dataset", "images"), Path.Join(path, "dataset", "images", "train"), 
+                Path.Join(path,"dataset", "images", "val"), Path.Join(path, "dataset", "labels"), Path.Join(path, "dataset", "labels", "train"), Path.Join(path, "dataset", "labels", "val")};
+
+            foreach(var dir in newdirs)
+                Directory.CreateDirectory(dir);
+
+
+            double actualBar = 0;
+            double BarDivider = Directory.GetFiles(ImagesPath).Length;
+            double BarPlus = 100 / BarDivider;
             // Recorrer todos los JSON de anotaciones
             foreach (string jsonPath in Directory.GetFiles(AnnotationsPath, "*.json"))
             {
@@ -185,22 +221,32 @@ namespace VisualCom
                         "{0} {1:F6} {2:F6} {3:F6} {4:F6}",
                         classIdx, centerX, centerY, width, height));
                 }
+                
+                if(actualBar < imagesBar)
+                {
+                    string txtPath = Path.Join(Path.Join(ModelFile.path, "dataset", "labels", "train"), Path.GetFileNameWithoutExtension(imageName) + ".txt");
+                    File.WriteAllLines(txtPath, lines);
+                    File.Copy(Path.Combine(ImagesPath, imageName), Path.Combine(ModelFile.train, imageName));
+                    actualBar = actualBar + BarPlus;
+                    if (actualBar >= 100)
+                        actualBar = 0;
+                } else if (actualBar > imagesBar)
+                {
+                    string txtPath = Path.Join(Path.Join(ModelFile.path, "dataset", "labels", "val"), Path.GetFileNameWithoutExtension(imageName) + ".txt");
+                    File.WriteAllLines(txtPath, lines);
+                    File.Copy(Path.Combine(ImagesPath, imageName), Path.Combine(ModelFile.val, imageName));
+                    actualBar = actualBar + BarPlus;
+                    if (actualBar >= 100)
+                        actualBar = 0;
+                }
 
-                string txtPath = Path.Join(outputDirectory, Path.GetFileNameWithoutExtension(imageName) + ".txt");
-                File.WriteAllLines(txtPath, lines);
-            }
-
-            string pathtest;
-
-            foreach (var image in Directory.GetFiles(ImagesPath))
-            {   
-                pathtest = Path.Join(outputDirectory, Path.GetFileName(image));
-                File.Copy(image, Path.Join(outputDirectory, Path.GetFileName(image)));
             }
 
             // Generar classes.txt con el listado de clases en orden
-            var classList = classIndex.OrderBy(c => c.Value).Select(c => c.Key);
-            File.WriteAllLines(Path.Join(outputDirectory, "classes.txt"), classList);
+            var ModelSerializer = new SerializerBuilder().WithNamingConvention(CamelCaseNamingConvention.Instance).Build();
+            var finalfile = ModelSerializer.Serialize(ModelFile);
+
+            File.WriteAllText(Path.Join(outputDirectory, "data.yaml"), finalfile);
         }
 
     }

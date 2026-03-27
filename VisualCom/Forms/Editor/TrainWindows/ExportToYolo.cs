@@ -50,19 +50,13 @@ namespace VisualCom.Forms.Editor.TrainWindows
             ModelPath = Path.Join(pv_models.Value, YOLOName.Text);
             string VersionPath = Path.Join(pv_versions.Value, VersionSelector?.SelectedItem?.ToString());
 
-            ProjectActions.ExportToYOLO(VersionPath, ModelPath);
-            OpenLocation.Enabled = true;
+            ProjectActions.ExportToYOLO(VersionPath, ModelPath, (Int32) ImagesNum.Value);
             ExportButton.Enabled = false;
         }
 
         private void Cancel(object sender, EventArgs e)
         {
             Close();
-        }
-
-        private void OpenFolder(object sender, EventArgs e)
-        {
-            Process.Start("explorer", ModelPath);
         }
 
         private void SetName(object sender, EventArgs e)
@@ -74,6 +68,16 @@ namespace VisualCom.Forms.Editor.TrainWindows
         {
             YOLOName.ReadOnly = !YOLOName.ReadOnly;
             YOLOName.Enabled = !YOLOName.Enabled;
+        }
+
+        private void ChangedNumeric(object sender, EventArgs e)
+        {
+            ImagesBar.Value = (Int32) ImagesNum.Value;
+        }
+
+        private void ChangedBar(object sender, EventArgs e)
+        {
+            ImagesNum.Value = (Int32) ImagesBar.Value;
         }
 
     }

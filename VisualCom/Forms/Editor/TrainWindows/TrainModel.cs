@@ -67,13 +67,6 @@ namespace VisualCom.Forms.Editor
             var PythonArguments = (version: Version, epoch: Convert.ToInt32(EpochNumeric.Value),
                 rate: Convert.ToInt32(RateNumeric.Value), images: Convert.ToInt32(ImagesNumeric.Value), device: Device);
 
-
-            if (c_ps == false)
-            {
-                c_ps = true;
-                PythonTrain.Initialize();
-            }
-
             dynamic? result = await Task.Run(() =>
                 PythonTrain.StartTrain(PythonArguments)
             );
