@@ -17,7 +17,7 @@ namespace VisualCom
             if (_initialized == true) return;
 
             string ProjectDir = AppDomain.CurrentDomain.BaseDirectory;
-            string TrainModPath = Path.GetFullPath(Path.Combine(ProjectDir, @".\TrainMod\"));
+            string TrainModPath = Path.GetFullPath(Path.Combine(ProjectDir, @".\..\..\..\TrainMod\"));
 
             var proc = new Process
             {
@@ -90,23 +90,53 @@ namespace VisualCom
             }
         }
 
-        public static double StartTrain((string, int, int, int, string) PythonArguments)
+        public static double StartTrain((string, int, int, int, string, string, string) PythonArguments, CancellationTokenSource cts, CancellationToken cToken, Action<int, int>? onEpochEnd = null)
         {
             using (Py.GIL())
             {
                 string? Version = PythonArguments.Item1;
                 int Epoch = PythonArguments.Item2;
-                int Rate = PythonArguments.Item3;
-                int Images = PythonArguments.Item4;
+                int ImgSz = PythonArguments.Item3;
+                int Seed = PythonArguments.Item4;
                 string Device = PythonArguments.Item5;
+                string Model = PythonArguments.Item6;
+                string OutPath = PythonArguments.Item7;
 
 
-                dynamic mod = Py.Import("main");
-                dynamic returns = mod.train(Version, Epoch, Rate, Images, Device);
+                dynamic mod = Py.Import("trainmodel");
+                PyObject? cb = onEpochEnd?.ToPython();
+                dynamic? result = null;
 
-                double status = returns["status"].As<double>();
+                try
+                {
+                    result = cb is not null
+                        ? mod.train(Version, Epoch, ImgSz, Device, Model, Seed, OutPath, cb)
+                        : mod.train(Version, Epoch, ImgSz, Device, Model, Seed, OutPath);
+                } catch (Python.Runtime.PythonException error)
+                {
+                    if (error.ToString().Contains("Invalid CUDA"))
+                    {
+                        MessageBox.Show("Invalid CUDA");
+                    }
+                    cts.Cancel();
+                } catch(OperationCanceledException)
+                {
+                    PythonEngine.Shutdown();
+                    mod.ToPython().Dispose();
+                    result.ToPython().Dispose();
+                    _initialized = false;
+                }
 
-                return status;
+
+                if (result == null)
+                    return 0;
+
+                var pyResult = new PyDict((PyObject)result);
+
+                if (!pyResult.HasKey("status"))
+                    return 0.0;
+
+                return pyResult["status"].As<double>();
             }
         }
 

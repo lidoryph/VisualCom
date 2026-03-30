@@ -38,19 +38,21 @@
             EpochBar = new TrackBar();
             HelpButton = new Button();
             label3 = new Label();
-            RateNumeric = new NumericUpDown();
-            RateBar = new TrackBar();
+            ImageSizeNum = new NumericUpDown();
+            ImageSizeBar = new TrackBar();
             label4 = new Label();
-            ImagesBar = new TrackBar();
-            ImagesNumeric = new NumericUpDown();
+            SeedBar = new TrackBar();
+            SeedNum = new NumericUpDown();
             EpochNumeric = new NumericUpDown();
             label5 = new Label();
             DeviceSelector = new ComboBox();
+            label6 = new Label();
+            ModelSelector = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)EpochBar).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)RateNumeric).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)RateBar).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)ImagesBar).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)ImagesNumeric).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)ImageSizeNum).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)ImageSizeBar).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)SeedBar).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)SeedNum).BeginInit();
             ((System.ComponentModel.ISupportInitialize)EpochNumeric).BeginInit();
             SuspendLayout();
             // 
@@ -119,7 +121,7 @@
             EpochBar.Location = new Point(12, 86);
             EpochBar.Maximum = 100;
             EpochBar.Name = "EpochBar";
-            EpochBar.Size = new Size(362, 45);
+            EpochBar.Size = new Size(352, 45);
             EpochBar.TabIndex = 6;
             EpochBar.TickFrequency = 10;
             EpochBar.Value = 10;
@@ -139,66 +141,67 @@
             label3.AutoSize = true;
             label3.Location = new Point(12, 134);
             label3.Name = "label3";
-            label3.Size = new Size(146, 15);
+            label3.Size = new Size(109, 15);
             label3.TabIndex = 9;
-            label3.Text = "Corrección de Aprendizaje";
+            label3.Text = "Tamaño de Imagen";
             // 
-            // RateNumeric
+            // ImageSizeNum
             // 
-            RateNumeric.Location = new Point(380, 152);
-            RateNumeric.Name = "RateNumeric";
-            RateNumeric.Size = new Size(39, 23);
-            RateNumeric.TabIndex = 10;
-            RateNumeric.Value = new decimal(new int[] { 50, 0, 0, 0 });
-            RateNumeric.ValueChanged += RateNumeric_ValueChanged;
+            ImageSizeNum.Location = new Point(370, 152);
+            ImageSizeNum.Maximum = new decimal(new int[] { 1024, 0, 0, 0 });
+            ImageSizeNum.Name = "ImageSizeNum";
+            ImageSizeNum.Size = new Size(49, 23);
+            ImageSizeNum.TabIndex = 10;
+            ImageSizeNum.Value = new decimal(new int[] { 640, 0, 0, 0 });
+            ImageSizeNum.ValueChanged += RateNumeric_ValueChanged;
             // 
-            // RateBar
+            // ImageSizeBar
             // 
-            RateBar.Location = new Point(12, 152);
-            RateBar.Maximum = 100;
-            RateBar.Name = "RateBar";
-            RateBar.Size = new Size(362, 45);
-            RateBar.TabIndex = 11;
-            RateBar.TickFrequency = 10;
-            RateBar.Value = 50;
-            RateBar.ValueChanged += RateBar_ValueChanged;
+            ImageSizeBar.Location = new Point(12, 152);
+            ImageSizeBar.Maximum = 1024;
+            ImageSizeBar.Name = "ImageSizeBar";
+            ImageSizeBar.Size = new Size(352, 45);
+            ImageSizeBar.TabIndex = 11;
+            ImageSizeBar.TickFrequency = 128;
+            ImageSizeBar.Value = 640;
+            ImageSizeBar.ValueChanged += RateBar_ValueChanged;
             // 
             // label4
             // 
             label4.AutoSize = true;
             label4.Location = new Point(12, 200);
             label4.Name = "label4";
-            label4.Size = new Size(111, 15);
+            label4.Size = new Size(45, 15);
             label4.TabIndex = 12;
-            label4.Text = "Imagenes a mostrar";
+            label4.Text = "Semilla";
             // 
-            // ImagesBar
+            // SeedBar
             // 
-            ImagesBar.Location = new Point(12, 218);
-            ImagesBar.Maximum = 100;
-            ImagesBar.Name = "ImagesBar";
-            ImagesBar.Size = new Size(362, 45);
-            ImagesBar.TabIndex = 13;
-            ImagesBar.TickFrequency = 10;
-            ImagesBar.Value = 16;
-            ImagesBar.ValueChanged += ImagesBar_ValueChanged;
+            SeedBar.Location = new Point(12, 218);
+            SeedBar.Maximum = 256;
+            SeedBar.Name = "SeedBar";
+            SeedBar.Size = new Size(352, 45);
+            SeedBar.TabIndex = 13;
+            SeedBar.TickFrequency = 16;
+            SeedBar.Value = 42;
+            SeedBar.ValueChanged += ImagesBar_ValueChanged;
             // 
-            // ImagesNumeric
+            // SeedNum
             // 
-            ImagesNumeric.Location = new Point(380, 218);
-            ImagesNumeric.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            ImagesNumeric.Name = "ImagesNumeric";
-            ImagesNumeric.Size = new Size(39, 23);
-            ImagesNumeric.TabIndex = 14;
-            ImagesNumeric.Value = new decimal(new int[] { 16, 0, 0, 0 });
-            ImagesNumeric.ValueChanged += ImagesNumeric_ValueChanged;
+            SeedNum.Location = new Point(370, 218);
+            SeedNum.Maximum = new decimal(new int[] { 256, 0, 0, 0 });
+            SeedNum.Name = "SeedNum";
+            SeedNum.Size = new Size(49, 23);
+            SeedNum.TabIndex = 14;
+            SeedNum.Value = new decimal(new int[] { 42, 0, 0, 0 });
+            SeedNum.ValueChanged += ImagesNumeric_ValueChanged;
             // 
             // EpochNumeric
             // 
-            EpochNumeric.Location = new Point(380, 86);
+            EpochNumeric.Location = new Point(370, 86);
             EpochNumeric.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             EpochNumeric.Name = "EpochNumeric";
-            EpochNumeric.Size = new Size(39, 23);
+            EpochNumeric.Size = new Size(49, 23);
             EpochNumeric.TabIndex = 15;
             EpochNumeric.Value = new decimal(new int[] { 10, 0, 0, 0 });
             EpochNumeric.ValueChanged += EpochNumeric_ValueChanged;
@@ -220,20 +223,39 @@
             DeviceSelector.Size = new Size(407, 23);
             DeviceSelector.TabIndex = 17;
             // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(12, 314);
+            label6.Name = "label6";
+            label6.Size = new Size(48, 15);
+            label6.TabIndex = 18;
+            label6.Text = "Modelo";
+            // 
+            // ModelSelector
+            // 
+            ModelSelector.FormattingEnabled = true;
+            ModelSelector.Location = new Point(12, 332);
+            ModelSelector.Name = "ModelSelector";
+            ModelSelector.Size = new Size(407, 23);
+            ModelSelector.TabIndex = 19;
+            // 
             // TrainModel
             // 
             AcceptButton = TrainModelButton;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(431, 528);
+            Controls.Add(ModelSelector);
+            Controls.Add(label6);
             Controls.Add(DeviceSelector);
             Controls.Add(label5);
             Controls.Add(EpochNumeric);
-            Controls.Add(ImagesNumeric);
-            Controls.Add(ImagesBar);
+            Controls.Add(SeedNum);
+            Controls.Add(SeedBar);
             Controls.Add(label4);
-            Controls.Add(RateBar);
-            Controls.Add(RateNumeric);
+            Controls.Add(ImageSizeBar);
+            Controls.Add(ImageSizeNum);
             Controls.Add(label3);
             Controls.Add(HelpButton);
             Controls.Add(EpochBar);
@@ -250,11 +272,12 @@
             Name = "TrainModel";
             ShowInTaskbar = false;
             Text = "Entrenar un modelo...";
+            FormClosing += OnFormClose;
             ((System.ComponentModel.ISupportInitialize)EpochBar).EndInit();
-            ((System.ComponentModel.ISupportInitialize)RateNumeric).EndInit();
-            ((System.ComponentModel.ISupportInitialize)RateBar).EndInit();
-            ((System.ComponentModel.ISupportInitialize)ImagesBar).EndInit();
-            ((System.ComponentModel.ISupportInitialize)ImagesNumeric).EndInit();
+            ((System.ComponentModel.ISupportInitialize)ImageSizeNum).EndInit();
+            ((System.ComponentModel.ISupportInitialize)ImageSizeBar).EndInit();
+            ((System.ComponentModel.ISupportInitialize)SeedBar).EndInit();
+            ((System.ComponentModel.ISupportInitialize)SeedNum).EndInit();
             ((System.ComponentModel.ISupportInitialize)EpochNumeric).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -271,13 +294,15 @@
         private TrackBar EpochBar;
         private Button HelpButton;
         private Label label3;
-        private NumericUpDown RateNumeric;
-        private TrackBar RateBar;
+        private NumericUpDown ImageSizeNum;
+        private TrackBar ImageSizeBar;
         private Label label4;
-        private TrackBar ImagesBar;
-        private NumericUpDown ImagesNumeric;
+        private TrackBar SeedBar;
+        private NumericUpDown SeedNum;
         private NumericUpDown EpochNumeric;
         private Label label5;
         private ComboBox DeviceSelector;
+        private Label label6;
+        private ComboBox ModelSelector;
     }
 }

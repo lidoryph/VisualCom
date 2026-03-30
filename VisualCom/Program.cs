@@ -18,7 +18,7 @@ namespace VisualCom
                 ProcessStartInfo pythoncheck = new()
                 {
                     UseShellExecute = true,
-                    CreateNoWindow = false,
+                    CreateNoWindow = true,
                     FileName = "python",
                     Arguments = "--version"
                 };
@@ -36,7 +36,7 @@ namespace VisualCom
                 ProcessStartInfo uvcheck = new()
                 {
                     UseShellExecute = true,
-                    CreateNoWindow = false,
+                    CreateNoWindow = true,
                     FileName = "uv",
                     Arguments = "-V"
                 };

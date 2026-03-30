@@ -28,7 +28,7 @@ namespace VisualCom
     internal static class ProjectActions
     {
         private static readonly ReadingDocument error = new();
-        private static readonly string? c_pf = Configuration.ProjectFile; 
+        private static string? c_pf = Configuration.ProjectFile; 
         private static readonly XElement? pv_name = Configuration.ProjectVariables.Root?.Element("Name");
         private static readonly XElement? pv_created = Configuration.ProjectVariables.Root?.Element("Created");
         private static readonly XElement? pv_modified = Configuration.ProjectVariables.Root?.Element("Modified");
@@ -61,9 +61,9 @@ namespace VisualCom
 
             if (Directory.EnumerateFileSystemEntries(ProjectDir).Any())
             {
-                System.IO.Directory.CreateDirectory(Path.Join(ProjectDir, ProjectName));
                 ProjectDir = Path.Join(ProjectDir, ProjectName);
-                Configuration.ProjectFile = (string)Path.Join(ProjectDir, (ProjectName + ".xml"));
+                System.IO.Directory.CreateDirectory(ProjectDir);
+                c_pf = (string)Path.Join(ProjectDir, (ProjectName + ".xml"));
             }
 
             pv_main.Value = ProjectDir;
@@ -85,7 +85,7 @@ namespace VisualCom
             }
 
 
-            Configuration.ProjectVariables.Save(Configuration.ProjectFile);
+            Configuration.ProjectVariables.Save(c_pf);
         }
 
         public static void LoadAnnotations(string filepath)

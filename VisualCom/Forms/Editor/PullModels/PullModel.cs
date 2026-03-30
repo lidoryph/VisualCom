@@ -16,7 +16,7 @@ namespace VisualCom.Forms.Editor.PullModels
         public PullModel()
         {
             InitializeComponent();
-            List<string> AvailableModels = ["YOLO26n", "YOLO26s", "YOLO26m", "YOLO26l", "YOLO26x", "YOLO11m", "YOLO11x"];
+            List<string> AvailableModels = ["YOLO26 Nano", "YOLO26 Small", "YOLO26 Medium", "YOLO26 Large", "YOLO26 Extra", "YOLO11 Medium", "YOLO11 Extra"];
             foreach (string model in AvailableModels)
                 ModelsList.Items.Add(model);
         }
