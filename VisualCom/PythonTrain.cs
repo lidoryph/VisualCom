@@ -64,8 +64,6 @@ namespace VisualCom
                 dynamic sys = Py.Import("sys");
                 sys.path.insert(0, TrainModPath);
                 sys.path.insert(0, SitePackages);
-
-                Console.WriteLine("sys.path: " + sys.path.ToString());
             }
 
             _initialized = true;

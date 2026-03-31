@@ -34,6 +34,7 @@
             abrirProyectoToolStripMenuItem = new ToolStripMenuItem();
             guardarProyectoToolStripMenuItem = new ToolStripMenuItem();
             extraerModeloToolStripMenuItem = new ToolStripMenuItem();
+            conectarseAServidorToolStripMenuItem = new ToolStripMenuItem();
             editarToolStripMenuItem = new ToolStripMenuItem();
             verToolStripMenuItem = new ToolStripMenuItem();
             proyectoToolStripMenuItem = new ToolStripMenuItem();
@@ -110,7 +111,7 @@
             // 
             // menuitemArchivo
             // 
-            menuitemArchivo.DropDownItems.AddRange(new ToolStripItem[] { nuevoProyectoToolStripMenuItem, abrirProyectoToolStripMenuItem, guardarProyectoToolStripMenuItem, extraerModeloToolStripMenuItem });
+            menuitemArchivo.DropDownItems.AddRange(new ToolStripItem[] { nuevoProyectoToolStripMenuItem, abrirProyectoToolStripMenuItem, guardarProyectoToolStripMenuItem, extraerModeloToolStripMenuItem, conectarseAServidorToolStripMenuItem });
             menuitemArchivo.Name = "menuitemArchivo";
             menuitemArchivo.Size = new Size(60, 20);
             menuitemArchivo.Text = "Archivo";
@@ -119,7 +120,7 @@
             // 
             nuevoProyectoToolStripMenuItem.Image = Properties.Resources.new_document;
             nuevoProyectoToolStripMenuItem.Name = "nuevoProyectoToolStripMenuItem";
-            nuevoProyectoToolStripMenuItem.Size = new Size(168, 22);
+            nuevoProyectoToolStripMenuItem.Size = new Size(201, 26);
             nuevoProyectoToolStripMenuItem.Text = "Nuevo Proyecto...";
             nuevoProyectoToolStripMenuItem.Click += NewProject;
             // 
@@ -127,7 +128,7 @@
             // 
             abrirProyectoToolStripMenuItem.Image = Properties.Resources.open_document;
             abrirProyectoToolStripMenuItem.Name = "abrirProyectoToolStripMenuItem";
-            abrirProyectoToolStripMenuItem.Size = new Size(168, 22);
+            abrirProyectoToolStripMenuItem.Size = new Size(201, 26);
             abrirProyectoToolStripMenuItem.Text = "Abrir Proyecto...";
             abrirProyectoToolStripMenuItem.Click += OpenProject;
             // 
@@ -135,7 +136,7 @@
             // 
             guardarProyectoToolStripMenuItem.Image = Properties.Resources.save_document;
             guardarProyectoToolStripMenuItem.Name = "guardarProyectoToolStripMenuItem";
-            guardarProyectoToolStripMenuItem.Size = new Size(168, 22);
+            guardarProyectoToolStripMenuItem.Size = new Size(201, 26);
             guardarProyectoToolStripMenuItem.Text = "Guardar Proyecto";
             guardarProyectoToolStripMenuItem.Click += SaveProject;
             // 
@@ -143,9 +144,17 @@
             // 
             extraerModeloToolStripMenuItem.Image = Properties.Resources.pull_model;
             extraerModeloToolStripMenuItem.Name = "extraerModeloToolStripMenuItem";
-            extraerModeloToolStripMenuItem.Size = new Size(168, 22);
+            extraerModeloToolStripMenuItem.Size = new Size(201, 26);
             extraerModeloToolStripMenuItem.Text = "Extraer Modelo...";
             extraerModeloToolStripMenuItem.Click += PullModel;
+            // 
+            // conectarseAServidorToolStripMenuItem
+            // 
+            conectarseAServidorToolStripMenuItem.Image = Properties.Resources.globe_network;
+            conectarseAServidorToolStripMenuItem.Name = "conectarseAServidorToolStripMenuItem";
+            conectarseAServidorToolStripMenuItem.Size = new Size(201, 26);
+            conectarseAServidorToolStripMenuItem.Text = "Conectarse a Servidor...";
+            conectarseAServidorToolStripMenuItem.Click += OpenNetDialog;
             // 
             // editarToolStripMenuItem
             // 
@@ -668,5 +677,6 @@
         private ListView ClassesList;
         private ColumnHeader columnHeader1;
         private ToolStripMenuItem extraerModeloToolStripMenuItem;
+        private ToolStripMenuItem conectarseAServidorToolStripMenuItem;
     }
 }

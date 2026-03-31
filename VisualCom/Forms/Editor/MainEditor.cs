@@ -7,6 +7,7 @@ using VisualCom.Forms.Editor.PullModels;
 using VisualCom.Forms.Editor.TrainWindows;
 using VisualCom.Forms.Editor.Versions;
 using VisualCom.Forms.Errors;
+using VisualCom.Forms.Editor.NetTests;
 
 namespace VisualCom
 {
@@ -840,6 +841,12 @@ namespace VisualCom
         private void PullModel(object sender, EventArgs e)
         {
             PullModel dialog = new();
+            dialog.ShowDialog();
+        }
+
+        private void OpenNetDialog(object sender, EventArgs e)
+        {
+            NetworkDialog dialog = new();
             dialog.ShowDialog();
         }
 
