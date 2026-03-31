@@ -87,6 +87,7 @@ namespace VisualCom
         {
             base.OnFormClosed(e);
             Application.Exit();
+            Application.ExitThread();
         }
 
         private void NewProject(object sender, EventArgs e)
@@ -601,7 +602,7 @@ namespace VisualCom
                 )
             );
 
-            foreach(XElement Class in pv_classes.Elements("Class"))
+            foreach (XElement Class in pv_classes.Elements("Class"))
                 VersionDoc.Root?.Element("Classes")?.Add(Class);
 
             System.IO.Directory.CreateDirectory(VersionPath);
@@ -616,7 +617,7 @@ namespace VisualCom
             VersionDoc.Save(Path.Join(VersionPath, VersionName + ".xml"));
 
             pv_version.Value = VersionName;
-            ProjectActions.SaveProject(notes:false);
+            ProjectActions.SaveProject(notes: false);
         }
 
         public void RemoveVersion(string version)
@@ -825,7 +826,7 @@ namespace VisualCom
             );
 
             // Guardar el JSON actualizado
-            ProjectActions.SaveProject(notes:true);
+            ProjectActions.SaveProject(notes: true);
 
             pictureBox.Invalidate();
         }
@@ -844,10 +845,9 @@ namespace VisualCom
 
         private void Exit(object sender, EventArgs e)
         {
-            this.Close();
             Close();
             Application.Exit();
-        }
 
+        }
     }
 }

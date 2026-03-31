@@ -15,7 +15,7 @@ namespace VisualCom.Forms.Editor
 {
     public partial class TrainModel : Form
     {
-
+        private bool _cancelled = false;
         private CancellationTokenSource cts = new();
         private readonly XElement? pv_d_models = Configuration.ProjectVariables.Root?.Element("Directories")?.Element("Models");
         private readonly Dictionary<string, string> _modelFiles = new()
@@ -114,6 +114,9 @@ namespace VisualCom.Forms.Editor
 
             string Device = "";
 
+            if (DeviceSelector.SelectedItem == null)
+                return;
+
             if (DeviceSelector.SelectedItem.ToString() == "CPU")
                 Device = "cpu";
             else if (DeviceSelector.SelectedItem.ToString() == "GPU")
@@ -146,7 +149,7 @@ namespace VisualCom.Forms.Editor
             PythonTrain.Initialize();
 
             void OnEpochEnd(int current, int total) =>
-                TrainProgress.Invoke(() => TrainProgress.Value = (int)Math.Round((double)current / total * 100));
+                TrainProgress.InvokeAsync(() => TrainProgress.Value = (int)Math.Round((double)current / total * 100), cts.Token);
 
 
             TrainProgress.Value = (int)await Task.Run(() => PythonTrain.StartTrain(PythonArguments, cts, cts.Token, OnEpochEnd));
@@ -167,7 +170,11 @@ namespace VisualCom.Forms.Editor
 
         private async void TrainModCancelButton_Click(object sender, EventArgs e)
         {
-            cts.Cancel();
+            if (!_cancelled)
+            {
+                cts.Cancel();
+                _cancelled = true;
+            }
             Close();
         }
 
@@ -210,8 +217,11 @@ namespace VisualCom.Forms.Editor
 
         private void OnFormClose(object sender,  FormClosingEventArgs e)
         {
-            cts.Cancel();
-            Close();
+            if (!_cancelled)
+            {
+                cts.Cancel();
+                _cancelled = true;
+            }
         }
 
     }

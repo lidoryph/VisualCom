@@ -55,6 +55,7 @@ namespace VisualCom
                 PythonEngine.Initialize();
 
                 PythonEngine.BeginAllowThreads();
+                Configuration.PythonStarted = true;
             }
 
 
@@ -122,9 +123,6 @@ namespace VisualCom
                 } catch(OperationCanceledException)
                 {
                     PythonEngine.Shutdown();
-                    mod.ToPython().Dispose();
-                    result.ToPython().Dispose();
-                    _initialized = false;
                 }
 
 
