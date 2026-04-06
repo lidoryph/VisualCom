@@ -103,13 +103,19 @@ def remove_image(url: str, filename: str, project: str) -> tuple[int, str]:
 
     return r.status_code, r.text
 
-#hacer
+#hacer y en server
 def block_image(url: str, filename: str, project: str) -> tuple[int, str]:
     return 1, ""
 
-#hacer y en server
 def get_classes(url: str, name: str) -> tuple[int, str]:
-    return(1, "")
+    url = url + "/classes/" + name + "/get/"
+
+    try:
+        r = requests.get(url)
+    except requests.exceptions.ConnectionError:
+        return(1, "Couldn't get a hold of the server.")
+
+    return(r.status_code, r.text)
 
 #hacer y en server
 def add_class(url: str, name: str, classname: str, color: str) -> tuple[int, str]:
