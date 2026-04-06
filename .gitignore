@@ -362,7 +362,6 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
-# Trainmod, It's going to be a separate repo.
-VisualCom/TrainMod/
-VisualCom/TrainMod/*
-VisualCom/TrainMod
+#Python's customs
+VisualCom/TrainMod/__pycache__
+.idea

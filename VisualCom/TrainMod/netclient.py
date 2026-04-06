@@ -26,10 +26,6 @@ def get_projects(url:str) -> tuple[int, str]:
     
     return (r.status_code, r.text)
 
-#hacer
-def load_projects(url: str, name: str) -> tuple[int, str]:
-    return(1, "")
-
 def new_project(url: str, name: str, type: str) -> tuple[int, str]:
     url = url + "/project/new/" + name + "/" + type
     try:
@@ -40,9 +36,14 @@ def new_project(url: str, name: str, type: str) -> tuple[int, str]:
 
     return (r.status_code, r.text)
   
-#hacer y en server
 def load_project(url: str, name: str) -> tuple[int, str]:
-    return 1, ""
+    url = url + "/project/get/" + name
+    try:
+        r = requests.get(url)
+    except requests.exceptions.ConnectionError:
+        return(1, "Couldn't get a hold of the server")
+    
+    return(r.status_code, r.text)
 
 def delete_project(url: str, project: str) -> tuple[int, str]:
     url = url + "/project/delete/supersure/yes/" + project
