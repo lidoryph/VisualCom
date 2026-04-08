@@ -56,7 +56,10 @@ def delete_project(url: str, project: str) -> tuple[int, str]:
     
     return (r.status_code, r.text)
 
-def upload_image(url: str, filepath: str, project: str) -> tuple[int, str]:
+def get_images(url: str, name: str) -> tuple[int, str]:
+    return(1, "")
+
+def new_image(url: str, filepath: str, project: str) -> tuple[int, str]:
     file = open(filepath, "+br")
     fileextension = os.path.basename(filepath).split(".")[-1]
     filename = str(str(datetime.datetime.now()) + "." + fileextension).replace(":", "-").replace(" ", "H")
@@ -73,7 +76,7 @@ def upload_image(url: str, filepath: str, project: str) -> tuple[int, str]:
 
     return (r.status_code, r.text)
 
-def download_image(url:str, filepath:str, project: str) -> tuple[int, str]:
+def load_image(url:str, filepath:str, project: str) -> tuple[int, str]:
     url = url + "/get/" + project + "/" + filepath
     file = open(filepath, "+bw")
     
@@ -92,7 +95,7 @@ def download_image(url:str, filepath:str, project: str) -> tuple[int, str]:
 
     return (r.status_code, r.text)
 
-def remove_image(url: str, filename: str, project: str) -> tuple[int, str]:
+def delete_image(url: str, filename: str, project: str) -> tuple[int, str]:
     url = url + "/del/" + project + "/" + filename
 
     try:
@@ -117,7 +120,7 @@ def get_classes(url: str, name: str) -> tuple[int, str]:
 
     return(r.status_code, r.text)
 
-def add_class(url: str, name: str, classname: str, color: str) -> tuple[int, str]:
+def new_class(url: str, name: str, classname: str, color: str) -> tuple[int, str]:
     url = url + "/classes/" + name + "/add/" + classname + "/" + color
 
     try:
@@ -128,7 +131,7 @@ def add_class(url: str, name: str, classname: str, color: str) -> tuple[int, str
     return(r.status_code, r.text)
 
 #hacer y en server
-def erase_class(url: str, name: str, classname: str) -> tuple[int, str]:
+def delete_class(url: str, name: str, classname: str) -> tuple[int, str]:
     return(1, "")
 
 def get_versions(url: str, name: str) -> tuple[int, str]:
@@ -141,8 +144,7 @@ def get_versions(url: str, name: str) -> tuple[int, str]:
     
     return(r.status_code, r.text)
 
-
-def add_version(url: str, name: str, version: str) -> tuple[int, str]:
+def new_version(url: str, name: str, version: str) -> tuple[int, str]:
     url = url + "/versions/" + name + "/new/" + version
 
     try:
@@ -153,7 +155,7 @@ def add_version(url: str, name: str, version: str) -> tuple[int, str]:
     return(r.status_code, r.text)
 
 #hacer y en server
-def erase_version(url: str, name: str) -> tuple[int, str]:
+def delete_version(url: str, name: str) -> tuple[int, str]:
     return(1, "")
 
 #hacer y en server
@@ -161,11 +163,11 @@ def train_model(url: str, name: str, version) -> tuple[int, str]:
     return(1, "")
 
 #hacer y en server
-def add_label(url: str, name: str, image:str, botleft: str, topright: str) -> tuple[int, str]:
+def new_label(url: str, name: str, image:str, botleft: str, topright: str) -> tuple[int, str]:
     return(1, "")
 
 #hacer y en server
-def erase_label(url: str, name: str, image: str, botleft:str, topright: str) -> tuple[int, str]:
+def delete_label(url: str, name: str, image: str, botleft:str, topright: str) -> tuple[int, str]:
     return(1, "")
 
 #hacer y en server
