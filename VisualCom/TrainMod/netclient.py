@@ -125,26 +125,32 @@ def add_class(url: str, name: str, classname: str, color: str) -> tuple[int, str
     except requests.exceptions.ConnectionError:
         return(1, "Couldn't get a hold of the server.")
 
-    return(1, "")
+    return(r.status_code, r.text)
 
 #hacer y en server
 def erase_class(url: str, name: str, classname: str) -> tuple[int, str]:
     return(1, "")
 
-#hacer y en server
 def get_versions(url: str, name: str) -> tuple[int, str]:
-    url = url + "/classes/" + name + "/get/"
+    url = url + "/versions/" + name + "/get/"
 
     try:
         r = requests.get(url)
     except requests.exceptions.ConnectionError:
         return(1, "Couldn't get a hold of the server.")
     
-    return(r.status, r.text)
+    return(r.status_code, r.text)
 
-#hacer y en server
+
 def add_version(url: str, name: str, version: str) -> tuple[int, str]:
-    return(1, "")
+    url = url + "/versions/" + name + "/new/" + version
+
+    try:
+        r = requests.get(url)
+    except requests.exceptions.ConnectionError:
+        return(1, "Couldn't get a hold of the server.")
+    
+    return(r.status_code, r.text)
 
 #hacer y en server
 def erase_version(url: str, name: str) -> tuple[int, str]:
