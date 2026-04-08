@@ -1,7 +1,6 @@
 from common_variables import allmodels, latest
 import os
 import urllib.request
-import requests
 from urllib.parse import urlparse
 import urllib.error
 
