@@ -117,8 +117,14 @@ def get_classes(url: str, name: str) -> tuple[int, str]:
 
     return(r.status_code, r.text)
 
-#hacer y en server
 def add_class(url: str, name: str, classname: str, color: str) -> tuple[int, str]:
+    url = url + "/classes/" + name + "/add/" + classname + "/" + color
+
+    try:
+        r = requests.get(url)
+    except requests.exceptions.ConnectionError:
+        return(1, "Couldn't get a hold of the server.")
+
     return(1, "")
 
 #hacer y en server
