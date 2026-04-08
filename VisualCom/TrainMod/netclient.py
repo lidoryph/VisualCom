@@ -133,7 +133,14 @@ def erase_class(url: str, name: str, classname: str) -> tuple[int, str]:
 
 #hacer y en server
 def get_versions(url: str, name: str) -> tuple[int, str]:
-    return(1, "")
+    url = url + "/classes/" + name + "/get/"
+
+    try:
+        r = requests.get(url)
+    except requests.exceptions.ConnectionError:
+        return(1, "Couldn't get a hold of the server.")
+    
+    return(r.status, r.text)
 
 #hacer y en server
 def add_version(url: str, name: str, version: str) -> tuple[int, str]:
