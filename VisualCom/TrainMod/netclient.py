@@ -57,16 +57,23 @@ def delete_project(url: str, project: str) -> tuple[int, str]:
     return (r.status_code, r.text)
 
 def get_images(url: str, name: str) -> tuple[int, str]:
-    return(1, "")
+    url = url + "/image/get/" + name + "/"
+
+    try:
+        r = requests.get(url)
+    except requests.exceptions.ConnectionError:
+        return(1, "Couldn't get a hold of the server.")
+
+    return(r.status_code, r.text)
 
 def new_image(url: str, filepath: str, project: str) -> tuple[int, str]:
     file = open(filepath, "+br")
     fileextension = os.path.basename(filepath).split(".")[-1]
     filename = str(str(datetime.datetime.now()) + "." + fileextension).replace(":", "-").replace(" ", "H")
     print(filename)
-    
+    url = url + "/image/new/" + project + "/" + filename
     files = {"file": (filepath, file, "image/" + fileextension)}
-    url = url + "/add/" + project + "/" + filename
+    
     print(url)
     try:
         r = requests.put(url, files=files)
@@ -77,7 +84,7 @@ def new_image(url: str, filepath: str, project: str) -> tuple[int, str]:
     return (r.status_code, r.text)
 
 def load_image(url:str, filepath:str, project: str) -> tuple[int, str]:
-    url = url + "/get/" + project + "/" + filepath
+    url = url + "/image/load/" + project + "/" + filepath
     file = open(filepath, "+bw")
     
     try:
@@ -96,7 +103,7 @@ def load_image(url:str, filepath:str, project: str) -> tuple[int, str]:
     return (r.status_code, r.text)
 
 def delete_image(url: str, filename: str, project: str) -> tuple[int, str]:
-    url = url + "/del/" + project + "/" + filename
+    url = url + "/image/del/" + project + "/" + filename
 
     try:
         r = requests.get(url)
@@ -121,7 +128,7 @@ def get_classes(url: str, name: str) -> tuple[int, str]:
     return(r.status_code, r.text)
 
 def new_class(url: str, name: str, classname: str, color: str) -> tuple[int, str]:
-    url = url + "/classes/" + name + "/add/" + classname + "/" + color
+    url = url + "/classes/" + name + "/new/" + classname + "/" + color
 
     try:
         r = requests.get(url)
@@ -135,7 +142,7 @@ def delete_class(url: str, name: str, classname: str) -> tuple[int, str]:
     return(1, "")
 
 def get_versions(url: str, name: str) -> tuple[int, str]:
-    url = url + "/versions/" + name + "/get/"
+    url = url + "/version/" + name + "/get/"
 
     try:
         r = requests.get(url)
@@ -145,7 +152,7 @@ def get_versions(url: str, name: str) -> tuple[int, str]:
     return(r.status_code, r.text)
 
 def new_version(url: str, name: str, version: str) -> tuple[int, str]:
-    url = url + "/versions/" + name + "/new/" + version
+    url = url + "/version/" + name + "/new/" + version
 
     try:
         r = requests.get(url)
@@ -154,9 +161,15 @@ def new_version(url: str, name: str, version: str) -> tuple[int, str]:
     
     return(r.status_code, r.text)
 
-#hacer y en server
-def delete_version(url: str, name: str) -> tuple[int, str]:
-    return(1, "")
+def delete_version(url: str, name: str, version: str) -> tuple[int, str]:
+    url = url + "/version/" + name + "/del/" + version
+
+    try:
+        r = requests.get(url)
+    except requests.exceptions.ConnectionError:
+        return(1, "Couldn't get a hold of the server")
+    
+    return(r.status_code, r.text)
 
 #hacer y en server
 def train_model(url: str, name: str, version) -> tuple[int, str]:
