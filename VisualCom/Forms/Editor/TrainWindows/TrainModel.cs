@@ -152,7 +152,12 @@ namespace VisualCom.Forms.Editor
                 TrainProgress.InvokeAsync(() => TrainProgress.Value = (int)Math.Round((double)current / total * 100), cts.Token);
 
 
-            TrainProgress.Value = (int)await Task.Run(() => PythonTrain.StartTrain(PythonArguments, cts, cts.Token, OnEpochEnd));
+            double trainResult = await Task.Run(() => PythonTrain.StartTrain(PythonArguments, cts, cts.Token, OnEpochEnd));
+
+            if (_cancelled || IsDisposed)
+                return;
+
+            TrainProgress.Value = (int)trainResult;
             TrainModelButton.Enabled = true;
             TrainProgress.Enabled = false;
 

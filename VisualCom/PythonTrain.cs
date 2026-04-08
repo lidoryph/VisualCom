@@ -11,7 +11,7 @@ namespace VisualCom
     public static class PythonTrain
     {
         private static bool _initialized = false;
-
+        private static ulong _pythonThreadId = 0;
         public static void Initialize()
         {
             if (_initialized == true) return;
@@ -64,6 +64,7 @@ namespace VisualCom
                 dynamic sys = Py.Import("sys");
                 sys.path.insert(0, TrainModPath);
                 sys.path.insert(0, SitePackages);
+
             }
 
             _initialized = true;
@@ -89,6 +90,16 @@ namespace VisualCom
             }
         }
 
+        public static void Interrupt()
+        {
+            ulong threadId = _pythonThreadId;
+            if (threadId == 0) return;
+            using (Py.GIL())
+            {
+                PythonEngine.Interrupt(threadId);
+            }
+        }
+
         public static double StartTrain((string, int, int, int, string, string, string) PythonArguments, CancellationTokenSource cts, CancellationToken cToken, Action<int, int>? onEpochEnd = null)
         {
             using (Py.GIL())
@@ -106,6 +117,8 @@ namespace VisualCom
                 PyObject? cb = onEpochEnd?.ToPython();
                 dynamic? result = null;
 
+                _pythonThreadId = PythonEngine.GetPythonThreadID();
+
                 try
                 {
                     result = cb is not null
@@ -118,9 +131,9 @@ namespace VisualCom
                         MessageBox.Show("Invalid CUDA");
                     }
                     cts.Cancel();
-                } catch(OperationCanceledException)
+                } finally
                 {
-                    PythonEngine.Shutdown();
+                    _pythonThreadId = 0;
                 }
 
 

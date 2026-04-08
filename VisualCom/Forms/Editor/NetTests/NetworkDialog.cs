@@ -77,9 +77,15 @@ namespace VisualCom.Forms.Editor.NetTests
                 ProjectsList.Items.Add(project);
 
         }
+        
+        private void GetClasses(object sender, EventArgs e)
+        {
+            string url = "http://" + ServerURL.Text + ":" + PortNumber.Value;
 
+            PythonTrain.Initialize();
+            dynamic result = NetActions.GetProjects(url);
+            int? scode = result[0];
+            string? rawprojects = result[1];
+        }
     }
-
-
-
 }

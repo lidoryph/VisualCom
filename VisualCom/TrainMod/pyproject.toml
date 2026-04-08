@@ -1,0 +1,13 @@
+[project]
+name = "trainmod"
+version = "0.1.0"
+description = "Trainer and tools for VisualCom"
+readme = "README.md"
+requires-python = "==3.12"
+dependencies = [
+    "cffi>=2.0.0",
+    "pygithub>=2.9.0",
+    "pythonnet>=3.0.5",
+    "requests>=2.32.5",
+    "ultralytics>=8.4.26",
+]
