@@ -363,5 +363,6 @@ MigrationBackup/
 FodyWeavers.xsd
 
 #Python's customs
+VisualCom/TrainMod/.venv
 VisualCom/TrainMod/__pycache__
 .idea

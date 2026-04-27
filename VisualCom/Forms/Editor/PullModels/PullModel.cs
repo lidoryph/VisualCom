@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-
-namespace VisualCom.Forms.Editor.PullModels
+﻿namespace VisualCom.Forms.Editor.PullModels
 {
     public partial class PullModel : Form
     {
@@ -43,14 +35,17 @@ namespace VisualCom.Forms.Editor.PullModels
                 if (result == 0)
                 {
                     Close();
-                } else if (result == -1)
+                }
+                else if (result == -1)
                 {
                     MessageBox.Show("Ha ocurrido un error fatal.\nSe va a cerrar el programa.");
                     Application.Exit();
-                } else if (result == -2)
+                }
+                else if (result == -2)
                     MessageBox.Show("¡Este modelo ya existe!");
 
-            } else if (Mode == "ONLINE")
+            }
+            else if (Mode == "ONLINE")
             {
                 model = InternetModelURL.Text.ToString();
 

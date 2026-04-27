@@ -34,6 +34,7 @@
             btnNewProject = new Button();
             SaveFileDlg = new SaveFileDialog();
             OpenFileDlg = new OpenFileDialog();
+            ConnectToServer_Button = new Button();
             groupBox1.SuspendLayout();
             SuspendLayout();
             // 
@@ -62,11 +63,19 @@
             btnNewProject.UseVisualStyleBackColor = true;
             btnNewProject.Click += NewProject;
             // 
+            // ConnectToServer_Button
+            // 
+            resources.ApplyResources(ConnectToServer_Button, "ConnectToServer_Button");
+            ConnectToServer_Button.Name = "ConnectToServer_Button";
+            ConnectToServer_Button.UseVisualStyleBackColor = true;
+            ConnectToServer_Button.Click += ConnectServer;
+            // 
             // WelcomeWindow
             // 
             resources.ApplyResources(this, "$this");
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
+            Controls.Add(ConnectToServer_Button);
             Controls.Add(groupBox1);
             MaximizeBox = false;
             Name = "WelcomeWindow";
@@ -81,5 +90,6 @@
         private Button btnNewProject;
         private SaveFileDialog SaveFileDlg;
         private OpenFileDialog OpenFileDlg;
+        private Button ConnectToServer_Button;
     }
 }

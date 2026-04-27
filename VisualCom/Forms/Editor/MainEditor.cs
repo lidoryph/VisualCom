@@ -28,6 +28,8 @@ namespace VisualCom
         private Boolean _isDragging = false;
         private Point _dragStartBox = Point.Empty;
         private Point _dragCurrentBox = Point.Empty;
+        private int _lastMouseCoordX = int.MinValue;
+        private int _lastMouseCoordY = int.MinValue;
 
         private PointF _selectionBottomLeft = PointF.Empty;
         private PointF _selectionTopRight = PointF.Empty;
@@ -290,9 +292,18 @@ namespace VisualCom
         {
             PointF? imgCoords = GetImageCoordinates(e.Location);
 
-            if (imgCoords.HasValue)
-                mouseCoordinates.Text = $"x: {(int)imgCoords.Value.X}, y: {(int)imgCoords.Value.Y}";
-            else return;
+            if (!imgCoords.HasValue)
+                return;
+
+            int currentX = (int)imgCoords.Value.X;
+            int currentY = (int)imgCoords.Value.Y;
+
+            if (currentX != _lastMouseCoordX || currentY != _lastMouseCoordY)
+            {
+                mouseCoordinates.Text = $"x: {currentX}, y: {currentY}";
+                _lastMouseCoordX = currentX;
+                _lastMouseCoordY = currentY;
+            }
 
             if (_isDragging)
             {

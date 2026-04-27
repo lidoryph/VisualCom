@@ -39,7 +39,7 @@
             SendPicButton = new Button();
             ErasePicButton = new Button();
             LockImageButton = new Button();
-            GetImages = new Button();
+            GetImagesButton = new Button();
             groupBox1 = new GroupBox();
             ImagesList = new ComboBox();
             groupBox2 = new GroupBox();
@@ -61,10 +61,12 @@
             button3 = new Button();
             button4 = new Button();
             groupBox6 = new GroupBox();
+            RightTopText = new TextBox();
+            LeftBotText = new TextBox();
             AddAnotationButton = new Button();
             EraseAnotationButton = new Button();
-            LeftBotText = new TextBox();
-            RightTopText = new TextBox();
+            OpenFileDialog = new OpenFileDialog();
+            user = new TextBox();
             ((System.ComponentModel.ISupportInitialize)PortNumber).BeginInit();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
@@ -88,13 +90,13 @@
             // 
             ServerURL.Location = new Point(93, 12);
             ServerURL.Name = "ServerURL";
-            ServerURL.Size = new Size(438, 23);
+            ServerURL.Size = new Size(232, 23);
             ServerURL.TabIndex = 1;
             ServerURL.Text = "127.0.0.1";
             // 
             // PortNumber
             // 
-            PortNumber.Location = new Point(537, 12);
+            PortNumber.Location = new Point(331, 12);
             PortNumber.Maximum = new decimal(new int[] { 10000000, 0, 0, 0 });
             PortNumber.Name = "PortNumber";
             PortNumber.Size = new Size(87, 23);
@@ -173,14 +175,15 @@
             LockImageButton.Text = "Bloquear Imagen";
             LockImageButton.UseVisualStyleBackColor = true;
             // 
-            // GetImages
+            // GetImagesButton
             // 
-            GetImages.Location = new Point(12, 70);
-            GetImages.Name = "GetImages";
-            GetImages.Size = new Size(200, 23);
-            GetImages.TabIndex = 11;
-            GetImages.Text = "Leer Imagenes";
-            GetImages.UseVisualStyleBackColor = true;
+            GetImagesButton.Location = new Point(12, 70);
+            GetImagesButton.Name = "GetImagesButton";
+            GetImagesButton.Size = new Size(200, 23);
+            GetImagesButton.TabIndex = 11;
+            GetImagesButton.Text = "Leer Imagenes";
+            GetImagesButton.UseVisualStyleBackColor = true;
+            GetImagesButton.Click += GetImages;
             // 
             // groupBox1
             // 
@@ -277,6 +280,7 @@
             GetClassesButton.TabIndex = 14;
             GetClassesButton.Text = "Leer Clases";
             GetClassesButton.UseVisualStyleBackColor = true;
+            GetClassesButton.Click += GetClasses;
             // 
             // groupBox4
             // 
@@ -362,6 +366,7 @@
             button3.TabIndex = 16;
             button3.Text = "Leer Versiones";
             button3.UseVisualStyleBackColor = true;
+            button3.Click += GetVersions;
             // 
             // button4
             // 
@@ -371,6 +376,7 @@
             button4.TabIndex = 17;
             button4.Text = "Leer Clases";
             button4.UseVisualStyleBackColor = true;
+            button4.Click += GetClasses;
             // 
             // groupBox6
             // 
@@ -384,6 +390,20 @@
             groupBox6.TabIndex = 15;
             groupBox6.TabStop = false;
             groupBox6.Text = "Etiqueta";
+            // 
+            // RightTopText
+            // 
+            RightTopText.Location = new Point(105, 22);
+            RightTopText.Name = "RightTopText";
+            RightTopText.Size = new Size(89, 23);
+            RightTopText.TabIndex = 12;
+            // 
+            // LeftBotText
+            // 
+            LeftBotText.Location = new Point(6, 22);
+            LeftBotText.Name = "LeftBotText";
+            LeftBotText.Size = new Size(93, 23);
+            LeftBotText.TabIndex = 11;
             // 
             // AddAnotationButton
             // 
@@ -403,25 +423,25 @@
             EraseAnotationButton.Text = "Borrar Etiqueta";
             EraseAnotationButton.UseVisualStyleBackColor = true;
             // 
-            // LeftBotText
+            // OpenFileDialog
             // 
-            LeftBotText.Location = new Point(6, 22);
-            LeftBotText.Name = "LeftBotText";
-            LeftBotText.Size = new Size(93, 23);
-            LeftBotText.TabIndex = 11;
+            OpenFileDialog.FileName = "OpenFileDialog";
             // 
-            // RightTopText
+            // user
             // 
-            RightTopText.Location = new Point(105, 22);
-            RightTopText.Name = "RightTopText";
-            RightTopText.Size = new Size(89, 23);
-            RightTopText.TabIndex = 12;
+            user.Location = new Point(423, 11);
+            user.Name = "user";
+            user.PlaceholderText = "Usuario";
+            user.Size = new Size(200, 23);
+            user.TabIndex = 18;
+            user.TextChanged += UsernameChanged;
             // 
             // NetworkDialog
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(635, 374);
+            Controls.Add(user);
             Controls.Add(groupBox6);
             Controls.Add(button4);
             Controls.Add(button3);
@@ -431,7 +451,7 @@
             Controls.Add(GetClassesButton);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
-            Controls.Add(GetImages);
+            Controls.Add(GetImagesButton);
             Controls.Add(SendPicButton);
             Controls.Add(GetProjectsButton);
             Controls.Add(ProjectType);
@@ -467,7 +487,7 @@
         private Button SendPicButton;
         private Button ErasePicButton;
         private Button LockImageButton;
-        private Button GetImages;
+        private Button GetImagesButton;
         private GroupBox groupBox1;
         private ComboBox ImagesList;
         private GroupBox groupBox2;
@@ -493,5 +513,7 @@
         private Button EraseAnotationButton;
         private TextBox RightTopText;
         private TextBox LeftBotText;
+        private OpenFileDialog OpenFileDialog;
+        private TextBox user;
     }
 }

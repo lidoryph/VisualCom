@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 
 namespace VisualCom.Forms.Editor.TrainWindows
 {
@@ -50,7 +42,7 @@ namespace VisualCom.Forms.Editor.TrainWindows
             ModelPath = Path.Join(pv_models.Value, YOLOName.Text);
             string VersionPath = Path.Join(pv_versions.Value, VersionSelector?.SelectedItem?.ToString());
 
-            ProjectActions.ExportToYOLO(VersionPath, ModelPath, (Int32) ImagesNum.Value);
+            ProjectActions.ExportToYOLO(VersionPath, ModelPath, (Int32)ImagesNum.Value);
             ExportButton.Enabled = false;
         }
 
@@ -72,12 +64,12 @@ namespace VisualCom.Forms.Editor.TrainWindows
 
         private void ChangedNumeric(object sender, EventArgs e)
         {
-            ImagesBar.Value = (Int32) ImagesNum.Value;
+            ImagesBar.Value = (Int32)ImagesNum.Value;
         }
 
         private void ChangedBar(object sender, EventArgs e)
         {
-            ImagesNum.Value = (Int32) ImagesBar.Value;
+            ImagesNum.Value = (Int32)ImagesBar.Value;
         }
 
     }

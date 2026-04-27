@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 using VisualCom.Forms.Errors;
 
 namespace VisualCom.Forms.Editor.Classes
@@ -56,7 +49,7 @@ namespace VisualCom.Forms.Editor.Classes
         private void Modify(object sender, EventArgs e)
         {
             className = className.Trim();
-            
+
             if (pv_classes == null)
             {
                 ReadingDocument error = new();

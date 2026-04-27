@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Xml.Linq;
 using VisualCom.Forms.Errors;
-using Windows.ApplicationModel.VoiceCommands;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using static System.Windows.Forms.Design.AxImporter;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
-using System.Security.Policy;
 
 namespace VisualCom
 {
@@ -28,7 +21,7 @@ namespace VisualCom
     internal static class ProjectActions
     {
         private static readonly ReadingDocument error = new();
-        private static string? c_pf = Configuration.ProjectFile; 
+        private static string? c_pf = Configuration.ProjectFile;
         private static readonly XElement? pv_name = Configuration.ProjectVariables.Root?.Element("Name");
         private static readonly XElement? pv_created = Configuration.ProjectVariables.Root?.Element("Created");
         private static readonly XElement? pv_modified = Configuration.ProjectVariables.Root?.Element("Modified");
@@ -48,8 +41,8 @@ namespace VisualCom
                 error.ShowDialog();
                 return;
             }
-               
-            
+
+
 
             string ProjectName = Path.GetFileNameWithoutExtension(c_pf);
             pv_name.Value = ProjectName;
@@ -78,9 +71,9 @@ namespace VisualCom
 
             foreach (var directory in pv_dirs.Elements())
             {
-                if((string) directory != "main")
+                if ((string)directory != "main")
                 {
-                    System.IO.Directory.CreateDirectory((string) directory);
+                    System.IO.Directory.CreateDirectory((string)directory);
                 }
             }
 
@@ -94,14 +87,15 @@ namespace VisualCom
 
             ImageAnnotation annotation = new();
 
-            try 
+            try
             {
                 annotation = JsonSerializer.Deserialize<ImageAnnotation>(json);
-            } catch (JsonException)
+            }
+            catch (JsonException)
             {
                 File.Delete(filepath);
             }
-            
+
             Configuration.JsonPath = filepath;
             if (annotation == null) return;
 
@@ -130,7 +124,7 @@ namespace VisualCom
                 string json = JsonSerializer.Serialize(Configuration.CurrentImageJson, options);
                 File.WriteAllText(Configuration.JsonPath, json);
             }
-            
+
             pv_modified.Value = DateTime.Now.ToString();
             Configuration.ProjectVariables.Save(c_pf);
             Configuration.Saved = true;
@@ -175,10 +169,10 @@ namespace VisualCom
                 names = myClass
             };
 
-            var newdirs = new List<string> { Path.Join(path, "dataset"), Path.Join(path, "dataset", "images"), Path.Join(path, "dataset", "images", "train"), 
+            var newdirs = new List<string> { Path.Join(path, "dataset"), Path.Join(path, "dataset", "images"), Path.Join(path, "dataset", "images", "train"),
                 Path.Join(path,"dataset", "images", "val"), Path.Join(path, "dataset", "labels"), Path.Join(path, "dataset", "labels", "train"), Path.Join(path, "dataset", "labels", "val")};
 
-            foreach(var dir in newdirs)
+            foreach (var dir in newdirs)
                 Directory.CreateDirectory(dir);
 
 
@@ -221,8 +215,8 @@ namespace VisualCom
                         "{0} {1:F6} {2:F6} {3:F6} {4:F6}",
                         classIdx, centerX, centerY, width, height));
                 }
-                
-                if(actualBar < imagesBar)
+
+                if (actualBar < imagesBar)
                 {
                     string txtPath = Path.Join(Path.Join(ModelFile.path, "dataset", "labels", "train"), Path.GetFileNameWithoutExtension(imageName) + ".txt");
                     File.WriteAllLines(txtPath, lines);
@@ -230,7 +224,8 @@ namespace VisualCom
                     actualBar = actualBar + BarPlus;
                     if (actualBar >= 100)
                         actualBar = 0;
-                } else if (actualBar > imagesBar)
+                }
+                else if (actualBar > imagesBar)
                 {
                     string txtPath = Path.Join(Path.Join(ModelFile.path, "dataset", "labels", "val"), Path.GetFileNameWithoutExtension(imageName) + ".txt");
                     File.WriteAllLines(txtPath, lines);

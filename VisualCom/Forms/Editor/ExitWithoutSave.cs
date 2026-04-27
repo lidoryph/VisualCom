@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-
-namespace VisualCom.Forms.Editor
+﻿namespace VisualCom.Forms.Editor
 {
     public partial class ExitWithoutSave : Form
     {
@@ -19,7 +11,7 @@ namespace VisualCom.Forms.Editor
 
         private void WriteChanges(object sender, EventArgs e)
         {
-            ProjectActions.SaveProject(notes:false);
+            ProjectActions.SaveProject(notes: false);
             left = true;
             Close();
         }

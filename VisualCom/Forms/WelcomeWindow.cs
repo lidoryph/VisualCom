@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 using VisualCom.Forms;
 
 namespace VisualCom
@@ -67,7 +60,12 @@ namespace VisualCom
             }
         }
 
+        private void ConnectServer(object sender, EventArgs e)
+        {
+            ConnectToServer server_dialog = new();
+            server_dialog.ShowDialog();
 
+        }
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
             base.OnFormClosed(e);

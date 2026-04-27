@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-
-namespace VisualCom.Forms.Editor.Classes
+﻿namespace VisualCom.Forms.Editor.Classes
 {
     public partial class RemoveClasses : Form
     {
@@ -16,7 +8,7 @@ namespace VisualCom.Forms.Editor.Classes
         {
             InitializeComponent();
 
-            if(selected == 1)
+            if (selected == 1)
                 label1.Text = "¿Seguro que quieres borrar " + selected.ToString() + " clase?";
             else
                 label1.Text = "¿Seguro que quieres borrar " + selected.ToString() + " clases?";

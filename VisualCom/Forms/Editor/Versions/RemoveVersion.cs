@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 using VisualCom.Forms.Editor.Versions.Dialogs;
 
 namespace VisualCom.Forms.Editor.Versions
@@ -42,7 +35,7 @@ namespace VisualCom.Forms.Editor.Versions
             {
                 return;
             }
-            
+
             _editor.RemoveVersion(Version);
             Close();
 

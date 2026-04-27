@@ -1,4 +1,5 @@
 import requests
+from requests.auth import HTTPBasicAuth
 import os
 import datetime
 
@@ -12,11 +13,13 @@ def ping_server(url: str) -> tuple[int, str]:
 
     return(r.status_code, r.text)
 
-def get_projects(url:str) -> tuple[int, str]:
+def get_projects(url:str, user:str) -> tuple[int, str]:
     url = url + "/project/get/"
+    basic = HTTPBasicAuth(user, user)
+
 
     try:
-        r = requests.get(url)
+        r = requests.get(url, auth=basic)
     except requests.exceptions.ConnectionError:
         print("Couldn't get a hold of the server.")
         return (1, "")
@@ -26,36 +29,40 @@ def get_projects(url:str) -> tuple[int, str]:
     
     return (r.status_code, r.text)
 
-def new_project(url: str, name: str, type: str) -> tuple[int, str]:
+def new_project(url: str, name: str, type: str, user: str) -> tuple[int, str]:
     url = url + "/project/new/" + name + "/" + type
+    basic = HTTPBasicAuth(user, user)
     try:
-        r = requests.get(url)
+        r = requests.get(url, auth=basic)
     except requests.exceptions.ConnectionError:
         print("Couldn't get a hold of the server.")
-        return (1, "")
+        return (0, "")
 
     return (r.status_code, r.text)
-  
-def load_project(url: str, name: str) -> tuple[int, str]:
+
+def load_project(url: str, name: str, user:str) -> tuple[int, str]:
     url = url + "/project/get/" + name
+    basic = HTTPBasicAuth(user, user)
     try:
-        r = requests.get(url)
+        r = requests.get(url, auth=basic)
     except requests.exceptions.ConnectionError:
         return(1, "Couldn't get a hold of the server")
     
     return(r.status_code, r.text)
 
-def delete_project(url: str, project: str) -> tuple[int, str]:
+def delete_project(url: str, project: str, user:str) -> tuple[int, str]:
     url = url + "/project/delete/supersure/yes/" + project
+    basic = HTTPBasicAuth(user, user)
 
     try:
-        r = requests.get(url)
+        r = requests.get(url, auth=basic)
     except requests.exceptions.ConnectionError:
         print("Couldn't get a hold of the server.")
         return 1, ""
     
     return (r.status_code, r.text)
 
+#ask for user
 def get_images(url: str, name: str) -> tuple[int, str]:
     url = url + "/image/get/" + name + "/"
 
@@ -66,6 +73,7 @@ def get_images(url: str, name: str) -> tuple[int, str]:
 
     return(r.status_code, r.text)
 
+#ask for user
 def new_image(url: str, filepath: str, project: str) -> tuple[int, str]:
     file = open(filepath, "+br")
     fileextension = os.path.basename(filepath).split(".")[-1]
@@ -83,6 +91,7 @@ def new_image(url: str, filepath: str, project: str) -> tuple[int, str]:
 
     return (r.status_code, r.text)
 
+#ask for user
 def load_image(url:str, filepath:str, project: str) -> tuple[int, str]:
     url = url + "/image/load/" + project + "/" + filepath
     file = open(filepath, "+bw")
@@ -102,17 +111,21 @@ def load_image(url:str, filepath:str, project: str) -> tuple[int, str]:
 
     return (r.status_code, r.text)
 
-def delete_image(url: str, filename: str, project: str) -> tuple[int, str]:
+#ask for user
+def delete_image(url: str, project: str, filename: str, user: str) -> tuple[int, str]:
     url = url + "/image/del/" + project + "/" + filename
 
+    basic = HTTPBasicAuth(user, user)
+
     try:
-        r = requests.get(url)
+        r = requests.get(url, auth=basic)
     except requests.exceptions.ConnectionError:
         print("Couldn't get a hold of the server.")
         return 1, ""
 
     return r.status_code, r.text
 
+#ask for user
 #hacer y en server
 def block_image(url: str, filename: str, project: str) -> tuple[int, str]:
     return 1, ""
@@ -127,6 +140,7 @@ def get_classes(url: str, name: str) -> tuple[int, str]:
 
     return(r.status_code, r.text)
 
+#ask for user
 def new_class(url: str, name: str, classname: str, color: str) -> tuple[int, str]:
     url = url + "/classes/" + name + "/new/" + classname + "/" + color
 
@@ -137,6 +151,7 @@ def new_class(url: str, name: str, classname: str, color: str) -> tuple[int, str
 
     return(r.status_code, r.text)
 
+#ask for user
 #hacer y en server
 def delete_class(url: str, name: str, classname: str) -> tuple[int, str]:
     return(1, "")
@@ -151,6 +166,7 @@ def get_versions(url: str, name: str) -> tuple[int, str]:
     
     return(r.status_code, r.text)
 
+#ask for user
 def new_version(url: str, name: str, version: str) -> tuple[int, str]:
     url = url + "/version/" + name + "/new/" + version
 
@@ -161,6 +177,7 @@ def new_version(url: str, name: str, version: str) -> tuple[int, str]:
     
     return(r.status_code, r.text)
 
+#ask for user
 def delete_version(url: str, name: str, version: str) -> tuple[int, str]:
     url = url + "/version/" + name + "/del/" + version
 

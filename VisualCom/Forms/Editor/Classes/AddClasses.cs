@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Windows.Forms;
+﻿using System.Xml.Linq;
 using VisualCom.Forms.Errors;
-using System.Xml.Linq;
 
 namespace VisualCom.Forms.Editor.Classes
 {
@@ -45,7 +37,7 @@ namespace VisualCom.Forms.Editor.Classes
             changedcolor = true;
         }
 
-        
+
         private void AddClassToFile(object sender, EventArgs e)
         {
             className = className.Trim();

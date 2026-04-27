@@ -1,56 +1,96 @@
-﻿using System;
-using Python.Runtime;
-using System.Collections.Generic;
-using System.Text;
-using Windows.System.UserProfile;
+﻿using Python.Runtime;
 
 namespace VisualCom
 {
     internal class NetActions
     {
-        public static bool pingServer(string url)
+        public static dynamic pingServer()
         {
-            using(Py.GIL())
+            using (Py.GIL())
             {
                 dynamic mod = Py.Import("netclient");
-                dynamic returns = mod.ping_server(url);
+                dynamic returns = mod.ping_server(Configuration.ServerAddress);
                 return returns;
             }
         }
 
-        public static bool createProject((string, string, string) netArgs)
+        public static dynamic CreateProject((string, string, string, string) netArgs)
         {
-            using(Py.GIL())
+            using (Py.GIL())
             {
                 string url = netArgs.Item1;
                 string name = netArgs.Item2;
                 string type = netArgs.Item3;
+                string user = netArgs.Item4;
 
                 dynamic mod = Py.Import("netclient");
-                dynamic returns = mod.new_project(url, name, type);
+                dynamic returns = mod.new_project(url, name, type, user);
                 return returns;
             }
         }
 
-        public static dynamic GetProjects(string url)
+        public static dynamic GetProjects()
         {
-            using(Py.GIL())
+            using (Py.GIL())
             {
                 dynamic mod = Py.Import("netclient");
-                dynamic returns = mod.get_projects(url);
+                dynamic returns = mod.get_projects(Configuration.ServerAddress, Configuration.UserName);
+                return returns;
+            }
+        }
+
+        public static dynamic DeleteProject((string, string, string) netargs)
+        {
+
+            string url = netargs.Item1;
+            string project = netargs.Item2;
+            string user = netargs.Item3;
+
+            using(Py.GIL())
+            {
+                dynamic net = Py.Import("netclient");
+                dynamic returns = net.delete_project(url, project, user);
                 return returns;
             }
         }
 
         public static dynamic GetClasses((string, string) netArgs)
         {
-            using(Py.GIL())
+            using (Py.GIL())
             {
                 string url = netArgs.Item1;
-                string name = netArgs.Item2;
+                string project = netArgs.Item2;
 
                 dynamic mod = Py.Import("netclient");
-                dynamic returns = mod.get_classes(url, name);
+                dynamic returns = mod.get_classes(url, project);
+                return returns;
+            }
+        }
+
+        public static dynamic GetVersions((string, string) netArgs)
+        {
+            using (Py.GIL())
+            {
+                string url = netArgs.Item1;
+                string project = netArgs.Item2;
+
+                dynamic mod = Py.Import("netclient");
+                dynamic returns = mod.get_versions(url, project);
+
+                return returns;
+            }
+        }
+
+        public static dynamic GetImages((string, string) netArgs)
+        {
+            using (Py.GIL())
+            {
+                string url = netArgs.Item1;
+                string project = netArgs.Item2;
+
+                dynamic mod = Py.Import("netclient");
+                dynamic returns = mod.get_images(url, project);
+
                 return returns;
             }
         }

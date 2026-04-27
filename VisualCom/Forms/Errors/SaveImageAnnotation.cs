@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-
-namespace VisualCom.Forms.Errors
+﻿namespace VisualCom.Forms.Errors
 {
     public partial class SaveImageAnnotation : Form
     {
@@ -20,7 +12,7 @@ namespace VisualCom.Forms.Errors
 
         private void SaveAnnotation(object sender, EventArgs e)
         {
-            ProjectActions.SaveProject(notes:true);
+            ProjectActions.SaveProject(notes: true);
             Configuration.Saved = true;
             Cancel = false;
             Close();
@@ -30,7 +22,7 @@ namespace VisualCom.Forms.Errors
         {
             string filecontent = File.ReadAllText(Configuration.JsonPath);
 
-            if(filecontent == "")
+            if (filecontent == "")
                 File.Delete(Configuration.JsonPath);
 
             Configuration.Saved = true;

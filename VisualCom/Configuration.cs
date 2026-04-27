@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml.Linq;
-using System.Text.Json;
+﻿using System.Xml.Linq;
+using Windows.Media.Streaming.Adaptive;
 
 
 namespace VisualCom
@@ -21,11 +18,15 @@ namespace VisualCom
         public List<BoundingBox> Boxes { get; set; } = new();
     }
 
-        public static class Configuration
+    public static class Configuration
     {
+
+        public static string UserName = "";
         public static string ProjectFile = "project.xml";
         public static Boolean Saved = true;
         public static Boolean PythonStarted = false;
+        public static Boolean Online = false;
+        public static string ServerAddress = "";
 
 
         public static XDocument ProjectVariables = new(

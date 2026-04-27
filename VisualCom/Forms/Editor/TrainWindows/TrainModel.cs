@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using System.Management;
-using System.Reflection;
-using VisualCom.Forms.Editor.TrainWindows;
-using System.Xml.Linq;
+﻿using System.Data;
 using System.Diagnostics;
+using System.Management;
+using System.Xml.Linq;
+using VisualCom.Forms.Editor.TrainWindows;
 
 namespace VisualCom.Forms.Editor
 {
@@ -70,7 +63,7 @@ namespace VisualCom.Forms.Editor
             foreach (string model in Directory.GetFiles(Path.Join(".", "models")))
             {
                 name = Path.GetFileName(Path.GetFileName(model));
-                switch(name)
+                switch (name)
                 {
                     case "yolo26n.pt":
                         ModelSelector.Items.Add("YOLO26 Nano");
@@ -137,11 +130,11 @@ namespace VisualCom.Forms.Editor
             }
 
             var PythonArguments = (
-                version: Path.Join(pv_d_models.Value, Version, "data.yaml"), 
+                version: Path.Join(pv_d_models.Value, Version, "data.yaml"),
                 epoch: Convert.ToInt32(EpochNumeric.Value),
-                imgsz: Convert.ToInt32(ImageSizeNum.Value), 
-                seed: Convert.ToInt32(SeedNum.Value), 
-                device: Device, 
+                imgsz: Convert.ToInt32(ImageSizeNum.Value),
+                seed: Convert.ToInt32(SeedNum.Value),
+                device: Device,
                 model: modelFile,
                 path: Path.Join(pv_d_models.Value, Version)
             );
@@ -220,7 +213,7 @@ namespace VisualCom.Forms.Editor
             SeedBar.Value = Convert.ToInt32(SeedNum.Value);
         }
 
-        private void OnFormClose(object sender,  FormClosingEventArgs e)
+        private void OnFormClose(object sender, FormClosingEventArgs e)
         {
             if (!_cancelled)
             {

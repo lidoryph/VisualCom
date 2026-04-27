@@ -1,10 +1,5 @@
 ﻿using Python.Runtime;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Text;
-using VisualCom.Forms.Editor;
 
 namespace VisualCom
 {
@@ -124,14 +119,16 @@ namespace VisualCom
                     result = cb is not null
                         ? mod.train(Version, Epoch, ImgSz, Device, Model, Seed, OutPath, cb)
                         : mod.train(Version, Epoch, ImgSz, Device, Model, Seed, OutPath);
-                } catch (Python.Runtime.PythonException error)
+                }
+                catch (Python.Runtime.PythonException error)
                 {
                     if (error.ToString().Contains("Invalid CUDA"))
                     {
                         MessageBox.Show("Invalid CUDA");
                     }
                     cts.Cancel();
-                } finally
+                }
+                finally
                 {
                     _pythonThreadId = 0;
                 }
