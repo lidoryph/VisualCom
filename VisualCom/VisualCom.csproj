@@ -41,6 +41,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\VisComClient\VisComClient.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Resources\logo.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>

@@ -76,6 +76,7 @@
             CreateProject_Button.TabIndex = 2;
             CreateProject_Button.Text = "Crear Proyecto...";
             CreateProject_Button.UseVisualStyleBackColor = false;
+            CreateProject_Button.Click += CreateProject;
             // 
             // LoadProject_Button
             // 
@@ -166,8 +167,12 @@
             Controls.Add(CreateProject_Button);
             Controls.Add(UserName_Label);
             Controls.Add(label1);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
+            MaximumSize = new Size(816, 489);
+            MinimizeBox = false;
+            MinimumSize = new Size(816, 489);
             Name = "OnlineProjects";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Proyectos Online";

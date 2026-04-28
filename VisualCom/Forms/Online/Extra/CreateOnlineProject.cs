@@ -5,17 +5,21 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using VisComClient;
 
 namespace VisualCom.Forms
 {
     public partial class CreateOnlineProject : Form
     {
+
+        public string ProjectName = "";
+
         public CreateOnlineProject()
         {
             InitializeComponent();
         }
 
-        private void ObjectIdentification(object sender, EventArgs e)
+        private async void CreateProjectAsync(object sender, EventArgs e)
         {
             if (ProjectName_TextBox.Text == "")
                 return;
@@ -29,12 +33,11 @@ namespace VisualCom.Forms
             else
                 return;
 
-            var netargs = (Configuration.ServerAddress, ProjectName_TextBox.Text, type, Configuration.UserName);
-            dynamic result = NetActions.CreateProject(netargs);
 
-            int scode = result[0];
+            var Response = await Configuration.Connection.CreateProject(ProjectName_TextBox.Text, type);
 
-            if(scode == 200)
+
+            if(Response.Item1 == 200)
             {
                 MessageBox.Show("¡Proyecto creado!");
                 Close();

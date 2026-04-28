@@ -1,5 +1,6 @@
 ﻿using System.Xml.Linq;
 using Windows.Media.Streaming.Adaptive;
+using VisComClient;
 
 
 namespace VisualCom
@@ -27,6 +28,7 @@ namespace VisualCom
         public static Boolean PythonStarted = false;
         public static Boolean Online = false;
         public static string ServerAddress = "";
+        public static ServerConnection Connection = new(null, null);
 
 
         public static XDocument ProjectVariables = new(
