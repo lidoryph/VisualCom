@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 using VisualCom.Forms.Online;
+using VisualCom.Forms.Editor;
 
 namespace VisualCom.Forms
 {

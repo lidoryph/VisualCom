@@ -1,5 +1,6 @@
 ﻿using System.Xml.Linq;
 using VisualCom.Forms;
+using VisualCom.Forms.Editor;
 
 namespace VisualCom
 {
