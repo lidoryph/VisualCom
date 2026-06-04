@@ -146,7 +146,7 @@ namespace VisualCom.Forms.Editor
             PythonTrain.Initialize();
 
             void OnEpochEnd(int current, int total) =>
-                TrainProgress.InvokeAsync(() => TrainProgress.Value = (int)Math.Round((double)current / total * 100), cts.Token);
+                TrainProgress.Invoke(() => TrainProgress.Value = (int)Math.Round((double)current / total * 100), cts.Token);
 
 
             double trainResult = await Task.Run(() => PythonTrain.StartTrain(PythonArguments, cts, cts.Token, OnEpochEnd));

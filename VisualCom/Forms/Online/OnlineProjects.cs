@@ -196,7 +196,7 @@ namespace VisualCom.Forms
             Configuration.Online = false;
             Configuration.ServerAddress = "";
             Configuration.UserName = "";
-            Parent.ShowAsync();
+            Parent.Show();
 
             Close();
         }

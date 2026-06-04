@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net10.0-windows10.0.17763.0</TargetFramework>
+    <TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -33,10 +33,6 @@
     <Content Include="Resources\logo.ico" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Obfuscar" Version="3.0.0-beta.16">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
     <PackageReference Include="Octokit" Version="14.0.0" />
     <PackageReference Include="pythonnet" Version="3.0.5" />
     <PackageReference Include="System.Management" Version="10.0.5" />

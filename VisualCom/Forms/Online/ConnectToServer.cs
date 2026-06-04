@@ -39,7 +39,6 @@ namespace VisualCom.Forms
             }
 
             LoadingScreen loading_dlg = new("Espere mientras se le conecta con el servidor.");
-            _ = loading_dlg.ShowDialogAsync();
 
             Configuration.Connection = new(Configuration.ServerAddress, User_TextBox.Text);
             bool LoginStatus = await Configuration.Connection.LoginAsync();

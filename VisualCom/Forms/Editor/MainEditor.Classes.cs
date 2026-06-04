@@ -123,8 +123,8 @@ namespace VisualCom.Forms.Editor
                 return;
             }
 
-            pv_classes.Elements("Class").FirstOrDefault(c => string.Equals(c.Attribute("id")?.Value, id, StringComparison.Ordinal))?.Value = name;
-            pv_classes.Elements("Class").FirstOrDefault(c => string.Equals(c.Attribute("id")?.Value, id, StringComparison.Ordinal))?.Attribute("color")?.Value = color ?? "#FFFFFF";
+            pv_classes.Elements("Class").FirstOrDefault(c => string.Equals(c.Attribute("id").Value, id, StringComparison.Ordinal)).Value = name;
+            pv_classes.Elements("Class").FirstOrDefault(c => string.Equals(c.Attribute("id").Value, id, StringComparison.Ordinal)).Attribute("color").Value = color ?? "#FFFFFF";
             foreach (ListViewItem item in ClassesList.Items)
             {
                 if (color == null)

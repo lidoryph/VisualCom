@@ -55,7 +55,7 @@ namespace VisualCom.Forms.Editor
             LockedButton.Visible = false;
 
             var connection = Configuration.Connection;
-            connection?.OnImageUnlocked += OnImageUnlocked;
+            connection.OnImageUnlocked += OnImageUnlocked;
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -84,7 +84,7 @@ namespace VisualCom.Forms.Editor
             Application.Exit();
             Application.ExitThread();
             var connection = Configuration.Connection;
-            connection?.OnImageUnlocked -= OnImageUnlocked;
+            connection.OnImageUnlocked -= OnImageUnlocked;
         }
 
         private void MainEditor_FormClosing(object sender, FormClosingEventArgs e)

@@ -16,7 +16,7 @@
         private async void GetListModel(object sender, EventArgs e)
         {
             WaitingRoom dlg = new();
-            _ = dlg.ShowDialogAsync();
+            _ = dlg.ShowDialog();
             string model = "";
             int result = -100;
 
