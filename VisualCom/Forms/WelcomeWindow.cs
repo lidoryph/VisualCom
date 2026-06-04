@@ -26,9 +26,9 @@ namespace VisualCom
                 string UserDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
                 SaveFileDlg.Title = "Crea un proyecto...";
-                SaveFileDlg.Filter = "Archivos de proyecto (*.xml)|*.xml";
+                SaveFileDlg.Filter = "Archivos de proyecto (*.asaivc)|*.asaivc";
                 SaveFileDlg.InitialDirectory = UserDocuments;
-                SaveFileDlg.FileName = "proyecto.xml";
+                SaveFileDlg.FileName = "proyecto.asaivc";
 
                 if (SaveFileDlg.ShowDialog() == DialogResult.OK)
                 {
@@ -46,24 +46,25 @@ namespace VisualCom
             string UserDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
             OpenFileDlg.Title = "Abrir proyecto...";
-            OpenFileDlg.Filter = "Archivos de proyecto (*.xml)|*.xml";
+            OpenFileDlg.Filter = "Archivos de proyecto (*.asaivc)|*.asaivc";
             OpenFileDlg.InitialDirectory = UserDocuments;
-            OpenFileDlg.FileName = "proyecto.xml";
+            OpenFileDlg.FileName = "proyecto.asaivc";
 
             if (OpenFileDlg.ShowDialog() == DialogResult.OK)
             {
                 Configuration.ProjectFile = OpenFileDlg.FileName;
                 ProjectActions.LoadProject();
                 MainEditor editor = new();
-                this.Hide();
+                Hide();
                 editor.Show();
             }
         }
 
         private void ConnectServer(object sender, EventArgs e)
         {
-            ConnectToServer server_dialog = new();
-            server_dialog.ShowDialog();
+            Hide();
+            using var server_dialog = new ConnectToServer(this);
+            server_dialog.ShowDialog(this);
 
         }
         protected override void OnFormClosed(FormClosedEventArgs e)

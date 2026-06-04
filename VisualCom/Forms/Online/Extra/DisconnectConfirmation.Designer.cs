@@ -88,6 +88,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(63, 62, 62);
             ClientSize = new Size(444, 147);
+            ControlBox = false;
             Controls.Add(CancelButton);
             Controls.Add(AcceptButton);
             Controls.Add(label1);
@@ -95,7 +96,11 @@
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "DisconnectConfirmation";
+            ShowInTaskbar = false;
+            SizeGripStyle = SizeGripStyle.Hide;
+            StartPosition = FormStartPosition.CenterParent;
             Text = "Confirme la desconexión";
+            TopMost = true;
             ResumeLayout(false);
             PerformLayout();
         }

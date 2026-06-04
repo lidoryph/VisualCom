@@ -1,4 +1,4 @@
-﻿namespace VisualCom
+﻿namespace VisualCom.Forms.Editor
 {
     partial class MainEditor
     {
@@ -34,7 +34,6 @@
             abrirProyectoToolStripMenuItem = new ToolStripMenuItem();
             guardarProyectoToolStripMenuItem = new ToolStripMenuItem();
             extraerModeloToolStripMenuItem = new ToolStripMenuItem();
-            conectarseAServidorToolStripMenuItem = new ToolStripMenuItem();
             editarToolStripMenuItem = new ToolStripMenuItem();
             verToolStripMenuItem = new ToolStripMenuItem();
             proyectoToolStripMenuItem = new ToolStripMenuItem();
@@ -83,6 +82,7 @@
             ClassesList = new ListView();
             columnHeader1 = new ColumnHeader();
             ImagesList = new ListView();
+            LockedButton = new Button();
             pictureBox = new PictureBox();
             editorMenu.SuspendLayout();
             EditorToolStrip.SuspendLayout();
@@ -111,7 +111,7 @@
             // 
             // menuitemArchivo
             // 
-            menuitemArchivo.DropDownItems.AddRange(new ToolStripItem[] { nuevoProyectoToolStripMenuItem, abrirProyectoToolStripMenuItem, guardarProyectoToolStripMenuItem, extraerModeloToolStripMenuItem, conectarseAServidorToolStripMenuItem });
+            menuitemArchivo.DropDownItems.AddRange(new ToolStripItem[] { nuevoProyectoToolStripMenuItem, abrirProyectoToolStripMenuItem, guardarProyectoToolStripMenuItem, extraerModeloToolStripMenuItem });
             menuitemArchivo.Name = "menuitemArchivo";
             menuitemArchivo.Size = new Size(60, 20);
             menuitemArchivo.Text = "Archivo";
@@ -120,7 +120,7 @@
             // 
             nuevoProyectoToolStripMenuItem.Image = Properties.Resources.new_document;
             nuevoProyectoToolStripMenuItem.Name = "nuevoProyectoToolStripMenuItem";
-            nuevoProyectoToolStripMenuItem.Size = new Size(201, 26);
+            nuevoProyectoToolStripMenuItem.Size = new Size(184, 26);
             nuevoProyectoToolStripMenuItem.Text = "Nuevo Proyecto...";
             nuevoProyectoToolStripMenuItem.Click += NewProject;
             // 
@@ -128,7 +128,7 @@
             // 
             abrirProyectoToolStripMenuItem.Image = Properties.Resources.open_document;
             abrirProyectoToolStripMenuItem.Name = "abrirProyectoToolStripMenuItem";
-            abrirProyectoToolStripMenuItem.Size = new Size(201, 26);
+            abrirProyectoToolStripMenuItem.Size = new Size(184, 26);
             abrirProyectoToolStripMenuItem.Text = "Abrir Proyecto...";
             abrirProyectoToolStripMenuItem.Click += OpenProject;
             // 
@@ -136,7 +136,7 @@
             // 
             guardarProyectoToolStripMenuItem.Image = Properties.Resources.save_document;
             guardarProyectoToolStripMenuItem.Name = "guardarProyectoToolStripMenuItem";
-            guardarProyectoToolStripMenuItem.Size = new Size(201, 26);
+            guardarProyectoToolStripMenuItem.Size = new Size(184, 26);
             guardarProyectoToolStripMenuItem.Text = "Guardar Proyecto";
             guardarProyectoToolStripMenuItem.Click += SaveProject;
             // 
@@ -144,17 +144,9 @@
             // 
             extraerModeloToolStripMenuItem.Image = Properties.Resources.pull_model;
             extraerModeloToolStripMenuItem.Name = "extraerModeloToolStripMenuItem";
-            extraerModeloToolStripMenuItem.Size = new Size(201, 26);
+            extraerModeloToolStripMenuItem.Size = new Size(184, 26);
             extraerModeloToolStripMenuItem.Text = "Extraer Modelo...";
             extraerModeloToolStripMenuItem.Click += PullModel;
-            // 
-            // conectarseAServidorToolStripMenuItem
-            // 
-            conectarseAServidorToolStripMenuItem.Image = Properties.Resources.globe_network;
-            conectarseAServidorToolStripMenuItem.Name = "conectarseAServidorToolStripMenuItem";
-            conectarseAServidorToolStripMenuItem.Size = new Size(201, 26);
-            conectarseAServidorToolStripMenuItem.Text = "Conectarse a Servidor...";
-            conectarseAServidorToolStripMenuItem.Click += OpenNetDialog;
             // 
             // editarToolStripMenuItem
             // 
@@ -514,6 +506,7 @@
             // 
             // MainContainer.Panel2
             // 
+            MainContainer.Panel2.Controls.Add(LockedButton);
             MainContainer.Panel2.Controls.Add(pictureBox);
             MainContainer.Panel2MinSize = 512;
             MainContainer.Size = new Size(1264, 610);
@@ -535,7 +528,7 @@
             // 
             ListsContainer.Panel2.Controls.Add(ImagesList);
             ListsContainer.Size = new Size(256, 610);
-            ListsContainer.SplitterDistance = 214;
+            ListsContainer.SplitterDistance = 203;
             ListsContainer.TabIndex = 0;
             // 
             // ClassesList
@@ -546,7 +539,7 @@
             ClassesList.FullRowSelect = true;
             ClassesList.Location = new Point(0, 0);
             ClassesList.Name = "ClassesList";
-            ClassesList.Size = new Size(256, 214);
+            ClassesList.Size = new Size(256, 203);
             ClassesList.TabIndex = 0;
             ClassesList.UseCompatibleStateImageBehavior = false;
             ClassesList.View = View.Details;
@@ -563,11 +556,23 @@
             ImagesList.Dock = DockStyle.Fill;
             ImagesList.Location = new Point(0, 0);
             ImagesList.Name = "ImagesList";
-            ImagesList.Size = new Size(256, 392);
+            ImagesList.Size = new Size(256, 403);
             ImagesList.TabIndex = 0;
             ImagesList.UseCompatibleStateImageBehavior = false;
             ImagesList.ItemActivate += ImagesList_ItemActivate;
             ImagesList.ItemSelectionChanged += SelectImages;
+            // 
+            // LockedButton
+            // 
+            LockedButton.CausesValidation = false;
+            LockedButton.Image = Properties.Resources._lock;
+            LockedButton.Location = new Point(3, 3);
+            LockedButton.Name = "LockedButton";
+            LockedButton.Size = new Size(64, 64);
+            LockedButton.TabIndex = 4;
+            LockedButton.UseVisualStyleBackColor = true;
+            LockedButton.Visible = false;
+            LockedButton.Click += LockedButton_Click;
             // 
             // pictureBox
             // 
@@ -601,6 +606,7 @@
             Name = "MainEditor";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "VisualCom - Editor";
+            FormClosing += MainEditor_FormClosing;
             editorMenu.ResumeLayout(false);
             editorMenu.PerformLayout();
             EditorToolStrip.ResumeLayout(false);
@@ -677,6 +683,6 @@
         private ListView ClassesList;
         private ColumnHeader columnHeader1;
         private ToolStripMenuItem extraerModeloToolStripMenuItem;
-        private ToolStripMenuItem conectarseAServidorToolStripMenuItem;
+        private Button LockedButton;
     }
 }

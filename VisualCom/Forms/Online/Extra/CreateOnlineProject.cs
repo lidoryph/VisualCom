@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using VisComClient;
 
 namespace VisualCom.Forms
@@ -13,6 +7,8 @@ namespace VisualCom.Forms
     {
 
         public string ProjectName = "";
+        public bool Made = false;
+        public string Type = "";
 
         public CreateOnlineProject()
         {
@@ -21,29 +17,28 @@ namespace VisualCom.Forms
 
         private async void CreateProjectAsync(object sender, EventArgs e)
         {
-            if (ProjectName_TextBox.Text == "")
-                return;
+            if (ProjectName_TextBox.Text == "" || Configuration.Connection == null) return;
 
-            string type = "";
+            ProjectName = ProjectName_TextBox.Text.Trim().Replace(" ", "_");
 
             if (OI_Radio.Checked == true)
-                type = "OI";
+                Type = "OI";
             else if (C_Radio.Checked == true)
-                type = "C";
+                Type = "C";
             else
                 return;
 
-
-            var Response = await Configuration.Connection.CreateProject(ProjectName_TextBox.Text, type);
-
+            var Response = await Configuration.Connection.CreateProject(ProjectName, Type);
 
             if(Response.Item1 == 200)
             {
                 MessageBox.Show("¡Proyecto creado!");
+                Made = true;
                 Close();
             } else
             {
                 MessageBox.Show("Ha habido un error y el proyecto no ha sido creado.");
+                Made = false;
                 Close();
             }
 

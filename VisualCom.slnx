@@ -1,4 +1,15 @@
 <Solution>
-  <Project Path="VisComClient/VisComClient.csproj" Id="124d5c4a-c2f3-489d-af1c-e5ced50fb602" />
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="Online-Debug" />
+    <BuildType Name="Release" />
+    <Platform Name="Any CPU" />
+    <Platform Name="ARM64" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="VisComClient/VisComClient.csproj" Id="124d5c4a-c2f3-489d-af1c-e5ced50fb602">
+    <Build Solution="Online-Debug|Any CPU" Project="false" />
+  </Project>
   <Project Path="VisualCom/VisualCom.csproj" />
 </Solution>

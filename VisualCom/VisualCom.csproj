@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net10.0-windows10.0.17763.0</TargetFramework>
@@ -8,18 +7,41 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <PackageIcon>logo.png</PackageIcon>
     <ApplicationIcon>Resources\logo.ico</ApplicationIcon>
+    <Configurations>Debug;Release;Online-Debug</Configurations>
+    <StartupObject>VisualCom.Program</StartupObject>
+    <NuGetAuditLevel>low</NuGetAuditLevel>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
-
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>none</DebugType>
+    <WarningLevel>9999</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+    <WarningLevel>9999</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Online-Debug|AnyCPU'">
+    <DebugType>none</DebugType>
+    <WarningLevel>9999</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Forms\Editor\Images\**" />
+    <EmbeddedResource Remove="Forms\Editor\Images\**" />
+    <None Remove="Forms\Editor\Images\**" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\logo.ico" />
   </ItemGroup>
-
   <ItemGroup>
+    <PackageReference Include="Obfuscar" Version="3.0.0-beta.16">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Octokit" Version="14.0.0" />
     <PackageReference Include="pythonnet" Version="3.0.5" />
     <PackageReference Include="System.Management" Version="10.0.5" />
     <PackageReference Include="YamlDotNet" Version="16.3.0" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -27,28 +49,24 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-
   <ItemGroup>
-    <Folder Include="Forms\Editor\Images\" />
     <Folder Include="TrainMod\" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\VisComClient\VisComClient.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <None Update="Resources\logo.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
-
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+  </Target>
 </Project>

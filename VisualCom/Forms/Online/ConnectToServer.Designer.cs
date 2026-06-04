@@ -32,9 +32,10 @@
             Connect_Button = new Button();
             Close_Button = new Button();
             ServerIP_TextBox = new TextBox();
-            ServerPort_TextBox = new TextBox();
             label1 = new Label();
             User_TextBox = new TextBox();
+            ServerPort_Numeric = new NumericUpDown();
+            ((System.ComponentModel.ISupportInitialize)ServerPort_Numeric).BeginInit();
             SuspendLayout();
             // 
             // Connect_Button
@@ -67,35 +68,24 @@
             Close_Button.TabIndex = 1;
             Close_Button.Text = "Cerrar";
             Close_Button.UseVisualStyleBackColor = false;
-            Close_Button.Click += CloaseDialog;
+            Close_Button.Click += CloseDialog;
             // 
             // ServerIP_TextBox
             // 
             ServerIP_TextBox.BackColor = Color.FromArgb(33, 32, 32);
             ServerIP_TextBox.BorderStyle = BorderStyle.None;
             ServerIP_TextBox.ForeColor = Color.White;
-            ServerIP_TextBox.Location = new Point(89, 34);
+            ServerIP_TextBox.Location = new Point(95, 51);
             ServerIP_TextBox.Name = "ServerIP_TextBox";
             ServerIP_TextBox.PlaceholderText = "Introduce la dirección del servidor";
             ServerIP_TextBox.Size = new Size(258, 16);
             ServerIP_TextBox.TabIndex = 2;
             // 
-            // ServerPort_TextBox
-            // 
-            ServerPort_TextBox.BackColor = Color.FromArgb(33, 32, 32);
-            ServerPort_TextBox.BorderStyle = BorderStyle.None;
-            ServerPort_TextBox.ForeColor = Color.White;
-            ServerPort_TextBox.Location = new Point(357, 34);
-            ServerPort_TextBox.Name = "ServerPort_TextBox";
-            ServerPort_TextBox.PlaceholderText = "Puerto";
-            ServerPort_TextBox.Size = new Size(100, 16);
-            ServerPort_TextBox.TabIndex = 3;
-            // 
             // label1
             // 
             label1.AutoSize = true;
             label1.ForeColor = Color.White;
-            label1.Location = new Point(347, 33);
+            label1.Location = new Point(353, 50);
             label1.Name = "label1";
             label1.Size = new Size(10, 15);
             label1.TabIndex = 4;
@@ -106,11 +96,19 @@
             User_TextBox.BackColor = Color.FromArgb(33, 32, 32);
             User_TextBox.BorderStyle = BorderStyle.None;
             User_TextBox.ForeColor = Color.White;
-            User_TextBox.Location = new Point(207, 78);
+            User_TextBox.Location = new Point(213, 95);
             User_TextBox.Name = "User_TextBox";
             User_TextBox.PlaceholderText = "Usuario";
             User_TextBox.Size = new Size(100, 16);
             User_TextBox.TabIndex = 5;
+            // 
+            // ServerPort_Numeric
+            // 
+            ServerPort_Numeric.Location = new Point(361, 48);
+            ServerPort_Numeric.Maximum = new decimal(new int[] { 60000, 0, 0, 0 });
+            ServerPort_Numeric.Name = "ServerPort_Numeric";
+            ServerPort_Numeric.Size = new Size(120, 23);
+            ServerPort_Numeric.TabIndex = 6;
             // 
             // ConnectToServer
             // 
@@ -118,15 +116,17 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(63, 62, 62);
             ClientSize = new Size(562, 221);
+            Controls.Add(ServerPort_Numeric);
             Controls.Add(User_TextBox);
             Controls.Add(label1);
-            Controls.Add(ServerPort_TextBox);
             Controls.Add(ServerIP_TextBox);
             Controls.Add(Close_Button);
             Controls.Add(Connect_Button);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "ConnectToServer";
+            StartPosition = FormStartPosition.CenterParent;
             Text = "ConnectToServer";
+            ((System.ComponentModel.ISupportInitialize)ServerPort_Numeric).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -136,8 +136,8 @@
         private Button Connect_Button;
         private Button Close_Button;
         private TextBox ServerIP_TextBox;
-        private TextBox ServerPort_TextBox;
         private Label label1;
         private TextBox User_TextBox;
+        private NumericUpDown ServerPort_Numeric;
     }
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using VisComClient;
 using VisualCom.Forms.Online.Extra;
 
@@ -13,8 +7,11 @@ namespace VisualCom.Forms
     public partial class ConnectToServer : Form
     {
 
-        public ConnectToServer()
+        new readonly Form Parent;
+
+        public ConnectToServer(Form window)
         {
+            Parent = window;
             InitializeComponent();
         }
 
@@ -28,38 +25,33 @@ namespace VisualCom.Forms
 
             if (ServerIP_TextBox.Text.StartsWith("http://") || ServerIP_TextBox.Text.StartsWith("https://"))
             {
-                if (ServerPort_TextBox.Text == "")
+                if (ServerPort_Numeric.Text == "")
                     Configuration.ServerAddress = ServerIP_TextBox.Text;
                 else
-                    Configuration.ServerAddress = ServerIP_TextBox.Text + ":" + ServerPort_TextBox.Text;
+                    Configuration.ServerAddress = ServerIP_TextBox.Text + ":" + ServerPort_Numeric.Text;
             }
             else
             {
-                if (ServerPort_TextBox.Text == "")
+                if (ServerPort_Numeric.Text == "")
                     Configuration.ServerAddress = "http://" + ServerIP_TextBox.Text;
                 else
-                    Configuration.ServerAddress = "http://" + ServerIP_TextBox.Text + ":" + ServerPort_TextBox.Text;
+                    Configuration.ServerAddress = "http://" + ServerIP_TextBox.Text + ":" + ServerPort_Numeric.Text;
             }
 
             LoadingScreen loading_dlg = new("Espere mientras se le conecta con el servidor.");
             _ = loading_dlg.ShowDialogAsync();
 
             Configuration.Connection = new(Configuration.ServerAddress, User_TextBox.Text);
-            int LoginStatus = await Configuration.Connection.LoginAsync();
+            bool LoginStatus = await Configuration.Connection.LoginAsync();
 
-            if(LoginStatus != 200)
-            {
-                MessageBox.Show("No se ha podido iniciar sesión. Intentelo de nuevo.");
-                Close();
-                return;
-            }
-
-            int PingStatus = await Configuration.Connection.PingServer();
-
-            if(PingStatus != 200)
+            if(!LoginStatus)
             {
                 loading_dlg.Close();
-                MessageBox.Show("No se ha podido comunicar con el servidor, por favor, compruebe sus datos.");
+                MessageBox.Show("No se ha podido iniciar sesión. Intentelo de nuevo.");
+                if (Parent.InvokeRequired)
+                    Parent.Invoke(new Action(() => Parent.Show()));
+                else
+                    Parent.Show();
                 Close();
                 return;
             }
@@ -74,21 +66,40 @@ namespace VisualCom.Forms
                 MessageBox.Show("Ha habido un error recibiendo los proyectos, por favor, intentelo de nuevo mas tarde.");
                 Configuration.UserName = "";
                 Configuration.Online = false;
+                if (Parent.InvokeRequired)
+                    Parent.Invoke(new Action(() => Parent.Show()));
+                else
+                    Parent.Show();
+
                 Close();
                 return;
             }
 
-            OnlineProjects onlineprojects_dialog = new(Projects.Item2);
+            OnlineProjects onlineprojects_dialog = new(Projects.Item2, Parent);
             loading_dlg.Close();
             onlineprojects_dialog.Show();
             Close();
         }
 
-        private void CloaseDialog(object sender, EventArgs e)
+        private void CloseDialog(object sender, EventArgs e)
         {
             Close();
         }
 
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            base.OnFormClosed(e);
+
+            if (!Configuration.Online)
+            {
+                if (Parent.InvokeRequired)
+                    Parent.Invoke(new Action(() => Parent.Show()));
+                else
+                    Parent.Show();
+            }
+
+            Close();
+        }
 
     }
 }

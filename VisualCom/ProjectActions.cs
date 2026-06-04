@@ -4,20 +4,10 @@ using System.Xml.Linq;
 using VisualCom.Forms.Errors;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
+using VisualCom.DataTypes;
 
 namespace VisualCom
 {
-
-    public class ModelYaml
-    {
-        public string path { get; set; } = string.Empty;
-        public string train { get; set; } = string.Empty;
-        public string val { get; set; } = string.Empty;
-        public int nc { get; set; } = new int();
-        //public IEnumerable<string> Classes { get; set; } = new List<string>();
-        public Dictionary<int, string> names { get; set; } = new Dictionary<int, string>();
-    }
-
     internal static class ProjectActions
     {
         private static readonly ReadingDocument error = new();
@@ -25,57 +15,44 @@ namespace VisualCom
         private static readonly XElement? pv_name = Configuration.ProjectVariables.Root?.Element("Name");
         private static readonly XElement? pv_created = Configuration.ProjectVariables.Root?.Element("Created");
         private static readonly XElement? pv_modified = Configuration.ProjectVariables.Root?.Element("Modified");
-
-        private static readonly XElement? pv_dirs = Configuration.ProjectVariables.Root?.Element("Directories");
-        private static readonly XElement? pv_main = Configuration.ProjectVariables.Root?.Element("Directories")?.Element("Main");
-        private static readonly XElement? pv_images = Configuration.ProjectVariables.Root?.Element("Directories")?.Element("Images");
-        private static readonly XElement? pv_annotations = Configuration.ProjectVariables.Root?.Element("Directories")?.Element("Annotations");
-        private static readonly XElement? pv_models = Configuration.ProjectVariables.Root?.Element("Directories")?.Element("Models");
-        private static readonly XElement? pv_versions = Configuration.ProjectVariables.Root?.Element("Directories")?.Element("Versions");
+        private static readonly JsonSerializerOptions options = new() { WriteIndented = true };
 
         public static void NewProject()
         {
-            if (c_pf == null || pv_name == null || pv_main == null || pv_images == null || pv_annotations == null || pv_models == null ||
-                pv_versions == null || pv_created == null || pv_modified == null || pv_dirs == null)
+            if (c_pf == null || pv_name == null || pv_created == null || pv_modified == null)
             {
                 error.ShowDialog();
                 return;
             }
-
-
 
             string ProjectName = Path.GetFileNameWithoutExtension(c_pf);
             pv_name.Value = ProjectName;
 
             string? ProjectDir = Path.GetDirectoryName(c_pf);
 
-            if (ProjectDir == null)
-                return;
+            if (ProjectDir == null) return;
 
             if (Directory.EnumerateFileSystemEntries(ProjectDir).Any())
             {
                 ProjectDir = Path.Join(ProjectDir, ProjectName);
                 System.IO.Directory.CreateDirectory(ProjectDir);
-                c_pf = (string)Path.Join(ProjectDir, (ProjectName + ".xml"));
+                c_pf = (string)Path.Join(ProjectDir, (ProjectName + ".asaivc"));
             }
 
-            pv_main.Value = ProjectDir;
+            Configuration.ProjectDir = ProjectDir;
 
-            pv_images.Value = Path.Join(ProjectDir, "images");
-            pv_annotations.Value = Path.Join(ProjectDir, "annotations");
-            pv_models.Value = Path.Join(ProjectDir, "models");
-            pv_versions.Value = Path.Join(ProjectDir, "versions");
+            Configuration.ProjectImages = Path.Join(ProjectDir, "images");
+            Configuration.ProjectAnnotations = Path.Join(ProjectDir, "annotations");
+            Configuration.ProjectModels = Path.Join(ProjectDir, "models");
+            Configuration.ProjectVersions = Path.Join(ProjectDir, "versions");
+
+            List<string> dirs = [Configuration.ProjectImages, Configuration.ProjectAnnotations, Configuration.ProjectModels, Configuration.ProjectVersions];
 
             pv_created.Value = DateTime.Now.ToString();
             pv_modified.Value = DateTime.Now.ToString();
 
-            foreach (var directory in pv_dirs.Elements())
-            {
-                if ((string)directory != "main")
-                {
-                    System.IO.Directory.CreateDirectory((string)directory);
-                }
-            }
+            foreach (var directory in dirs)
+                System.IO.Directory.CreateDirectory((string)directory);
 
 
             Configuration.ProjectVariables.Save(c_pf);
@@ -84,12 +61,13 @@ namespace VisualCom
         public static void LoadAnnotations(string filepath)
         {
             string json = File.ReadAllText(filepath);
-
             ImageAnnotation annotation = new();
+
+            if (json == null) return;
 
             try
             {
-                annotation = JsonSerializer.Deserialize<ImageAnnotation>(json);
+                annotation = JsonSerializer.Deserialize<ImageAnnotation>(json) ?? new ImageAnnotation();
             }
             catch (JsonException)
             {
@@ -106,6 +84,12 @@ namespace VisualCom
         public static void LoadProject()
         {
             Configuration.ProjectVariables = XDocument.Load(Configuration.ProjectFile);
+            Configuration.ProjectDir = Path.GetDirectoryName(Configuration.ProjectFile) ?? "";
+            string ProjectDir = Configuration.ProjectDir;
+            Configuration.ProjectImages = Path.Join(ProjectDir, "images");
+            Configuration.ProjectAnnotations = Path.Join(ProjectDir, "annotations");
+            Configuration.ProjectModels = Path.Join(ProjectDir, "models");
+            Configuration.ProjectVersions = Path.Join(ProjectDir, "versions");
         }
 
         public static void SaveProject(bool notes)
@@ -120,7 +104,6 @@ namespace VisualCom
 
             if (notes)
             {
-                var options = new JsonSerializerOptions { WriteIndented = true };
                 string json = JsonSerializer.Serialize(Configuration.CurrentImageJson, options);
                 File.WriteAllText(Configuration.JsonPath, json);
             }
@@ -132,17 +115,11 @@ namespace VisualCom
 
         public static void ExportToYOLO(string VersionPath, string outputDirectory, int imagesBar)
         {
-            if (pv_annotations == null || pv_images == null)
-            {
-                error.ShowDialog();
-                return;
-            }
-
-            string DocumentPath = Path.Combine(VersionPath, Path.GetFileName(VersionPath) + ".xml");
+            string DocumentPath = Path.Combine(VersionPath, Path.GetFileName(VersionPath) + ".asaivc");
             XDocument VerDoc = XDocument.Load(DocumentPath);
 
-            string? ImagesPath = VerDoc.Root?.Element("Directories")?.Element("Images")?.Value;
-            string? AnnotationsPath = VerDoc.Root?.Element("Directories")?.Element("Annotations")?.Value;
+            string ImagesPath = Configuration.ProjectImages;
+            string AnnotationsPath = Configuration.ProjectAnnotations;
             XElement? VersionClasses = VerDoc.Root?.Element("Classes");
 
             if (ImagesPath == null || AnnotationsPath == null || VersionClasses == null)
@@ -162,15 +139,20 @@ namespace VisualCom
 
             var ModelFile = new ModelYaml
             {
-                path = path,
-                train = Path.Join(path, "dataset", "images", "train"),
-                val = Path.Join(path, "dataset", "images", "val"),
-                nc = idx,
-                names = myClass
+                Path = path,
+                Train = Path.Join(path, "dataset", "images", "train"),
+                Val = Path.Join(path, "dataset", "images", "val"),
+                Nc = idx,
+                Names = myClass
             };
 
-            var newdirs = new List<string> { Path.Join(path, "dataset"), Path.Join(path, "dataset", "images"), Path.Join(path, "dataset", "images", "train"),
-                Path.Join(path,"dataset", "images", "val"), Path.Join(path, "dataset", "labels"), Path.Join(path, "dataset", "labels", "train"), Path.Join(path, "dataset", "labels", "val")};
+            var newdirs = new List<string> { Path.Join(path, "dataset"), 
+                Path.Join(path, "dataset", "images"), 
+                Path.Join(path, "dataset", "images", "train"),
+                Path.Join(path,"dataset", "images", "val"), 
+                Path.Join(path, "dataset", "labels"), 
+                Path.Join(path, "dataset", "labels", "train"), 
+                Path.Join(path, "dataset", "labels", "val")};
 
             foreach (var dir in newdirs)
                 Directory.CreateDirectory(dir);
@@ -218,21 +200,20 @@ namespace VisualCom
 
                 if (actualBar < imagesBar)
                 {
-                    string txtPath = Path.Join(Path.Join(ModelFile.path, "dataset", "labels", "train"), Path.GetFileNameWithoutExtension(imageName) + ".txt");
+                    string txtPath = Path.Join(Path.Join(ModelFile.Path, "dataset", "labels", "train"), Path.GetFileNameWithoutExtension(imageName) + ".txt");
                     File.WriteAllLines(txtPath, lines);
-                    File.Copy(Path.Combine(ImagesPath, imageName), Path.Combine(ModelFile.train, imageName));
-                    actualBar = actualBar + BarPlus;
+                    File.Copy(Path.Combine(ImagesPath, imageName), Path.Combine(ModelFile.Train, imageName));
+                    actualBar += BarPlus;
                     if (actualBar >= 100)
                         actualBar = 0;
                 }
                 else if (actualBar > imagesBar)
                 {
-                    string txtPath = Path.Join(Path.Join(ModelFile.path, "dataset", "labels", "val"), Path.GetFileNameWithoutExtension(imageName) + ".txt");
+                    string txtPath = Path.Join(Path.Join(ModelFile.Path, "dataset", "labels", "val"), Path.GetFileNameWithoutExtension(imageName) + ".txt");
                     File.WriteAllLines(txtPath, lines);
-                    File.Copy(Path.Combine(ImagesPath, imageName), Path.Combine(ModelFile.val, imageName));
-                    actualBar = actualBar + BarPlus;
-                    if (actualBar >= 100)
-                        actualBar = 0;
+                    File.Copy(Path.Combine(ImagesPath, imageName), Path.Combine(ModelFile.Val, imageName));
+                    actualBar += BarPlus;
+                    if (actualBar >= 100) actualBar = 0;
                 }
 
             }

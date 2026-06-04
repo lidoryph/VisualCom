@@ -36,7 +36,17 @@
             EraseProject_Button = new Button();
             Disconnect_Button = new Button();
             label2 = new Label();
-            ProjectsList = new ListBox();
+            ProjectsList = new ListView();
+            Name_Column = new ColumnHeader();
+            Type_Column = new ColumnHeader();
+            Created_Column = new ColumnHeader();
+            Modified_Column = new ColumnHeader();
+            Classes_Column = new ColumnHeader();
+            Images_Column = new ColumnHeader();
+            DownloadProyect_Button = new Button();
+            ImportProyect_Button = new Button();
+            openFileDialog = new OpenFileDialog();
+            folderBrowserDialog = new FolderBrowserDialog();
             SuspendLayout();
             // 
             // label1
@@ -69,7 +79,7 @@
             CreateProject_Button.FlatAppearance.MouseDownBackColor = Color.FromArgb(128, 128, 192);
             CreateProject_Button.FlatAppearance.MouseOverBackColor = Color.FromArgb(48, 39, 131);
             CreateProject_Button.FlatStyle = FlatStyle.Flat;
-            CreateProject_Button.Font = new Font("Neo Sans Std", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            CreateProject_Button.Font = new Font("Neo Sans Std", 9F);
             CreateProject_Button.Location = new Point(12, 66);
             CreateProject_Button.Name = "CreateProject_Button";
             CreateProject_Button.Size = new Size(128, 48);
@@ -94,6 +104,7 @@
             LoadProject_Button.TabIndex = 3;
             LoadProject_Button.Text = "Cargar Proyecto";
             LoadProject_Button.UseVisualStyleBackColor = false;
+            LoadProject_Button.Click += LoadProject;
             // 
             // EraseProject_Button
             // 
@@ -145,13 +156,85 @@
             // 
             ProjectsList.BackColor = Color.FromArgb(33, 32, 32);
             ProjectsList.BorderStyle = BorderStyle.None;
+            ProjectsList.Columns.AddRange(new ColumnHeader[] { Name_Column, Type_Column, Created_Column, Modified_Column, Classes_Column, Images_Column });
             ProjectsList.ForeColor = Color.White;
-            ProjectsList.FormattingEnabled = true;
+            ProjectsList.FullRowSelect = true;
             ProjectsList.Location = new Point(152, 66);
             ProjectsList.Name = "ProjectsList";
-            ProjectsList.Size = new Size(620, 360);
-            ProjectsList.TabIndex = 7;
-            ProjectsList.SelectedIndexChanged += ChangedSelectionList;
+            ProjectsList.Size = new Size(636, 360);
+            ProjectsList.TabIndex = 8;
+            ProjectsList.UseCompatibleStateImageBehavior = false;
+            ProjectsList.View = View.Details;
+            ProjectsList.ItemSelectionChanged += ChangedSelectionList;
+            // 
+            // Name_Column
+            // 
+            Name_Column.Text = "Nombre";
+            Name_Column.Width = 100;
+            // 
+            // Type_Column
+            // 
+            Type_Column.Text = "Tipo";
+            Type_Column.Width = 150;
+            // 
+            // Created_Column
+            // 
+            Created_Column.Text = "Creado";
+            Created_Column.Width = 125;
+            // 
+            // Modified_Column
+            // 
+            Modified_Column.Text = "Modificado";
+            Modified_Column.Width = 125;
+            // 
+            // Classes_Column
+            // 
+            Classes_Column.Text = "Clases";
+            Classes_Column.TextAlign = HorizontalAlignment.Center;
+            // 
+            // Images_Column
+            // 
+            Images_Column.Text = "Imagenes";
+            Images_Column.TextAlign = HorizontalAlignment.Center;
+            Images_Column.Width = 75;
+            // 
+            // DownloadProyect_Button
+            // 
+            DownloadProyect_Button.BackColor = Color.FromArgb(214, 10, 81);
+            DownloadProyect_Button.Cursor = Cursors.Hand;
+            DownloadProyect_Button.FlatAppearance.BorderSize = 0;
+            DownloadProyect_Button.FlatAppearance.MouseDownBackColor = Color.FromArgb(128, 128, 192);
+            DownloadProyect_Button.FlatAppearance.MouseOverBackColor = Color.FromArgb(48, 39, 131);
+            DownloadProyect_Button.FlatStyle = FlatStyle.Flat;
+            DownloadProyect_Button.Font = new Font("Neo Sans Std", 9F);
+            DownloadProyect_Button.Location = new Point(660, 8);
+            DownloadProyect_Button.Name = "DownloadProyect_Button";
+            DownloadProyect_Button.Size = new Size(128, 48);
+            DownloadProyect_Button.TabIndex = 9;
+            DownloadProyect_Button.Text = "Descargar Proyecto";
+            DownloadProyect_Button.UseVisualStyleBackColor = false;
+            DownloadProyect_Button.Click += DownloadProject;
+            // 
+            // ImportProyect_Button
+            // 
+            ImportProyect_Button.BackColor = Color.FromArgb(214, 10, 81);
+            ImportProyect_Button.Cursor = Cursors.Hand;
+            ImportProyect_Button.FlatAppearance.BorderSize = 0;
+            ImportProyect_Button.FlatAppearance.MouseDownBackColor = Color.FromArgb(128, 128, 192);
+            ImportProyect_Button.FlatAppearance.MouseOverBackColor = Color.FromArgb(48, 39, 131);
+            ImportProyect_Button.FlatStyle = FlatStyle.Flat;
+            ImportProyect_Button.Font = new Font("Neo Sans Std", 9F);
+            ImportProyect_Button.Location = new Point(508, 8);
+            ImportProyect_Button.Name = "ImportProyect_Button";
+            ImportProyect_Button.Size = new Size(128, 48);
+            ImportProyect_Button.TabIndex = 10;
+            ImportProyect_Button.Text = "Importar Proyecto";
+            ImportProyect_Button.UseVisualStyleBackColor = false;
+            ImportProyect_Button.Click += ImportProject;
+            // 
+            // openFileDialog
+            // 
+            openFileDialog.FileName = "proyecto.asaivc";
             // 
             // OnlineProjects
             // 
@@ -159,6 +242,8 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(63, 62, 62);
             ClientSize = new Size(800, 450);
+            Controls.Add(ImportProyect_Button);
+            Controls.Add(DownloadProyect_Button);
             Controls.Add(ProjectsList);
             Controls.Add(label2);
             Controls.Add(Disconnect_Button);
@@ -176,6 +261,7 @@
             Name = "OnlineProjects";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Proyectos Online";
+            FormClosed += OnlineProjects_FormClosed;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -189,6 +275,16 @@
         private Button EraseProject_Button;
         private Button Disconnect_Button;
         private Label label2;
-        private ListBox ProjectsList;
+        private ListView ProjectsList;
+        private ColumnHeader Name_Column;
+        private ColumnHeader Type_Column;
+        private ColumnHeader Modified_Column;
+        private ColumnHeader Created_Column;
+        private ColumnHeader Classes_Column;
+        private ColumnHeader Images_Column;
+        private Button DownloadProyect_Button;
+        private Button ImportProyect_Button;
+        private OpenFileDialog openFileDialog;
+        private FolderBrowserDialog folderBrowserDialog;
     }
 }

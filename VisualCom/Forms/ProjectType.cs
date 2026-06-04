@@ -5,7 +5,7 @@ namespace VisualCom.Forms
     public partial class ProjectType : Form
     {
 
-        XElement? pv_type = Configuration.ProjectVariables.Root?.Element("Type");
+        readonly XElement? pv_type = Configuration.ProjectVariables.Root?.Element("Type");
 
         public ProjectType()
         {
@@ -14,8 +14,7 @@ namespace VisualCom.Forms
 
         private void ObjectIdentification(object sender, EventArgs e)
         {
-            if (pv_type == null)
-                return;
+            if (pv_type == null) return;
 
             pv_type.Value = "OI";
             Close();
@@ -23,8 +22,7 @@ namespace VisualCom.Forms
 
         private void Classification(object sender, EventArgs e)
         {
-            if (pv_type == null)
-                return;
+            if (pv_type == null) return;
 
             pv_type.Value = "C";
             Close();

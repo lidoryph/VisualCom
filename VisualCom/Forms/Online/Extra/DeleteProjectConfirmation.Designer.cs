@@ -88,12 +88,18 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(63, 62, 62);
             ClientSize = new Size(444, 147);
+            ControlBox = false;
             Controls.Add(CancelButton);
             Controls.Add(AcceptButton);
             Controls.Add(label1);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "DeleteProjectConfirmation";
+            ShowInTaskbar = false;
+            SizeGripStyle = SizeGripStyle.Hide;
             Text = "Confirme el borrado";
+            TopMost = true;
             ResumeLayout(false);
             PerformLayout();
         }

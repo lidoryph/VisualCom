@@ -1,0 +1,6 @@
+[X]	.\Forms\Editor\MainEditor.cs && .\Forms\Editor\Versions\RemoveVersion.cs: Fix RemoveVersion() from MainEditor.cs
+[ ]	*: Remove remaining paths and python network
+[X]	.\Forms\Editor\MainEditor.cs: Remove NetTests remainings
+		D ToolBar Button
+[X]	*: Fix using headers in files.
+[ ] .\Forms\Editor\MainEditor.cs: Refactor MainEditor, move functions elsewhere.

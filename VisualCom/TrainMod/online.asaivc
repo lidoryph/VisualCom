@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Online>
+  <!--NEVER CHANGE DATA HERE, ALWAYS CHANGE IT FROM THE PROGRAM-->
+  <Server>127.0.0.1</Server>
+  <Port>4541</Port>
+  <Name>proyecto</Name>
+  <Type>OI</Type>
+  <Created>24/03/2026 12:44:07</Created>
+  <Classes>
+    <Objetos>#55FF22</Objetos>
+    <Class color="#FF8080" id="1480511701">Iconos</Class>
+    <Class color="#80FF80" id="1890816322">Fecha</Class>
+    <Class color="#FFFF80" id="-1974282908">Tipo</Class>
+    <Class color="#00FF80" id="-1221862595">Peso</Class>
+    <Class color="#FF80FF" id="1696962933">Nombre</Class>
+  </Classes>
+  <!--NEVER CHANGE DATA HERE, ALWAYS CHANGE IT FROM THE PROGRAM-->
+</Online>
